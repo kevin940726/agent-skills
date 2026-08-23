@@ -21,5 +21,8 @@ Any prose you output (chat, summaries, docs, emails, commit/PR): apply `no-slop`
 ## Fetch before you act
 Question/impl needs current, authoritative, version-specific info (lib/API usage, best practices, "latest"/"most popular" compare, open-ended): search web for most popular + latest battle-tested sources before answer/code. Load `web-first` skill. Present as cited list/table. Skip only stable facts you certain about.
 
+## Gate merges on security
+Before merging or pushing a branch that touches auth, data, or the network, load `security-review` and act on its verdict.
+
 ## Using skills
 Task match vendored skill: load via client skill mechanism before respond/act.
