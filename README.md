@@ -59,22 +59,22 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `domain-modeling` | Architecture | Build/sharpen a project's domain model (terms, ADRs) in CONTEXT.md. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `resolving-merge-conflicts` | Git safety | Work a merge/rebase conflict hunk by hunk, resolving by intent, never --abort. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `setup-pre-commit` | Git safety | Set up Husky + lint-staged (Prettier), type-check, and tests as pre-commit hooks. | [mattpocock/skills](https://github.com/mattpocock/skills) |
-| `web-app-design` | Web / UI | Industry-standard modern web interface guidelines (Vercel). | local |
+| `web-app-design` | Web / UI | Industry-standard modern web interface guidelines (Vercel). | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines/blob/main/command.md) |
 | `frontend-design` | Web / UI | Production-grade UI generation guidance. | [anthropics/skills](https://github.com/anthropics/skills) |
-| `vercel-react-best-practices` | Web / UI | React/Next.js performance optimization guidelines from Vercel Engineering. | local |
-| `vercel-react-native-skills` | Web / UI | React Native/Expo best practices for performant mobile apps. | local |
-| `shadcn` | Web / UI | shadcn/ui expert guidance (CLI, composition, theming, Tailwind). | local |
+| `vercel-react-best-practices` | Web / UI | React/Next.js performance optimization guidelines from Vercel Engineering. | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/blob/main/skills/react-best-practices/SKILL.md) |
+| `vercel-react-native-skills` | Web / UI | React Native/Expo best practices for performant mobile apps. | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/blob/main/skills/react-native-skills/SKILL.md) |
+| `shadcn` | Web / UI | shadcn/ui expert guidance (CLI, composition, theming, Tailwind). | [shadcn-ui/ui](https://github.com/shadcn-ui/ui/blob/main/skills/shadcn/SKILL.md) |
 | `research` | Research | Investigate a question against primary sources; capture findings as a cited Markdown file. | [mattpocock/skills](https://github.com/mattpocock/skills) |
-| `caveman` | Knowledge / compress | Ultra-compressed communication mode (~75% token saving, full accuracy). | local |
-| `compress` | Knowledge / compress | Compress memory files (CLAUDE.md, todos) into caveman format to save tokens. | local |
-| `karpathy-guidelines` | Knowledge / compress | Behavioral guidelines to reduce common LLM coding mistakes. | local |
+| `caveman` | Knowledge / compress | Ultra-compressed communication mode (~75% token saving, full accuracy). | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman/blob/main/skills/caveman/SKILL.md) |
+| `compress` | Knowledge / compress | Compress memory files (CLAUDE.md, todos) into caveman format to save tokens. | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman/blob/main/skills/caveman-compress/SKILL.md) |
+| `karpathy-guidelines` | Knowledge / compress | Behavioral guidelines to reduce common LLM coding mistakes. | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md) |
 | `handoff` | Knowledge / compress | Compact the conversation into a handoff doc for another agent. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `grill-me` | Grill | Relentless interview to sharpen a plan/design (stateless). | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `grill-with-docs` | Grill | Same interview, plus builds docs (ADRs + glossary) as you go. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `grilling` | Grill | The reusable interview primitive behind grill-me/grill-with-docs/triage. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `wait-what` | Grill | Re-pitch a message that didn't land, with the context the user was missing. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `skill-creator` | Authoring | Create/improve/evaluate agent skills, including evals. | [anthropics/skills](https://github.com/anthropics/skills) |
-| `find-skills` | Authoring | Discover and install agent skills for a given need. | local |
+| `find-skills` | Authoring | Discover and install agent skills for a given need. | [vercel-labs/skills](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) |
 | `writing-for-agents` | Writing for agents | Reference for writing docs agents consume (skills, AGENTS.md). | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `to-questionnaire` | Writing for agents | Turn a gap in someone else's head into a questionnaire for them to fill in. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `ask-matt` | Router | User-invoked router; points you at the right skill/flow in this kit. | [mattpocock/skills](https://github.com/mattpocock/skills) |
@@ -83,15 +83,13 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `docs` | Quality / shipping | Write/update README, API reference, JSDoc; example-driven, no-slop. | custom |
 | `fff` | File search (MCP) | fff-mcp file-search server; prefer over grep/ripgrep for agents. | [dmtrKovalenko/fff](https://github.com/dmtrKovalenko/fff) |
 | `ask-clarify` | Agent behavior | Clarify with the user before acting instead of guessing. | custom |
-| `no-slop` | Writing quality | Anti-slop prose rules: no em-dashes, filler, intensifiers, hollow claims. | custom |
+| `no-slop` | Writing quality | Anti-slop prose rules: no em-dashes, filler, intensifiers, hollow claims. | [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules/blob/main/skills/no-ai-slop/SKILL.md) |
 | `web-first` | Agent behavior | Fetch current/authoritative sources before answering; cite as a table. | custom |
 
 ## Sourcing
 Skills are **vendored copies** (self-contained, offline-capable). Provenance:
 - [mattpocock/skills](https://github.com/mattpocock/skills) — planning, debugging, testing, architecture, git, grill, handoff, writing-for-agents, to-questionnaire, ask-matt, research
 - [anthropics/skills](https://github.com/anthropics/skills) — `frontend-design`, `skill-creator`
-- Local skills — `web-app-design`, `vercel-*`, `shadcn`, `caveman`,
-  `compress`, `karpathy-guidelines`, `find-skills`
 - Custom (this kit) — `ask-clarify`, `web-first`, `no-slop`, `security-review`, `changelog`, `docs`
 
 ## Naming notes
