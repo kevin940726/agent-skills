@@ -33,7 +33,7 @@ custom skills (caveman, compress, karpathy-guidelines, research, grill-*).
 | Knowledge/compress | caveman, compress, karpathy-guidelines, handoff (mattpocock) |
 | Grill | grill-me, grill-with-docs, grilling, wait-what (mattpocock) |
 | Authoring | anthropics skill-creator (kit "write-a-skill"); find-skills |
-| Project guidance | fff (FFF.nvim — Rust + Lua Neovim file picker; vendored from its AGENTS.md) |
+| File search (MCP) | fff (fff-mcp file-search server; replaces grep/ripgrep for agents) |
 | Global memory | memory/AGENTS.md (wires never-block rule) |
 
 > Note: `handoff` here = mattpocock/skills handoff (knowledge/compress group), **not** the

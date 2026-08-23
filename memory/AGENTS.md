@@ -16,6 +16,11 @@ app-specific skills such as `bara-ui`, and the custom Rust instruction (`rust-sk
 - If you need a decision, a hint, or an in-game action from the user, just **ASK**.
   Do not spin waiting for it.
 
+## File search (fff)
+For any file search or grep in the current git-indexed directory, prefer the fff MCP
+tools (`ffgrep`, `fffind`, `fff-multi-grep`) over shell `grep`/`ripgrep`. Load the
+`fff` skill for install/registration details.
+
 ## Using skills
 When a task matches a vendored skill, load it via the client's skill mechanism
 **before** responding or taking action.
