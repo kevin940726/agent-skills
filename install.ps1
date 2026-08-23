@@ -8,7 +8,6 @@ $Target = Join-Path $HOME ".agents"
 
 Write-Output "Installing agents-skills into $Target"
 New-Item -ItemType Directory -Force -Path (Join-Path $Target "skills") | Out-Null
-New-Item -ItemType Directory -Force -Path (Join-Path $Target "instructions") | Out-Null
 
 # Detect symbolic-link capability (needs Developer Mode or admin on Windows)
 $linkMode = $true
@@ -23,13 +22,12 @@ try {
 
 function Link-Or-Copy($src, $dst) {
     if (Test-Path $dst) { Remove-Item -LiteralPath $dst -Force -Recurse }
-    $isDir = (Get-Item $src).PSIsContainer
     if ($script:linkMode) {
         try {
             New-Item -ItemType SymbolicLink -Path $dst -Target $src -ErrorAction Stop | Out-Null
             return
         } catch {
-            if ($isDir) {
+            if ((Get-Item $src).PSIsContainer) {
                 cmd /c "mklink /J `"$dst`" `"$src`"" | Out-Null
                 return
             }
@@ -41,10 +39,6 @@ function Link-Or-Copy($src, $dst) {
 # Skills
 Get-ChildItem -LiteralPath (Join-Path $Repo "skills") -Directory | ForEach-Object {
     Link-Or-Copy $_.FullName (Join-Path $Target "skills\$($_.Name)")
-}
-# Custom instructions
-Get-ChildItem -LiteralPath (Join-Path $Repo "instructions") | ForEach-Object {
-    Link-Or-Copy $_.FullName (Join-Path $Target "instructions\$($_.Name)")
 }
 # Global memory
 Link-Or-Copy (Join-Path $Repo "memory\AGENTS.md") (Join-Path $Target "AGENTS.md")

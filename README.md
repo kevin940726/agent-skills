@@ -23,7 +23,6 @@ cd agents-skills
 The installer:
 - symlinks `skills/<name>` → `~/.agents/skills/<name>` (falls back to copy where
   symlinks are unsupported, e.g. Windows without Developer Mode),
-- symlinks `instructions/*` → `~/.agents/instructions/`,
 - symlinks `memory/AGENTS.md` → `~/.agents/AGENTS.md`.
 It is idempotent: re-running relinks/updates without creating duplicates.
 
@@ -35,8 +34,7 @@ agents-skills/
 ├── install.sh                 # POSIX (macOS / Linux / Git Bash)
 ├── install.ps1                # Windows PowerShell
 ├── skills/                    # vendored, self-contained skills
-├── memory/AGENTS.md           # global memory (never-block rule, rust ref)
-├── instructions/rust-skills.md
+├── memory/AGENTS.md           # global memory (never-block rule)
 └── docs/superpowers/specs/    # design doc
 ```
 
@@ -64,7 +62,8 @@ Skills are **vendored copies** (self-contained, offline-capable). Provenance:
   `compress`, `karpathy-guidelines`, `find-skills`
 
 ## Intentionally excluded
-superpowers pack, graphify, all backend / Supabase skills, `bara-ui` (app-specific).
+superpowers pack, graphify, all backend / Supabase skills, `bara-ui` (app-specific),
+and the custom Rust instruction (`rust-skills.md`).
 
 ## Naming notes
 A few kit names had no separate upstream skill; closest equivalents were vendored:

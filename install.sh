@@ -9,7 +9,7 @@ TARGET="${HOME}/.agents"
 
 echo "Installing agents-skills into ${TARGET}"
 
-mkdir -p "${TARGET}/skills" "${TARGET}/instructions"
+mkdir -p "${TARGET}/skills"
 
 link_or_copy() {
   local src="$1" dst="$2"
@@ -28,13 +28,6 @@ for d in "${REPO}"/skills/*/; do
   [ -d "$d" ] || continue
   name="$(basename "$d")"
   link_or_copy "$d" "${TARGET}/skills/${name}"
-done
-
-# Custom instructions
-for f in "${REPO}"/instructions/*; do
-  [ -e "$f" ] || continue
-  name="$(basename "$f")"
-  link_or_copy "$f" "${TARGET}/instructions/${name}"
 done
 
 # Global memory

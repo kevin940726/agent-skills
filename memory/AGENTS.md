@@ -6,8 +6,8 @@ It wires project-wide conventions for any agent client that reads `~/.agents/AGE
 ## What this repo is
 `agents-skills` is a version-controlled, portable kit of curated agent skills.
 Skills live in `skills/<name>/` and are symlinked (or copied) into `~/.agents/skills/`.
-Deliberately **excluded**: the superpowers pack, any backend (Supabase) skills, and
-app-specific skills such as `bara-ui`.
+Deliberately **excluded**: the superpowers pack, any backend (Supabase) skills,
+app-specific skills such as `bara-ui`, and the custom Rust instruction (`rust-skills.md`).
 
 ## NEVER BLOCK THE USER
 - Do NOT make the user wait on something that will never finish (servers, REPLs,
@@ -15,11 +15,6 @@ app-specific skills such as `bara-ui`.
   background process and ask the user to tell you when it is done.
 - If you need a decision, a hint, or an in-game action from the user, just **ASK**.
   Do not spin waiting for it.
-
-## Custom instructions
-- **Rust**: include `instructions/rust-skills.md` (vendored). It sets Cargo.toml
-  defaults (edition 2024, rust-version 1.85, `lints`) and routes Rust questions
-  through the rust-skills workflow.
 
 ## `/graphify`-style trigger
 The user uses a `/graphify` convention (any input → knowledge graph) that is

@@ -9,11 +9,11 @@ machine (macOS + Windows). Replaces scattered global skills with a curated, offl
 
 ## Locked decisions
 - **Distribution:** `git clone` + symlink into `~/.agents` (generic, not client-specific).
-- **Target dir:** `~/.agents/skills`, `~/.agents/AGENTS.md`, `~/.agents/instructions/`.
+- **Target dir:** `~/.agents/skills`, `~/.agents/AGENTS.md`.
 - **Skill sourcing:** VENDORED COPIES (self-contained, offline).
 - **Repo name:** `agents-skills` (name collisions are not a concern).
 - **Excluded:** superpowers pack (all of it), graphify, ALL backend (Supabase),
-  `bara-ui` (app-specific, kept local only).
+  `bara-ui` (app-specific, kept local only), and the custom Rust instruction (`rust-skills.md`).
 
 ## Curated kit philosophy
 A personal-development kit that swaps the superpowers pack for
@@ -33,11 +33,11 @@ custom skills (caveman, compress, karpathy-guidelines, research, grill-*).
 | Knowledge/compress | caveman, compress, karpathy-guidelines, handoff (mattpocock) |
 | Grill | grill-me, grill-with-docs, grilling, wait-what (mattpocock) |
 | Authoring | anthropics skill-creator (kit "write-a-skill"); find-skills |
-| Custom instruction | instructions/rust-skills.md (existing custom Rust instruction) |
-| Global memory | memory/AGENTS.md (wires /graphify-style triggers + never-block rule + rust instruction ref) |
+| Global memory | memory/AGENTS.md (wires /graphify-style triggers + never-block rule) |
 
 > Note: `handoff` here = mattpocock/skills handoff (knowledge/compress group), **not** the
-> superpowers handoff (which is excluded).
+> superpowers handoff (which is excluded). The custom Rust instruction (`rust-skills.md`)
+> was originally planned but is **excluded** at the user's request.
 
 ## Repo layout
 ```
@@ -48,14 +48,12 @@ agents-skills/
 ├── install.ps1                   # PowerShell: Windows native (mklink/junction, copy fallback)
 ├── skills/                       # vendored skills, one folder each (36 total)
 ├── memory/AGENTS.md
-├── instructions/rust-skills.md
 └── docs/superpowers/specs/       # this design doc
 ```
 
 ## Installer behavior
 - Symlink `skills/*` → `~/.agents/skills/<name>` (fallback copy if symlinks unsupported).
 - Symlink `memory/AGENTS.md` → `~/.agents/AGENTS.md`.
-- Symlink `instructions/*` → `~/.agents/instructions/`.
 - Idempotent: re-run relinks/updates, no duplicates.
 
 ## Naming deviations from the original kit list
@@ -65,6 +63,7 @@ vendoring the closest equivalent and documenting the mapping in the README:
 - `diagnose` → `diagnosing-bugs`
 - `write-a-skill` → `skill-creator` (anthropics)
 - `to-prd` → omitted (no upstream equivalent found in mattpocock/skills)
+- `rust-skills.md` → omitted (custom Rust instruction, excluded at user's request)
 
 ## Open items
 - The legacy `C:\Users\User\work\skills` directory (now empty) remains locked by the
