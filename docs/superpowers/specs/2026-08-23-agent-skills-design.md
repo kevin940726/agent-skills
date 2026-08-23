@@ -34,7 +34,7 @@ custom skills (caveman, compress, karpathy-guidelines, research, grill-*).
 | Grill | grill-me, grill-with-docs, grilling, wait-what (mattpocock) |
 | Authoring | anthropics skill-creator (kit "write-a-skill"); find-skills |
 | File search (MCP) | fff (fff-mcp file-search server; replaces grep/ripgrep for agents) |
-| Global memory | memory/AGENTS.md (wires never-block rule) |
+| Global memory | memory/AGENTS.md (wires never-block + clarify-before-acting rules) |
 
 > Note: `handoff` here = mattpocock/skills handoff (knowledge/compress group), **not** the
 > superpowers handoff (which is excluded). The custom Rust instruction (`rust-skills.md`)

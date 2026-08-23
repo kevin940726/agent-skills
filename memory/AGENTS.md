@@ -16,6 +16,26 @@ app-specific skills such as `bara-ui`, and the custom Rust instruction (`rust-sk
 - If you need a decision, a hint, or an in-game action from the user, just **ASK**.
   Do not spin waiting for it.
 
+## Clarify before acting
+When a request is ambiguous, under-specified, or could reasonably go more than one way,
+**ask the user for clarification before acting — do not guess and build on assumptions.**
+A short clarifying question is cheaper than a long, wrong implementation.
+
+Prefer asking before:
+- starting multi-step implementations or refactors,
+- making irreversible or hard-to-undo changes (deletes, force-pushes, migrations, schema changes),
+- choosing between meaningfully different approaches or scopes,
+- guessing which file, API, dependency, or convention the user actually means.
+
+How to ask well:
+- Be specific and crisp; offer 2–4 concrete options when it helps the user decide.
+- State your assumption and the cost of getting it wrong, then let the user confirm.
+- Ask the fewest questions that unblock the next step — don't interrogate.
+
+It is fine to proceed without asking when the step is cheap, reversible, and low-risk,
+or when the user has already specified the intent clearly. Asking is not "blocking" —
+it is a quick question, not an open-ended wait.
+
 ## File search (fff)
 For any file search or grep in the current git-indexed directory, prefer the fff MCP
 tools (`ffgrep`, `fffind`, `fff-multi-grep`) over shell `grep`/`ripgrep`. Load the
