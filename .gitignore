@@ -1,0 +1,7 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Dependency artifacts (vendored skills should stay self-contained)
+node_modules/
