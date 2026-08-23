@@ -47,7 +47,7 @@ Folder names follow each upstream project's own naming.
 **Testing / review** — `tdd`, `code-review`
 **Architecture** — `improve-codebase-architecture`, `codebase-design`, `domain-modeling`
 **Git safety** — `resolving-merge-conflicts`, `setup-pre-commit`
-**Web / UI** — `web-app-design`, `windows-app-design`, `frontend-design` (anthropics), `vercel-react-best-practices`, `vercel-react-native-skills`, `shadcn`
+**Web / UI** — `web-app-design`, `frontend-design` (anthropics), `vercel-react-best-practices`, `vercel-react-native-skills`, `shadcn`
 **Research** — `research`, `research-add-fields`, `research-add-items`, `research-deep`, `research-report`
 **Knowledge / compress** — `caveman`, `compress`, `karpathy-guidelines`, `handoff` (mattpocock handoff)
 **Grill** — `grill-me`, `grill-with-docs`, `grilling`, `wait-what`
