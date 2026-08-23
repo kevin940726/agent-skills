@@ -52,6 +52,7 @@ Folder names follow each upstream project's own naming.
 **Knowledge / compress** — `caveman`, `compress`, `karpathy-guidelines`, `handoff` (mattpocock handoff)
 **Grill** — `grill-me`, `grill-with-docs`, `grilling`, `wait-what`
 **Authoring** — `skill-creator` (anthropics; kit also listed "write-a-skill"), `find-skills`
+**Router** — `ask-matt` (user-invoked router; points you at the right skill/flow in this kit when you are unsure)
 **File search (MCP)** — `fff` (fff-mcp file-search server; replaces grep/ripgrep for agents)
 **Agent behavior** — `ask-clarify` (clarify before guessing; restate intent, offer options, safe fallback when unreachable)
 **Writing quality** — `no-slop` (anti-slop prose rules; no em-dashes, filler, intensifiers, hollow claims, clickbait headings)
