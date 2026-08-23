@@ -64,11 +64,7 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `vercel-react-best-practices` | Web / UI | React/Next.js performance optimization guidelines from Vercel Engineering. | local |
 | `vercel-react-native-skills` | Web / UI | React Native/Expo best practices for performant mobile apps. | local |
 | `shadcn` | Web / UI | shadcn/ui expert guidance (CLI, composition, theming, Tailwind). | local |
-| `research` | Research | Preliminary research on a topic; generate an outline. | local |
-| `research-add-fields` | Research | Add field definitions to an existing research outline. | local |
-| `research-add-items` | Research | Add items (research objects) to an existing research outline. | local |
-| `research-deep` | Research | Read the outline, launch parallel agents for deep research per item. | local |
-| `research-report` | Research | Summarize deep research into a markdown report (skip uncertain values). | local |
+| `research` | Research | Investigate a question against primary sources; capture findings as a cited Markdown file. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `caveman` | Knowledge / compress | Ultra-compressed communication mode (~75% token saving, full accuracy). | local |
 | `compress` | Knowledge / compress | Compress memory files (CLAUDE.md, todos) into caveman format to save tokens. | local |
 | `karpathy-guidelines` | Knowledge / compress | Behavioral guidelines to reduce common LLM coding mistakes. | local |
@@ -92,9 +88,9 @@ One row per skill. Folder names follow each upstream project's own naming; the
 
 ## Sourcing
 Skills are **vendored copies** (self-contained, offline-capable). Provenance:
-- [mattpocock/skills](https://github.com/mattpocock/skills) — planning, debugging, testing, architecture, git, grill, handoff, writing-for-agents, to-questionnaire, ask-matt
+- [mattpocock/skills](https://github.com/mattpocock/skills) — planning, debugging, testing, architecture, git, grill, handoff, writing-for-agents, to-questionnaire, ask-matt, research
 - [anthropics/skills](https://github.com/anthropics/skills) — `frontend-design`, `skill-creator`
-- Local skills — `web-app-design`, `vercel-*`, `shadcn`, `research*`, `caveman`,
+- Local skills — `web-app-design`, `vercel-*`, `shadcn`, `caveman`,
   `compress`, `karpathy-guidelines`, `find-skills`
 - Custom (this kit) — `ask-clarify`, `web-first`, `no-slop`, `security-review`, `changelog`, `docs`
 
