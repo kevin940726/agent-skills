@@ -1,14 +1,14 @@
 ---
 name: fff
-description: fff is a file-search MCP server for agents, meant to replace grep/ripgrep. Use it for any file or content search, finding code/text across a repo, or when the user references fff/FFF. Prefer the fff MCP tools (ffgrep, fffind, fff-multi-grep) over shell grep.
+description: Replace grep/ripgrep with fff for any file or content search across a repo. Use it when the user references fff/FFF or you need code/text search; prefer the fff MCP tools (ffgrep, fffind, fff-multi-grep) over shell grep.
 ---
 
 # fff — file search for agents
 
 fff (dmtrKovalenko/fff) is a fast, frecency-ranked file-search toolkit that runs as a
 long-lived process. Its **MCP server** (`fff-mcp`) gives any agent client a file-search
-tool that is faster and far more token-efficient than grep/ripgrep, and is designed to
-replace them for agents. Works with Claude Code, Codex, OpenCode, Cursor, Cline, etc.
+tool that is faster and far more token-efficient than grep/ripgrep, built to replace them
+for agents. Works with Claude Code, Codex, OpenCode, Cursor, Cline, and more.
 
 ## Tools the server exposes
 Once registered, ask the agent to "use fff" and it gets:

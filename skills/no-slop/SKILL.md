@@ -1,6 +1,6 @@
 ---
 name: no-slop
-description: Use this skill whenever you write or edit any prose for the user — chat replies, summaries, docs, emails, commit messages, PR descriptions, or even your own output — to keep it specific, honest, and free of AI-slop patterns (em-dashes, filler phrases, intensifiers, hollow claims, generic/clickbait headings). Apply it even when the user doesn't explicitly ask for clean writing, and to your own replies too.
+description: Writing any prose for the user (chat, summaries, docs, emails, commits, PRs, your own replies)? Keep it specific and slop-free — no em-dashes, filler, intensifiers, hollow claims, or clickbait headings. Apply it even when the user doesn't ask, and to your own output.
 ---
 
 # Write like a person who has done the thing
@@ -12,6 +12,9 @@ need a special request; apply these rules to everything you write, including cha
 
 These rules exist because generic phrasing is useless to the reader. A sentence that could
 appear on any site unchanged tells the user nothing. The fix is almost always a fact.
+
+**One fix per rule:** swap the banned word for its plain equivalent, or replace the vague
+sentence with a concrete detail. Do that and the bans below take care of themselves.
 
 ## The rules
 

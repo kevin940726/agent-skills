@@ -1,6 +1,6 @@
 ---
 name: web-first
-description: Use this skill whenever a question or implementation needs current, authoritative, or version-specific information — library/API usage, framework how-tos, best practices, "latest" or "most popular" comparisons, or anything you are not certain is still accurate. Always search the web for the most popular and latest battle-tested sources before answering or coding, then present the findings as a cited table with a confidence and version column. Trigger for coding/library questions by default; stay silent for chit-chat and stable facts. Skip only for facts you already know are stable and version-independent.
+description: Before answering a coding, library, or best-practice question, search the web for the most popular and latest battle-tested sources, then present a cited table with confidence and version columns. Load this skill for anything version-specific, "latest"/"most popular" comparisons, or open-ended questions; skip only stable facts you are certain about.
 ---
 
 # Fetch before you act
@@ -15,7 +15,7 @@ battle-tested result instead of a plausible hallucination.
 
 ## Two-tier trigger
 - **Auto-fetch (default):** coding, library/API, framework, config, or version-specific questions. Do the search before answering.
-- **Stay silent:** pure chit-chat, stable version-independent facts you are certain about, or when the user says "from memory" / "don't search". No table, no fetch.
+- **Skip the search:** pure chit-chat, stable version-independent facts you are certain about, or when the user says "from memory" / "don't search". No table, no fetch.
 - **Session cache:** if you fetched the same thing minutes ago this session, reuse it instead of re-fetching.
 
 ## How to search
@@ -27,7 +27,7 @@ battle-tested result instead of a plausible hallucination.
 ## Scope toggle (ask only if it matters)
 - **Brief:** top 1 source, one row, enough to act.
 - **Exhaustive:** full table with alternatives and trade-offs.
-Default to brief for a direct how-to; offer exhaustive when the user is choosing between options. Don't over-fetch a simple ask.
+Default to brief for a direct how-to; offer exhaustive when the user is choosing between options. Keep the fetch brief for simple asks.
 
 ## How to present the result
 Always hand the user a compact, cited table:
@@ -45,7 +45,7 @@ Column rules:
 - **Why trusted:** one line weighing popularity vs authority.
 
 ## Quote and attribute accurately
-If you quote a source, every word must match exactly (reuse the `no-slop` accurate-quote rule). Mark any needed edit with `[...]`. Name the speaker/medium when you introduce a quote. Paraphrase without quotes if you must clean up wording. Never invent a position.
+If you quote a source, every word must match exactly (reuse the `no-slop` accurate-quote rule). Mark any needed edit with `[...]`. Name the speaker/medium when you introduce a quote. Paraphrase without quotes if you must clean up wording. Every quoted position traces to a real, verifiable source.
 
 ## Cache reusable findings
 When a fetch is likely to recur (a library you use often, a standing best-practice question), write it to `memory/references/<topic>.md`:
