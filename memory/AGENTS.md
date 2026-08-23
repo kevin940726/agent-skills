@@ -32,6 +32,25 @@ How to ask well:
 - State your assumption and the cost of getting it wrong, then let the user confirm.
 - Ask the fewest questions that unblock the next step — don't interrogate.
 
+### Restate before acting
+Before any large or irreversible step, briefly echo your understanding first:
+"I'm about to <do X> because I think you mean <Y> — correct me if I've got it wrong."
+This catches misreads early, before effort is sunk into the wrong path.
+
+### Examples
+- User: "add auth." → Guessing JWT vs session vs OAuth is a rabbit hole. Ask:
+  "Which auth model — session cookies, JWT, or OAuth/OIDC?"
+- User: "speed up the build." → Don't blindly rewrite the hottest module. Restate scope:
+  "By 'speed up', do you mean local dev compile, CI, or the produced binary?"
+- User: "use the new API." → Ambiguous which client/version. Restate: "I'll wire
+  OrderService v2 (the only 'new' one I see) — confirm?"
+
+### If the user is unreachable
+Asking must never deadlock background or long-running work. If you cannot get an answer
+(and the step is safe to attempt), proceed using the **least-destructive, most-reversible**
+option and clearly record the assumption you made, so the user can correct it later.
+Prefer: reversible over irreversible, additive over mutating, narrow over broad.
+
 It is fine to proceed without asking when the step is cheap, reversible, and low-risk,
 or when the user has already specified the intent clearly. Asking is not "blocking" —
 it is a quick question, not an open-ended wait.

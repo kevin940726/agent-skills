@@ -34,6 +34,7 @@ custom skills (caveman, compress, karpathy-guidelines, research, grill-*).
 | Grill | grill-me, grill-with-docs, grilling, wait-what (mattpocock) |
 | Authoring | anthropics skill-creator (kit "write-a-skill"); find-skills |
 | File search (MCP) | fff (fff-mcp file-search server; replaces grep/ripgrep for agents) |
+| Agent behavior | ask-clarify (clarify-before-acting procedure: restate intent, offer options, safe fallback) |
 | Global memory | memory/AGENTS.md (wires never-block + clarify-before-acting rules) |
 
 > Note: `handoff` here = mattpocock/skills handoff (knowledge/compress group), **not** the

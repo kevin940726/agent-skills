@@ -53,6 +53,7 @@ Folder names follow each upstream project's own naming.
 **Grill** — `grill-me`, `grill-with-docs`, `grilling`, `wait-what`
 **Authoring** — `skill-creator` (anthropics; kit also listed "write-a-skill"), `find-skills`
 **File search (MCP)** — `fff` (fff-mcp file-search server; replaces grep/ripgrep for agents)
+**Agent behavior** — `ask-clarify` (clarify before guessing; restate intent, offer options, safe fallback when unreachable)
 
 ## Sourcing
 Skills are **vendored copies** (self-contained, offline-capable). Provenance:
