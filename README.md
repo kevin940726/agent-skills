@@ -55,6 +55,7 @@ Folder names follow each upstream project's own naming.
 **File search (MCP)** — `fff` (fff-mcp file-search server; replaces grep/ripgrep for agents)
 **Agent behavior** — `ask-clarify` (clarify before guessing; restate intent, offer options, safe fallback when unreachable)
 **Writing quality** — `no-slop` (anti-slop prose rules; no em-dashes, filler, intensifiers, hollow claims, clickbait headings)
+**Agent behavior** — `web-first` (fetch current/authoritative sources before answering coding or open-ended questions; cite as a table)
 
 ## Sourcing
 Skills are **vendored copies** (self-contained, offline-capable). Provenance:

@@ -33,6 +33,13 @@ the `no-slop` skill: no em-dashes, filler phrases, intensifiers, hollow claims, 
 clickbait headings. Prefer a concrete detail over a generic one. This applies to your own
 replies too.
 
+## Fetch before you act
+When a question or implementation needs current, authoritative, or version-specific
+information (library/API usage, best practices, "latest"/"most popular" comparisons,
+open-ended questions), search the web for the most popular and latest battle-tested
+sources before answering or coding — load the `web-first` skill. Present findings as a
+cited list or table. Skip only for stable facts you are certain about.
+
 ## Using skills
 When a task matches a vendored skill, load it via the client's skill mechanism
 **before** responding or taking action.
