@@ -1,45 +1,25 @@
 # Personal Agents — Global Memory (AGENTS.md)
 
-This file is symlinked into `~/.agents/AGENTS.md` by the `agents-skills` installer.
-It wires project-wide conventions for any agent client that reads `~/.agents/AGENTS.md`.
+`agents-skills` installer symlink this to `~/.agents/AGENTS.md`. Wires project-wide conventions for any agent client reading it.
 
 ## What this repo is
-`agents-skills` is a version-controlled, portable kit of curated agent skills.
-Skills live in `skills/<name>/` and are symlinked (or copied) into `~/.agents/skills/`.
-Deliberately **excluded**: the superpowers pack, any backend (Supabase) skills,
-app-specific skills such as `bara-ui`, and the custom Rust instruction (`rust-skills.md`).
+`agents-skills`: version-controlled portable kit of curated agent skills. Skills in `skills/<name>/`, symlinked/copied to `~/.agents/skills/`. Excluded: superpowers pack, backend (Supabase) skills, app-specific (`bara-ui`), custom Rust (`rust-skills.md`).
 
 ## NEVER BLOCK THE USER
-- Do NOT make the user wait on something that will never finish (servers, REPLs,
-  `while True` loops, open-ended waits). For a long-running observer, run it as a
-  background process and ask the user to tell you when it is done.
-- If you need a decision, a hint, or an in-game action from the user, just **ASK**.
-  Do not spin waiting for it.
+- No wait on never-finish tasks (servers, REPLs, `while True` loops, open-ended waits). Long observer: run background, ask user to say when done.
+- Need decision/hint/in-game action: just ASK. No spin wait.
 
 ## Clarify before acting
-When a request is ambiguous or risky, **ask instead of guessing** — don't build on
-assumptions. Before large or irreversible steps, restate your understanding and confirm;
-if you can't reach the user, take the least-destructive, most-reversible option and note
-the assumption. Full procedure and examples: load the `ask-clarify` skill.
+Ambiguous/risky request: ask, don't guess. Don't build on assumptions. Big/irreversible step: restate understanding, confirm. Unreachable: take least-destructive, most-reversible option, note assumption. Full procedure + examples: load `ask-clarify` skill.
 
 ## File search (fff)
-For any file search or grep in the current git-indexed directory, prefer the fff MCP
-tools (`ffgrep`, `fffind`, `fff-multi-grep`) over shell `grep`/`ripgrep`. Load the
-`fff` skill for install/registration details.
+File search/grep in git-indexed dir: use fff MCP (`ffgrep`, `fffind`, `fff-multi-grep`) over shell `grep`/`ripgrep`. Load `fff` skill for install/registration.
 
 ## Write without AI slop
-For any prose you produce (chat replies, summaries, docs, emails, commit/PR text), apply
-the `no-slop` skill: no em-dashes, filler phrases, intensifiers, hollow claims, or
-clickbait headings. Prefer a concrete detail over a generic one. This applies to your own
-replies too.
+Any prose you output (chat, summaries, docs, emails, commit/PR): apply `no-slop` skill. No em-dashes, filler, intensifiers, hollow claims, clickbait headings. Concrete detail over generic. Applies to your own replies too.
 
 ## Fetch before you act
-When a question or implementation needs current, authoritative, or version-specific
-information (library/API usage, best practices, "latest"/"most popular" comparisons,
-open-ended questions), search the web for the most popular and latest battle-tested
-sources before answering or coding — load the `web-first` skill. Present findings as a
-cited list or table. Skip only for stable facts you are certain about.
+Question/impl needs current, authoritative, version-specific info (lib/API usage, best practices, "latest"/"most popular" compare, open-ended): search web for most popular + latest battle-tested sources before answer/code. Load `web-first` skill. Present as cited list/table. Skip only stable facts you certain about.
 
 ## Using skills
-When a task matches a vendored skill, load it via the client's skill mechanism
-**before** responding or taking action.
+Task match vendored skill: load via client skill mechanism before respond/act.
