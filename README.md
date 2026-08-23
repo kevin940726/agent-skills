@@ -54,6 +54,7 @@ Folder names follow each upstream project's own naming.
 **Authoring** — `skill-creator` (anthropics; kit also listed "write-a-skill"), `find-skills`
 **File search (MCP)** — `fff` (fff-mcp file-search server; replaces grep/ripgrep for agents)
 **Agent behavior** — `ask-clarify` (clarify before guessing; restate intent, offer options, safe fallback when unreachable)
+**Writing quality** — `no-slop` (anti-slop prose rules; no em-dashes, filler, intensifiers, hollow claims, clickbait headings)
 
 ## Sourcing
 Skills are **vendored copies** (self-contained, offline-capable). Provenance:

@@ -27,6 +27,12 @@ For any file search or grep in the current git-indexed directory, prefer the fff
 tools (`ffgrep`, `fffind`, `fff-multi-grep`) over shell `grep`/`ripgrep`. Load the
 `fff` skill for install/registration details.
 
+## Write without AI slop
+For any prose you produce (chat replies, summaries, docs, emails, commit/PR text), apply
+the `no-slop` skill: no em-dashes, filler phrases, intensifiers, hollow claims, or
+clickbait headings. Prefer a concrete detail over a generic one. This applies to your own
+replies too.
+
 ## Using skills
 When a task matches a vendored skill, load it via the client's skill mechanism
 **before** responding or taking action.
