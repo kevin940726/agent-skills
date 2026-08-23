@@ -1,13 +1,15 @@
-# Personal Agents — Global Memory (AGENTS.md)
+# Global Agent Memory (AGENTS.md)
 
-`agents-skills` installer symlink this to `~/.agents/AGENTS.md`. Wires project-wide conventions for any agent client reading it.
+`agents-skills` installer symlinks this to `~/.agents/AGENTS.md`. It wires the
+kit's conventions for any agent client that reads it. Edit the sections below to
+match your own defaults.
 
 ## What this repo is
 `agents-skills`: version-controlled portable kit of curated agent skills. Skills in `skills/<name>/`, symlinked/copied to `~/.agents/skills/`.
 
-## NEVER BLOCK THE USER
-- No wait on never-finish tasks (servers, REPLs, `while True` loops, open-ended waits). Long observer: run background, ask user to say when done.
-- Need decision/hint action: just ASK. No spin wait.
+## Non-blocking by default
+- Run never-finish tasks (servers, REPLs, `while True` loops, open-ended waits) in the background; ask the user to say when done. Don't hold their turn.
+- When you need a decision or an in-game action, ask — don't spin-wait for it.
 
 ## Clarify before acting
 Ambiguous/risky request: ask, don't guess. Don't build on assumptions. Big/irreversible step: restate understanding, confirm. Unreachable: take least-destructive, most-reversible option, note assumption. Full procedure + examples: load `ask-clarify` skill.
