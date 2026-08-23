@@ -3,11 +3,11 @@
 `agents-skills` installer symlink this to `~/.agents/AGENTS.md`. Wires project-wide conventions for any agent client reading it.
 
 ## What this repo is
-`agents-skills`: version-controlled portable kit of curated agent skills. Skills in `skills/<name>/`, symlinked/copied to `~/.agents/skills/`. Excluded: superpowers pack, backend (Supabase) skills, app-specific (`bara-ui`), custom Rust (`rust-skills.md`).
+`agents-skills`: version-controlled portable kit of curated agent skills. Skills in `skills/<name>/`, symlinked/copied to `~/.agents/skills/`.
 
 ## NEVER BLOCK THE USER
 - No wait on never-finish tasks (servers, REPLs, `while True` loops, open-ended waits). Long observer: run background, ask user to say when done.
-- Need decision/hint/in-game action: just ASK. No spin wait.
+- Need decision/hint action: just ASK. No spin wait.
 
 ## Clarify before acting
 Ambiguous/risky request: ask, don't guess. Don't build on assumptions. Big/irreversible step: restate understanding, confirm. Unreachable: take least-destructive, most-reversible option, note assumption. Full procedure + examples: load `ask-clarify` skill.
