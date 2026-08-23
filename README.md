@@ -62,7 +62,7 @@ Skills are **vendored copies** (self-contained, offline-capable). Provenance:
   `compress`, `karpathy-guidelines`, `find-skills`
 
 ## Intentionally excluded
-superpowers pack, graphify, all backend / Supabase skills, `bara-ui` (app-specific),
+superpowers pack, all backend / Supabase skills, `bara-ui` (app-specific),
 and the custom Rust instruction (`rust-skills.md`).
 
 ## Naming notes

@@ -16,12 +16,6 @@ app-specific skills such as `bara-ui`, and the custom Rust instruction (`rust-sk
 - If you need a decision, a hint, or an in-game action from the user, just **ASK**.
   Do not spin waiting for it.
 
-## `/graphify`-style trigger
-The user uses a `/graphify` convention (any input → knowledge graph) that is
-maintained separately in `~/.claude/skills/graphify`. When the user types
-`/graphify`, invoke that skill before doing anything else. (This kit does not
-vendor graphify; it is referenced here for convention continuity.)
-
 ## Using skills
 When a task matches a vendored skill, load it via the client's skill mechanism
 **before** responding or taking action.

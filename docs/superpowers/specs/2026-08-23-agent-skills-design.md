@@ -12,7 +12,7 @@ machine (macOS + Windows). Replaces scattered global skills with a curated, offl
 - **Target dir:** `~/.agents/skills`, `~/.agents/AGENTS.md`.
 - **Skill sourcing:** VENDORED COPIES (self-contained, offline).
 - **Repo name:** `agents-skills` (name collisions are not a concern).
-- **Excluded:** superpowers pack (all of it), graphify, ALL backend (Supabase),
+- **Excluded:** superpowers pack (all of it), ALL backend (Supabase),
   `bara-ui` (app-specific, kept local only), and the custom Rust instruction (`rust-skills.md`).
 
 ## Curated kit philosophy
@@ -33,7 +33,7 @@ custom skills (caveman, compress, karpathy-guidelines, research, grill-*).
 | Knowledge/compress | caveman, compress, karpathy-guidelines, handoff (mattpocock) |
 | Grill | grill-me, grill-with-docs, grilling, wait-what (mattpocock) |
 | Authoring | anthropics skill-creator (kit "write-a-skill"); find-skills |
-| Global memory | memory/AGENTS.md (wires /graphify-style triggers + never-block rule) |
+| Global memory | memory/AGENTS.md (wires never-block rule) |
 
 > Note: `handoff` here = mattpocock/skills handoff (knowledge/compress group), **not** the
 > superpowers handoff (which is excluded). The custom Rust instruction (`rust-skills.md`)
