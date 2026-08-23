@@ -52,6 +52,7 @@ Folder names follow each upstream project's own naming.
 **Knowledge / compress** — `caveman`, `compress`, `karpathy-guidelines`, `handoff` (mattpocock handoff)
 **Grill** — `grill-me`, `grill-with-docs`, `grilling`, `wait-what`
 **Authoring** — `skill-creator` (anthropics; kit also listed "write-a-skill"), `find-skills`
+**Project guidance** — `fff` (FFF.nvim: Rust + Lua Neovim file picker; vendored from its AGENTS.md)
 
 ## Sourcing
 Skills are **vendored copies** (self-contained, offline-capable). Provenance:
