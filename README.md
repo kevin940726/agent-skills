@@ -54,6 +54,7 @@ Folder names follow each upstream project's own naming.
 **Authoring** — `skill-creator` (anthropics; kit also listed "write-a-skill"), `find-skills`
 **Writing for agents / productivity** — `writing-for-agents` (write skills/AGENTS.md docs agents consume; + `SKILL-MECHANICS.md` companion), `to-questionnaire` (turn a gap in someone else's head into a questionnaire)
 **Router** — `ask-matt` (user-invoked router; points you at the right skill/flow in this kit when you are unsure)
+**Quality / shipping** — `security-review` (pre-merge vuln gate: secrets, injection, authz, XSS, CVEs, with cited sources), `changelog` (release notes from git history, grouped + linked), `docs` (write/update README, API reference, JSDoc; example-driven, no-slop)
 **File search (MCP)** — `fff` (fff-mcp file-search server; replaces grep/ripgrep for agents)
 **Agent behavior** — `ask-clarify` (clarify before guessing; restate intent, offer options, safe fallback when unreachable)
 **Writing quality** — `no-slop` (anti-slop prose rules; no em-dashes, filler, intensifiers, hollow claims, clickbait headings)
