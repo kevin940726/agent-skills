@@ -1,6 +1,8 @@
 ---
+
 name: web-app-design
 description: Industry-standard guidelines for building modern web interfaces (based on Vercel Web Interface Guidelines)
+license: MIT
 ---
 
 ## Interactions

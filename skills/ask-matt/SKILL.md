@@ -1,6 +1,8 @@
 ---
+
 name: ask-matt
 description: Ask which skill or flow fits your situation. A router over the skills in this kit. User-invoked only — type /ask-matt when you are unsure which skill to reach for.
+license: MIT
 disable-model-invocation: true
 ---
 

@@ -1,6 +1,8 @@
 ---
+
 name: wait-what
 description: "Stop. That last message did not land: re-pitch it."
+license: MIT
 disable-model-invocation: true
 ---
 

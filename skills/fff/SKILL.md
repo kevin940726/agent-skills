@@ -1,6 +1,8 @@
 ---
+
 name: fff
 description: Replace grep/ripgrep with fff for any file or content search across a repo. Use it when the user references fff/FFF or you need code/text search; prefer the fff MCP tools (ffgrep, fffind, fff-multi-grep) over shell grep.
+license: MIT
 ---
 
 # fff — file search for agents

@@ -1,6 +1,8 @@
 ---
+
 name: ask-clarify
 description: Clarify with the user instead of guessing whenever a request is ambiguous, under-specified, risky, or could go more than one way. Load this skill before acting; it gives a restate-offer-options procedure and a safe fallback when the user is unreachable. Trigger even when the user doesn't explicitly ask to clarify.
+license: MIT
 ---
 
 # Clarify before acting

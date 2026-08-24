@@ -100,10 +100,22 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `web-first` | Agent behavior | Fetch current/authoritative sources before answering; cite as a table. | custom |
 
 ## Sourcing
-Skills are **vendored copies** (self-contained, offline-capable). Provenance:
-- [mattpocock/skills](https://github.com/mattpocock/skills) — planning, debugging, testing, architecture, git, grill, handoff, writing-for-agents, to-questionnaire, ask-matt, research
-- [anthropics/skills](https://github.com/anthropics/skills) — `frontend-design`, `skill-creator`
-- Custom (this kit) — `ask-clarify`, `web-first`, `no-slop`, `security-review`, `changelog`, `docs`
+Skills are **vendored copies** (self-contained, offline-capable). Each skill
+folder carries its own `LICENSE` (or `LICENSE.txt`) and a `SOURCE` file noting
+upstream provenance. Licenses: MIT (most), Apache-2.0 (anthropics), and `no-slop`
+is included with attribution (its upstream specifies no license).
+
+- [mattpocock/skills](https://github.com/mattpocock/skills) — `to-spec`, `to-tickets`, `prototype`, `implement`, `wayfinder`, `wizard`, `diagnosing-bugs`, `triage`, `tdd`, `code-review`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `resolving-merge-conflicts`, `setup-pre-commit`, `research`, `handoff`, `grill-me`, `grill-with-docs`, `grilling`, `wait-what`, `writing-for-agents`, `to-questionnaire`, `ask-matt`
+- [anthropics/skills](https://github.com/anthropics/skills) — `frontend-design`, `skill-creator` (Apache-2.0)
+- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — `vercel-react-best-practices`, `vercel-react-native-skills`
+- [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) — `web-app-design`
+- [vercel-labs/skills](https://github.com/vercel-labs/skills) — `find-skills`
+- [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — `shadcn`
+- [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) — `caveman`, `compress`
+- [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) — `karpathy-guidelines`
+- [dmtrKovalenko/fff](https://github.com/dmtrKovalenko/fff) — `fff`
+- [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules) — `no-slop` (upstream specifies no license; included with attribution)
+- Custom (this kit, MIT) — `ask-clarify`, `web-first`, `security-review`, `changelog`, `docs`
 
 ## Naming notes
 A few kit names had no separate upstream skill; closest equivalents were vendored:

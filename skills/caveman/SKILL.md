@@ -1,6 +1,8 @@
 ---
+
 name: caveman
 description: >
+license: MIT
   Ultra-compressed communication mode. Slash token usage ~75% by speaking like caveman
   while keeping full technical accuracy. Use when user says "caveman mode", "talk like caveman",
   "use caveman", "less tokens", "be brief", or invokes /caveman. Also auto-triggers

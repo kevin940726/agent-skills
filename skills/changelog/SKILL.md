@@ -1,6 +1,8 @@
 ---
+
 name: changelog
 description: Generate or update a changelog from git history. Load this skill when cutting a release, writing release notes, or asked for "what changed". Group commits by type (feat/fix/refactor/docs), link to commits or PRs, and write clean, specific entries that obey the no-slop rules.
+license: MIT
 ---
 
 # Changelog from git history

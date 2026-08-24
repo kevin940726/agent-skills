@@ -1,6 +1,8 @@
 ---
+
 name: docs
 description: Write or update documentation for code (README, API reference, module or function docs like JSDoc/TSDoc/docstrings). Load this skill when the user asks for docs, wants a new module documented, or a README is stale. Produce specific, example-driven docs that obey the no-slop rules.
+license: MIT
 ---
 
 # Docs for code

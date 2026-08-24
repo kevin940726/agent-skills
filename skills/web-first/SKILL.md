@@ -1,6 +1,8 @@
 ---
+
 name: web-first
 description: Before answering a coding, library, or best-practice question, search the web for the most popular and latest battle-tested sources, then present a cited table with confidence and version columns. Load this skill for anything version-specific, "latest"/"most popular" comparisons, or open-ended questions; skip only stable facts you are certain about.
+license: MIT
 ---
 
 # Fetch before you act

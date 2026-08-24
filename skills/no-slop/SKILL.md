@@ -1,6 +1,8 @@
 ---
+
 name: no-slop
 description: Writing any prose for the user (chat, summaries, docs, emails, commits, PRs, your own replies)? Keep it specific and slop-free — no em-dashes, filler, intensifiers, hollow claims, or clickbait headings. Apply it even when the user doesn't ask, and to your own output.
+license: See LICENSE
 ---
 
 # Write like a person who has done the thing
