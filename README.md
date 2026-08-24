@@ -6,33 +6,46 @@ installer, and symlink the skills into `~/.agents/skills` so any agent client
 
 ## Install
 
+**Recommended — via the Agent Skills CLI** (installs into every agent you have:
+Claude Code, opencode, Cursor, Codex, Copilot, Gemini, …):
+
+```sh
+npx skills add kevin940726/agent-skills
+```
+
+The CLI detects your installed agents, lets you pick which skills to take, and
+writes each into the correct location. Re-run to update.
+
+**Offline fallback — symlink install** (no network; for air-gapped machines or
+when you don't want the `skills` CLI). Copies editable skill files into
+`~/.agents/skills`, which is read by opencode and any agent-compatible client:
+
 **macOS / Linux / Git Bash (Windows):**
 ```sh
 git clone https://github.com/kevin940726/agent-skills.git agents-skills
-cd agents-skills
+cd agent-skills
 ./install.sh
 ```
 
 **Windows (PowerShell):**
 ```powershell
 git clone https://github.com/kevin940726/agent-skills.git agents-skills
-cd agents-skills
+cd agent-skills
 .\install.ps1
 ```
 
-The installer:
-- symlinks `skills/<name>` → `~/.agents/skills/<name>` (falls back to copy where
-  symlinks are unsupported, e.g. Windows without Developer Mode),
-- symlinks `memory/AGENTS.md` → `~/.agents/AGENTS.md`.
-It is idempotent: re-running relinks/updates without creating duplicates.
+The fallback installer symlinks `skills/<name>` → `~/.agents/skills/<name>`
+(falls back to copy where symlinks are unsupported, e.g. Windows without
+Developer Mode), and `memory/AGENTS.md` → `~/.agents/AGENTS.md`. It is
+idempotent: re-running relinks/updates without creating duplicates.
 
 ## Layout
 ```
 agents-skills/
 ├── README.md
 ├── LICENSE
-├── install.sh                 # POSIX (macOS / Linux / Git Bash)
-├── install.ps1                # Windows PowerShell
+├── install.sh                 # offline fallback installer (POSIX)
+├── install.ps1                # offline fallback installer (Windows)
 ├── skills/                    # vendored, self-contained skills
 └── memory/AGENTS.md           # global agent memory / guidance
 ```

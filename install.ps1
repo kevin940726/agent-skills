@@ -1,6 +1,9 @@
-# agents-skills installer (Windows PowerShell)
-# Symlinks (mklink/junction) or copies vendored skills into $HOME/.agents so any
-# agent client can find them. Idempotent: re-running relinks/updates without duplicates.
+# agents-skills OFFLINE FALLBACK installer (Windows PowerShell)
+# Symlinks (mklink/junction) or copies vendored skills into $HOME/.agents so
+# opencode / any agent-compatible client can find them. Prefer
+# `npx skills add kevin940726/agent-skills` for multi-agent installs
+# (Claude Code, Cursor, Codex, Copilot, Gemini, ...).
+# Idempotent: re-running relinks/updates without duplicates.
 $ErrorActionPreference = "Stop"
 
 $Repo = Split-Path -Parent $MyInvocation.MyCommand.Definition

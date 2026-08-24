@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# agents-skills installer (POSIX: macOS, Linux, Git Bash on Windows)
-# Symlinks (or copies) vendored skills into ~/.agents so any agent client can find them.
+# agents-skills OFFLINE FALLBACK installer (POSIX: macOS, Linux, Git Bash on Windows)
+# Symlinks (or copies) vendored skills into ~/.agents so opencode / any
+# agent-compatible client can find them. Prefer `npx skills add kevin940726/agent-skills`
+# for multi-agent installs (Claude Code, Cursor, Codex, Copilot, Gemini, ...).
 # Idempotent: re-running relinks/updates without creating duplicates.
 set -euo pipefail
 

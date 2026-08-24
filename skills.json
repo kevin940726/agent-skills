@@ -1,0 +1,8 @@
+{
+  "name": "agent-skills",
+  "version": "1.0.0",
+  "description": "A portable, version-controlled kit of curated agent skills (planning, debugging, architecture, web/UI, writing, and more).",
+  "skills": [
+    "skills/*/SKILL.md"
+  ]
+}
