@@ -36,5 +36,14 @@ Compact cited table — one row per finding:
 - **Verified:** today's date, so stale guidance surfaces later.
 - Attribute accurately: quote exactly or paraphrase clearly; every claim traces to a real source.
 
+## Recommend and offer options
+After the table:
+1. **State your suggestion** — one line: which existing solution to adopt, or that none fits and custom is justified.
+2. **Offer a questionnaire** — 2-4 concrete choices so the user decides fast, e.g.:
+   - "Adopt `openpyxl` (maintained, covers parsing) — go with this?"
+   - "Use stdlib `csv` instead (no dep) — lighter?"
+   - "Hand-roll it (nothing fits) — proceed?"
+   For a multi-question survey, load `to-questionnaire`.
+
 ## Cache recurring findings
 If a lookup will recur, save to `memory/references/<topic>.md` (Verified date + table); reuse via `fff` before re-fetching.
