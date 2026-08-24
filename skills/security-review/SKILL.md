@@ -7,12 +7,9 @@ license: MIT
 
 # Security review before merge
 
-Load this skill when a branch is about to merge, a PR is open, or you have written code that
-handles data, auth, or network calls. The goal is to catch vulnerabilities before they ship,
-not to comment on style. A clean diff that still leaks a token or trusts user input is a
-breach waiting to happen.
-
-This is a trust gate. Treat every finding as something a real attacker would try first.
+This is a trust gate: catch vulnerabilities before they ship, and route style comments to
+`code-review`. A clean diff that still leaks a token or trusts user input is a breach waiting
+to happen. Treat every finding as something a real attacker would try first.
 
 ## When to run
 - Before merging any branch with logic that touches auth, data, or the network.
@@ -29,7 +26,7 @@ Walk the diff against this list. Each item is a class of bug, not a style nit:
 - **XSS and output encoding.** User input rendered into HTML, Markdown, or a template without encoding or a sanitizer.
 - **Insecure deserialization or eval.** `eval`, `pickle.load`, `yaml.load` (unsafe), or untrusted input pushed into code paths.
 - **Weak crypto.** MD5/SHA1 for passwords, hardcoded IVs, ECB mode, home-grown schemes.
-- **Dependency risk.** New or bumped packages with known CVEs, or packages from untrusted sources. For current CVE data, search the web (see below).
+- **Dependency risk.** New or bumped packages with known CVEs, or packages from untrusted sources.
 
 ## How to report
 Always return a compact findings table:
@@ -46,9 +43,9 @@ Column rules:
 - **Source:** a real, clickable reference (OWASP, CWE, a CVE page, or a `web-first` search result).
 
 ## Use web-first for current truth
-For CVEs, dependency risk, and "is this still the right control" questions, search the web
-before asserting (load `web-first`). Cite the advisory or release note in the Source column.
-Do not rely on training memory for what is exploitable this month.
+For CVEs, dependency risk, and "is this still the right control" questions, confirm
+exploitability against this month's advisories via `web-first` and cite the advisory or
+release note in the Source column.
 
 ## Gate the merge
 End with a verdict: **safe to merge**, **merge after fixes**, or **block**. State the highest

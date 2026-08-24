@@ -27,6 +27,8 @@ is always on; this skill is the how-to.
 4. **Ask the minimum.** One or two questions that unblock the next step.
 5. **Confirm before destructive steps.** Get an explicit yes before anything hard to undo.
 
+*Done when* you've restated your understanding and the user confirmed it (or gave explicit go-ahead).
+
 ## Examples
 - "add auth" → ask: session cookies, JWT, or OAuth/OIDC?
 - "speed up the build" → restate scope: local dev compile, CI, or produced binary?

@@ -27,7 +27,9 @@ and should follow the `no-slop` rules: concrete, example-driven, no filler.
 4. **Show the setup.** For a README: install, a minimal usage snippet, and the common next
    step. Skip the origin story and the feature laundry list.
 5. **Flag drift.** If the code and an existing doc disagree, trust the code and say so, or
-   ask. Never copy a stale sentence into the new doc.
+   ask.
+
+*Done when* the public surface is documented with a runnable example and any drift is flagged.
 
 ## Output shape
 For a function:
@@ -46,6 +48,5 @@ parseQuery("?page=2&sort=desc") // { page: 2, sort: "desc" }
 For a README, keep: what it is, install, one usage example, links to deeper docs.
 
 ## Keep it clean
-Apply `no-slop`: no "powerful", "robust", "seamless"; no sentence that could sit on any
-project's README unchanged. Replace a generic claim with the concrete behavior or an example.
-Prefer one good example over a long description.
+Apply `no-slop`: replace a generic claim with the concrete behavior or an example, and prefer
+one good example over a long description.

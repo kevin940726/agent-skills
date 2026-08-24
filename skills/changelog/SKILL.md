@@ -28,6 +28,8 @@ and free of filler.
 5. **Surface breaking changes.** Put anything that requires a user or downstream action under
    a Breaking heading at the top.
 
+*Done when* the range is grouped by intent, each entry is linked, and breaking changes are surfaced.
+
 ## Output shape
 ```markdown
 ## 1.4.0 (2026-08-23)
@@ -44,7 +46,6 @@ and free of filler.
 ```
 
 ## Keep it clean
-Apply the `no-slop` rules: no filler ("In this release we are pleased to"), no vague verbs
-("improve performance" becomes "cut p95 load time from 1.2s to 400ms"). One concrete detail
-per line beats three generic ones. Omit chores with no reader impact (dependency bumps with
+Apply the `no-slop` rules: write one concrete detail per line ("cut p95 load time from 1.2s to
+400ms" beats "improve performance"). Omit chores with no reader impact (dependency bumps with
 no behavior change, lint fixes) unless the user wants them.
