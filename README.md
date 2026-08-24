@@ -1,13 +1,13 @@
 # agents-skills
 
-A portable, version-controlled kit of curated agent skills. Clone it, run the
-installer, and symlink the skills into `~/.agents/skills` so any agent client
-(Claude Code, Codex, opencode, Copilot, Gemini) can use them.
+A portable, version-controlled kit of curated agent skills. Install it with the
+Agent Skills CLI and any agent client (Claude Code, Codex, opencode, Copilot,
+Gemini) picks the skills up automatically.
 
 ## Install
 
-**Recommended — via the Agent Skills CLI** (installs into every agent you have:
-Claude Code, opencode, Cursor, Codex, Copilot, Gemini, …):
+Install with the Agent Skills CLI (installs into every agent you have: Claude
+Code, opencode, Cursor, Codex, Copilot, Gemini, …):
 
 ```sh
 npx skills add kevin940726/agent-skills
@@ -16,38 +16,13 @@ npx skills add kevin940726/agent-skills
 The CLI detects your installed agents, lets you pick which skills to take, and
 writes each into the correct location. Re-run to update.
 
-**Offline fallback — symlink install** (no network; for air-gapped machines or
-when you don't want the `skills` CLI). Copies editable skill files into
-`~/.agents/skills`, which is read by opencode and any agent-compatible client:
-
-**macOS / Linux / Git Bash (Windows):**
-```sh
-git clone https://github.com/kevin940726/agent-skills.git agents-skills
-cd agent-skills
-./install.sh
-```
-
-**Windows (PowerShell):**
-```powershell
-git clone https://github.com/kevin940726/agent-skills.git agents-skills
-cd agent-skills
-.\install.ps1
-```
-
-The fallback installer symlinks `skills/<name>` → `~/.agents/skills/<name>`
-(falls back to copy where symlinks are unsupported, e.g. Windows without
-Developer Mode), and `memory/AGENTS.md` → `~/.agents/AGENTS.md`. It is
-idempotent: re-running relinks/updates without creating duplicates.
-
 ## Layout
 ```
 agents-skills/
 ├── README.md
 ├── LICENSE
-├── install.sh                 # offline fallback installer (POSIX)
-├── install.ps1                # offline fallback installer (Windows)
 ├── skills/                    # vendored, self-contained skills
-└── memory/AGENTS.md           # global agent memory / guidance
+└── memory/AGENTS.md           # optional global agent memory / guidance
 ```
 
 ## Skill kit
@@ -95,9 +70,10 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `changelog` | Quality / shipping | Generate release notes from git history, grouped by type and linked. | custom |
 | `docs` | Quality / shipping | Write/update README, API reference, JSDoc; example-driven, no-slop. | custom |
 | `fff` | File search (MCP) | fff-mcp file-search server; prefer over grep/ripgrep for agents. | [dmtrKovalenko/fff](https://github.com/dmtrKovalenko/fff) |
-| `ask-clarify` | Agent behavior | Clarify with the user before acting instead of guessing. | custom |
+| `ask-clarify` | Agent behavior | Clarify before acting; also loads on pushback ("wait", "but the user…") and question-mark prompts. | custom |
 | `no-slop` | Writing quality | Anti-slop prose rules: no em-dashes, filler, intensifiers, hollow claims. | [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules/blob/main/skills/no-ai-slop/SKILL.md) |
-| `web-first` | Agent behavior | Fetch current/authoritative sources before answering; cite as a table. | custom |
+| `web-first` | Agent behavior | Before building custom code or stating a best practice, check the web for prior art — don't reinvent; adopt a battle-tested solution. | custom |
+| `rabbit-hole` | Agent behavior | Watch for scope creep; check prior art (web-first) and load ask-clarify before going deeper. | custom |
 
 ## Sourcing
 Skills are **vendored copies** (self-contained, offline-capable). Each skill
@@ -115,7 +91,7 @@ is included with attribution (its upstream specifies no license).
 - [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) — `karpathy-guidelines`
 - [dmtrKovalenko/fff](https://github.com/dmtrKovalenko/fff) — `fff`
 - [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules) — `no-slop` (upstream specifies no license; included with attribution)
-- Custom (this kit, MIT) — `ask-clarify`, `web-first`, `security-review`, `changelog`, `docs`
+- Custom (this kit, MIT) — `ask-clarify`, `web-first`, `rabbit-hole`, `security-review`, `changelog`, `docs`
 
 ## Naming notes
 A few kit names had no separate upstream skill; closest equivalents were vendored:

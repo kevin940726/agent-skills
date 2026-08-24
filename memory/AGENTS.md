@@ -1,11 +1,11 @@
 # Global Agent Memory (AGENTS.md)
 
-`agents-skills` installer symlinks this to `~/.agents/AGENTS.md`. It wires the
-kit's conventions for any agent client that reads it. Edit the sections below to
-match your own defaults.
+Optional global agent memory. Copy (or symlink) this to `~/.agents/AGENTS.md`
+to wire the kit's conventions into any agent client that reads it. Edit the
+sections below to match your own defaults.
 
 ## What this repo is
-`agents-skills`: version-controlled portable kit of curated agent skills. Skills in `skills/<name>/`, symlinked/copied to `~/.agents/skills/`.
+`agents-skills`: version-controlled portable kit of curated agent skills. Skills in `skills/<name>/`, installed into `~/.agents/skills/` by the Agent Skills CLI (`npx skills add`).
 
 ## Non-blocking by default
 - Run never-finish tasks (servers, REPLs, `while True` loops, open-ended waits) in the background; ask the user to say when done. Don't hold their turn.
