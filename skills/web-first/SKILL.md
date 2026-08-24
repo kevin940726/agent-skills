@@ -1,62 +1,40 @@
 ---
-
 name: web-first
-description: Before answering a coding, library, or best-practice question, search the web for the most popular and latest battle-tested sources, then present a cited table with confidence and version columns. Load this skill for anything version-specific, "latest"/"most popular" comparisons, or open-ended questions; skip only stable facts you are certain about.
+description: Before building custom code or stating a best practice, check the web — does an existing library, framework feature, or pattern already solve it (don't reinvent), and is the current approach still best? Prefer adopting a battle-tested solution over writing your own. Load for any task that could be solved by prior art, anything non-trivial built from scratch, or anything whose currency you're unsure of.
 license: MIT
 ---
 
-# Fetch before you act
+# Check the web before you build
 
-Load this skill when the answer depends on information that may have changed, varies by
-version, or comes from a source you should verify rather than guess. Guessing at a library
-API or a "best practice" from memory wastes the user's time when a two-second search gives
-the correct, current answer. Search first; answer or code second.
+Before writing custom code or endorsing a practice, confirm two things: it isn't
+already solved, and it's still current. Adopting beats reinventing.
 
-The point is not to show effort, it is to give the user the most popular and latest
-battle-tested result instead of a plausible hallucination.
+## When to load
+- Building anything non-trivial from scratch (function, component, script, pipeline).
+- Stating or reaching for a "best practice" you didn't verify.
+- Unsure a library/API/pattern is current or idiomatic for the version in play.
 
-## Two-tier trigger
-- **Auto-fetch (default):** coding, library/API, framework, config, or version-specific questions. Do the search before answering.
-- **Skip the search:** pure chit-chat, stable version-independent facts you are certain about, or when the user says "from memory" / "don't search". No table, no fetch.
-- **Session cache:** if you fetched the same thing minutes ago this session, reuse it instead of re-fetching.
+Skip only for stable facts you're certain of, or when the user says "from memory".
 
-## How to search
-1. **Broad pass first.** One websearch to map the landscape and find the authoritative and popular sources.
-2. **Deep pass on the top 2-3.** webfetch the official docs, a top Stack Overflow/GitHub thread, or a reputable write-up. Prefer official docs and pinned, recent versions over old blog posts.
-3. **Rank by trust.** Official docs and source repos outrank uncited blogs. Note the version and date of what you read so the user knows if it is current.
-4. **Flag mismatches.** If a source describes a different major version than the user is on, say so explicitly in the version column.
+## Find prior art
+1. **Broad pass:** one websearch for the capability + ecosystem (e.g. "python parse xlsx", "react data fetch 15").
+2. **Deep pass:** open the top 2-3 — official docs, a pinned GitHub/SO thread, a reputable write-up. Prefer official + recent over old blogs.
+3. **Adopt vs build:** if a maintained library or stdlib feature covers it, use it; hand-roll only when adoption cost exceeds build cost or nothing fits.
+4. **Verify currency:** note the version/date read; if a source is a different major than the user's, say so.
 
-## Scope toggle (ask only if it matters)
-- **Brief:** top 1 source, one row, enough to act.
-- **Exhaustive:** full table with alternatives and trade-offs.
-Default to brief for a direct how-to; offer exhaustive when the user is choosing between options. Keep the fetch brief for simple asks.
+*Done when* you can name the existing solution (or confirm none fits) and state adopt-vs-build.
 
-## How to present the result
-Always hand the user a compact, cited table:
+## Present
+Compact cited table — one row per finding:
 
-| Topic | Recommendation / answer | Source | Version | Verified | Confidence | Why trusted |
-|-------|------------------------|--------|--------|----------|------------|-------------|
-| React 19 `useFormStatus` | Returns `{pending, data, method, action}` | [React docs](https://react.dev) | 19 | 2026-08-23 | High | Official, current major |
-| Form lib choice | `react-hook-form` for uncontrolled, `formik` legacy | [npm trends](https://npmtrends.com) | — | 2026-08-23 | Med | Download rank, 12 mo |
+| Need | Existing solution / answer | Source | Version | Verified | Confidence |
+|------|---------------------------|--------|---------|----------|------------|
+| parse xlsx | `openpyxl` (maintained) | [docs](https://openpyxl.readthedocs.io) | — | 2026-08-24 | High |
 
-Column rules:
-- **Source:** a real, clickable URL. No URL, no claim.
-- **Version:** the major/minor version the source describes; mark "≠ yours" if it differs.
-- **Verified:** the date you read it (today). Surfaces stale guidance later.
-- **Confidence:** High (official/docs/source), Med (popular but uncited), Low (conflicting/old). If Low, say so and let the user pick.
-- **Why trusted:** one line weighing popularity vs authority.
+- **Source:** real clickable URL. No URL, no claim.
+- **Confidence:** High (official/source), Med (popular, uncited), Low (conflicting/old) — say so and let the user pick.
+- **Verified:** today's date, so stale guidance surfaces later.
+- Attribute accurately: quote exactly or paraphrase clearly; every claim traces to a real source.
 
-## Quote and attribute accurately
-If you quote a source, every word must match exactly (reuse the `no-slop` accurate-quote rule). Mark any needed edit with `[...]`. Name the speaker/medium when you introduce a quote. Paraphrase without quotes if you must clean up wording. Every quoted position traces to a real, verifiable source.
-
-## Cache reusable findings
-When a fetch is likely to recur (a library you use often, a standing best-practice question), write it to `memory/references/<topic>.md`:
-
-```
-# <topic>
-Verified: 2026-08-23
-| Topic | Answer | Source | Version | Confidence |
-...
-```
-
-Retrieve from there next time via the `fff` file-search tools before re-fetching. Stamp the verified date so stale entries are obvious.
+## Cache recurring findings
+If a lookup will recur, save to `memory/references/<topic>.md` (Verified date + table); reuse via `fff` before re-fetching.
