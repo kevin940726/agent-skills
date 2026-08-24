@@ -1,7 +1,7 @@
 ---
 
 name: ask-clarify
-description: Clarify with the user instead of guessing whenever a request is ambiguous, under-specified, risky, or could go more than one way. Load this skill before acting; it gives a restate-offer-options procedure and a safe fallback when the user is unreachable. Trigger even when the user doesn't explicitly ask to clarify.
+description: Clarify with the user instead of guessing. Load when a request is ambiguous, under-specified, risky, or could go more than one way; when the user pushes back or corrects (says "wait", "but the user…", "actually", "no I meant"); or when the user's message is a question (has a "?") — restate it and confirm the underlying intent before answering. Trigger even when the user doesn't explicitly ask to clarify.
 license: MIT
 ---
 
@@ -17,6 +17,8 @@ is always on; this skill is the how-to.
 - Before irreversible changes: deletes, force-push, schema/migration, config affecting others.
 - When choosing between meaningfully different approaches or scopes.
 - When you would have to guess which file, API, dependency, or convention the user means.
+- The user pushes back or corrects: "wait", "but the user…", "actually", "no, I meant".
+- The user's message is a question (contains "?"): restate it in your own words and confirm intent before answering.
 
 ## Procedure
 1. **Restate.** Echo your understanding: "I'm about to <X> because I think you mean <Y>."
