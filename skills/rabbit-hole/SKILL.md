@@ -18,9 +18,10 @@ then decide: continue, adopt, or defer.
 1. **Name the hole:** what exactly are you doing now, and why?
 2. **Check prior art:** for the sub-problem, load `web-first` to find an existing solution.
 3. **Weigh the detour:** does solving it now unblock the main goal, or is it a tangent?
-4. **Decide:**
+4. **Clarify before committing:** load `ask-clarify` and prompt the user with questions about the detour — is it in scope, which direction, adopt vs defer — instead of going deeper alone.
+5. **Decide:**
    - **Adopt** — an existing tool/library covers it; use it, drop the custom work.
    - **Continue** — it's on the critical path; bound it with a stop condition.
    - **Defer** — tangent; note it and return after the main task.
 
-*Done when* you've adopted an existing solution or set an explicit stop for the detour.
+*Done when* you've clarified with the user and adopted an existing solution or set an explicit stop for the detour.
