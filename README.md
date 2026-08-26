@@ -1,42 +1,50 @@
-# agents-skills
+# agent-skills
 
-A portable, version-controlled kit of curated agent skills. Install it with the
-Agent Skills CLI and any agent client (Claude Code, Codex, opencode, Copilot,
-Gemini) picks the skills up automatically.
+A maintained kit of **41 agent skills** — planning, debugging, architecture,
+web/UI, research, and writing — plus a set of **always-on conventions** that
+wire straight into your agent's memory.
 
-## Install
+Most skills are vendored from projects you may already trust (Anthropic,
+Vercel, shadcn-ui, mattpocock/skills); seven are written here. Every skill
+folder carries its own license and provenance, so installs stay auditable.
 
-Install with the Agent Skills CLI (installs into every agent you have: Claude
-Code, opencode, Cursor, Codex, Copilot, Gemini, …):
+Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
+client supported by the [Agent Skills CLI](https://github.com/vercel-labs/skills).
+
+## ⚡ Quick start
+
+**1 · Install** — the CLI detects your installed agents, lets you pick skills
+interactively, and writes each into the right location:
 
 ```sh
 npx skills add kevin940726/agent-skills
 ```
 
-The CLI detects your installed agents, lets you pick which skills to take, and
-writes each into the correct location. Re-run to update.
+Re-run the same command whenever you want to update.
 
-Then tell your agent: **"Set up kevin940726/agent-skills."** That prompt loads
-the `kit-setup` skill, which merges the kit's always-on conventions (fff search,
-clarify-before-acting, no-slop prose, security gate) into your global memory
-file — `AGENTS.md` / `CLAUDE.md`. It detects which clients the kit is installed
-in, skips rules you already have, and shows you the diff before writing. Run it
-once after installing, again whenever you update the kit, and on any new
-machine or client.
+**2 · Wire in the conventions** — tell your agent:
 
-## Layout
-```
-agents-skills/
-├── README.md
-├── LICENSE
-└── skills/                    # vendored, self-contained skills
-    └── kit-setup/AGENTS.md    # always-on conventions, merged into client memory by kit-setup
-```
+> Set up kevin940726/agent-skills
 
-## Skill kit
+That loads the `kit-setup` skill, which finds where the kit was installed,
+merges the always-on rules (fff search, clarify-before-acting, no-slop prose,
+security merge gate) into your global `AGENTS.md` / `CLAUDE.md`, skips rules
+you already have, and shows you the diff before writing anything.
+
+Run step 2 again after each update, and on any new machine or client.
+
+## Two layers
+
+- **Skills** load on demand — their descriptions decide when. Pick them at
+  install time, forget them until relevant.
+- **Conventions** (`skills/kit-setup/AGENTS.md`) are always-on defaults that
+  apply to every task. They only take effect once merged into client memory,
+  which is exactly what step 2 does.
+
+## 🧩 The skills
 
 One row per skill. Folder names follow each upstream project's own naming; the
-**Source** column points at the provenance for vendored skills and marks our own.
+**Source** column marks provenance, `custom` means written for this kit.
 
 | Skill | Category | What it does (one line) | Source |
 |-------|----------|-------------------------|--------|
@@ -83,11 +91,22 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `web-first` | Agent behavior | Before building custom code or stating a best practice, check the web for prior art — don't reinvent; adopt a battle-tested solution. | custom |
 | `rabbit-hole` | Agent behavior | Watch for scope creep; check prior art (web-first) and load ask-clarify before going deeper. | custom |
 
-## Sourcing
-Skills are **vendored copies** (self-contained, offline-capable). Each skill
-folder carries its own `LICENSE` (or `LICENSE.txt`) and a `SOURCE` file noting
-upstream provenance. Licenses: MIT (most), Apache-2.0 (anthropics), and `no-slop`
-is included with attribution (its upstream specifies no license).
+## Layout
+
+```
+agent-skills/
+├── README.md
+├── LICENSE
+└── skills/                    # vendored, self-contained skills
+    └── kit-setup/AGENTS.md    # always-on conventions, merged into client memory by kit-setup
+```
+
+## Sourcing & licenses
+
+Skills are vendored copies: self-contained, offline-capable, each folder with
+its own `LICENSE` (or `LICENSE.txt`) and a `SOURCE` file noting upstream.
+Licenses: MIT (most), Apache-2.0 (anthropics), and `no-slop` included with
+attribution (its upstream specifies no license).
 
 - [mattpocock/skills](https://github.com/mattpocock/skills) — `to-spec`, `to-tickets`, `prototype`, `implement`, `wayfinder`, `wizard`, `diagnosing-bugs`, `triage`, `tdd`, `code-review`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `resolving-merge-conflicts`, `setup-pre-commit`, `research`, `handoff`, `grill-me`, `grill-with-docs`, `grilling`, `wait-what`, `writing-for-agents`, `to-questionnaire`, `ask-matt`
 - [anthropics/skills](https://github.com/anthropics/skills) — `frontend-design`, `skill-creator` (Apache-2.0)
@@ -100,12 +119,12 @@ is included with attribution (its upstream specifies no license).
 - [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules) — `no-slop` (upstream specifies no license; included with attribution)
 - Custom (this kit, MIT) — `ask-clarify`, `web-first`, `rabbit-hole`, `security-review`, `changelog`, `docs`, `kit-setup`
 
-## Naming notes
-A few kit names had no separate upstream skill; closest equivalents were vendored:
-`to-issues → to-tickets`, `diagnose → diagnosing-bugs`, `write-a-skill → skill-creator`.
-`to-prd` had no upstream equivalent and was omitted.
+A few kit names had no direct upstream skill; closest equivalents were vendored
+(`to-issues` → `to-tickets`, `diagnose` → `diagnosing-bugs`, `write-a-skill` →
+`skill-creator`). `to-prd` had no equivalent and was omitted.
 
-## Security audits
+## 🔒 Security audits
+
 The Agent Skills CLI runs third-party scans (Gen Agent Trust Hub, Socket, Snyk)
 during install; results also live at
 [skills.sh/kevin940726/agent-skills](https://skills.sh/kevin940726/agent-skills).
@@ -122,4 +141,5 @@ Known flags and why they're accepted:
   code of its own beyond what upstream ships.
 
 ## License
+
 MIT.
