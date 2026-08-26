@@ -62,7 +62,6 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `grilling` | Grill | The reusable interview primitive behind grill-me/grill-with-docs/triage. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `wait-what` | Grill | Re-pitch a message that didn't land, with the context the user was missing. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `skill-creator` | Authoring | Create/improve/evaluate agent skills, including evals. | [anthropics/skills](https://github.com/anthropics/skills) |
-| `find-skills` | Authoring | Discover and install agent skills for a given need. | [vercel-labs/skills](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) |
 | `writing-for-agents` | Writing for agents | Reference for writing docs agents consume (skills, AGENTS.md). | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `to-questionnaire` | Writing for agents | Turn a gap in someone else's head into a questionnaire for them to fill in. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `ask-matt` | Router | User-invoked router; points you at the right skill/flow in this kit. | [mattpocock/skills](https://github.com/mattpocock/skills) |
@@ -85,7 +84,6 @@ is included with attribution (its upstream specifies no license).
 - [anthropics/skills](https://github.com/anthropics/skills) — `frontend-design`, `skill-creator` (Apache-2.0)
 - [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — `vercel-react-best-practices`, `vercel-react-native-skills`
 - [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) — `web-app-design`
-- [vercel-labs/skills](https://github.com/vercel-labs/skills) — `find-skills`
 - [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — `shadcn`
 - [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) — `caveman`, `compress`
 - [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) — `karpathy-guidelines`
@@ -97,6 +95,22 @@ is included with attribution (its upstream specifies no license).
 A few kit names had no separate upstream skill; closest equivalents were vendored:
 `to-issues → to-tickets`, `diagnose → diagnosing-bugs`, `write-a-skill → skill-creator`.
 `to-prd` had no upstream equivalent and was omitted.
+
+## Security audits
+The Agent Skills CLI runs third-party scans (Gen Agent Trust Hub, Socket, Snyk)
+during install; results also live at
+[skills.sh/kevin940726/agent-skills](https://skills.sh/kevin940726/agent-skills).
+Known flags and why they're accepted:
+
+- `compress`, `skill-creator` — LOW-severity Socket anomalies (no malware found):
+  `compress` pipes file text to a local `claude` call, so run it only on non-secret
+  files; `skill-creator`'s eval viewer renders local eval artifacts as HTML.
+- `fff` — flags the upstream `curl | bash` installer, now documented in its
+  `INSTALLATION.md`; the skill leads with Homebrew / GitHub Releases instead.
+- `web-first`, `research`, `triage`, and similar — Snyk "medium" for reading
+  third-party web/repo content at runtime; inherent to what those skills do.
+- Vendored skills inherit their upstream ratings; this kit adds no executable
+  code of its own beyond what upstream ships.
 
 ## License
 MIT.

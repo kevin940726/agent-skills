@@ -8,7 +8,8 @@ license: MIT
   implementing animations, or working with native modules. Triggers on tasks
   involving React Native, Expo, mobile performance, or native platform APIs.
 metadata:
-  author: vercel
+  author: vercel-labs (vendored copy maintained at kevin940726/agent-skills)
+  upstream: https://github.com/vercel-labs/agent-skills
   version: '1.0.0'
 ---
 

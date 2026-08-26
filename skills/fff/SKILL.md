@@ -23,17 +23,17 @@ Drop this into global/agent memory or a project `CLAUDE.md` / `AGENTS.md`:
 > For any file search or grep in the current git-indexed directory, use fff tools.
 
 ## Install the binary
-Linux/macOS:
+macOS / Linux (Homebrew — formula auto-bumped from upstream releases):
 ```bash
-curl -L https://dmtrkovalenko.dev/install-fff-mcp.sh | bash
+brew install dmtrKovalenko/fff/fff-mcp
 ```
-Windows (PowerShell):
-```powershell
-irm https://raw.githubusercontent.com/dmtrKovalenko/fff/main/install-mcp.ps1 | iex
-```
-The scripts print the exact wiring instructions for your client and install the
-`fff-mcp` binary (also published on GitHub Releases; Homebrew:
-`brew install dmtrKovalenko/fff/fff-mcp`).
+Any platform: grab a prebuilt `fff-mcp` binary from the upstream
+[GitHub Releases](https://github.com/dmtrKovalenko/fff/releases) page.
+
+The installer prints the exact wiring instructions for your client. If you would
+rather use the upstream one-line remote installers (`curl … | bash` /
+`irm … | iex`), see [INSTALLATION.md](INSTALLATION.md) for the commands and how
+to review the scripts first.
 
 ## Register with your client
 Point the client at the installed `fff-mcp` binary (use an absolute path, since desktop

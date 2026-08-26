@@ -110,3 +110,4 @@ Compressed:
 - If unsure whether something is code or prose, leave it unchanged
 - Original file is backed up as FILE.original.md before overwriting
 - Never compress FILE.original.md (skip it)
+- Run only on non-secret files: preserved regions (code blocks, commands, env vars) are copied verbatim into the Claude call, so any secrets inside them leave the machine unredacted
