@@ -23,12 +23,15 @@ the repo", and `--agent '*'` targets every client the CLI knows.
 
 ```sh
 npx skills add kevin940726/agent-skills -y -g \
-  --agent opencode \
+  --agent <client> \
   --skill kit-setup
 ```
 
-Ask the user which skills they want before adding more `--skill` flags. Humans
-can drop the flags and use the interactive picker instead.
+Ask the user two things before running: which clients to install into
+(`opencode`, `claude-code`, `codex`, … — suggesting the client of the current
+session is a good default), and which skills beyond `kit-setup`. Pass one
+`--agent` flag per client and one `--skill` per extra skill. Humans can drop
+the flags and use the interactive picker instead.
 
 ## Procedure
 1. **Read the source.** Open `AGENTS.md` next to this SKILL.md.
