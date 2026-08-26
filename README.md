@@ -20,7 +20,8 @@ Then ask your agent to **set up the kit**: it loads the `kit-setup` skill and
 merges the kit's always-on conventions (fff search, clarify-before-acting,
 no-slop prose, security gate) into your global memory file — `AGENTS.md` /
 `CLAUDE.md`. The conventions ship inside that skill, so this works for any
-client the CLI installed to.
+client the CLI installed to. Agents installing headless should pass flags
+(`-y -g --agent <client>`), since the CLI's pickers need an interactive terminal.
 
 ## Layout
 ```

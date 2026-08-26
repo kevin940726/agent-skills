@@ -11,6 +11,18 @@ descriptions. **Conventions** (`AGENTS.md` beside this file) are always-on
 defaults that apply to every task — they only work once merged into the
 client's global memory file.
 
+## If the kit needs installing or updating first
+The CLI's skill/agent pickers need an interactive terminal. Run it headless
+with flags instead:
+
+```sh
+npx skills add kevin940726/agent-skills -y -g --agent opencode
+```
+
+Repeat `--agent <slug>` per client (`opencode`, `claude-code`, `codex`, …) and
+add `--skill <name>` to take a subset. Humans can drop the flags and use the
+interactive picker.
+
 ## Procedure
 1. **Read the source.** Open `AGENTS.md` next to this SKILL.md.
 2. **Find the target.** The client's global memory file: opencode
