@@ -1,6 +1,6 @@
 # agent-skills
 
-A maintained kit of **41 agent skills** — planning, debugging, architecture,
+A maintained kit of **42 agent skills** — planning, debugging, architecture,
 web/UI, research, and writing — plus a set of **always-on conventions** that
 wire straight into your agent's memory.
 
