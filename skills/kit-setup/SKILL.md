@@ -6,46 +6,37 @@ license: MIT
 
 # Wire kit conventions into agent memory
 
-This kit ships two layers. **Skills** load on demand, triggered by their
+Two layers ship with this kit. **Skills** load on demand, triggered by their
 descriptions. **Conventions** (`AGENTS.md` beside this file) are always-on
-defaults that apply to every task — they only work once merged into the
-client's global memory file.
+defaults that only take effect once merged into each client's global memory
+file. The user runs `npx skills add kevin940726/agent-skills` themselves;
+this skill handles everything after install.
 
 ## When to run
 - After the first install: skills work immediately, conventions apply only once merged.
 - After each kit update: changed or new conventions land here first.
 - On a new machine or client: the global memory file starts empty.
 
-## If the kit needs installing or updating first
-The CLI's pickers need an interactive terminal, so run it headless with flags.
-Name skills and clients explicitly: `-y` alone means "install everything in
-the repo", and `--agent '*'` targets every client the CLI knows.
-
-```sh
-npx skills add kevin940726/agent-skills -y -g \
-  --agent <client> \
-  --skill kit-setup
-```
-
-Ask the user two things before running: which clients to install into
-(`opencode`, `claude-code`, `codex`, … — suggesting the client of the current
-session is a good default), and which skills beyond `kit-setup`. Pass one
-`--agent` flag per client and one `--skill` per extra skill. Humans can drop
-the flags and use the interactive picker instead.
-
 ## Procedure
 1. **Read the source.** Open `AGENTS.md` next to this SKILL.md.
-2. **Find the target.** The client's global memory file: opencode
-   `~/.config/opencode/AGENTS.md`; Claude Code `~/.claude/CLAUDE.md`; Codex
-   `~/.codex/AGENTS.md`. Create it if missing.
-3. **Merge, dedupe first.** Append each convention section that isn't already
-   covered. Keep memory entries as one-liners pointing at their skill — the
-   skill carries the how-to, memory carries the trigger.
-4. **Confirm before writing.** Show the diff and get an explicit yes.
+2. **Infer installed clients.** Scan each client's global skill directory for
+   folders unique to this kit (`kit-setup`, `ask-clarify`, `web-first`):
+   opencode `~/.config/opencode/skills`, Claude Code `~/.claude/skills`,
+   Codex `~/.codex/skills`, Gemini CLI `~/.gemini/skills`, plus the shared
+   `~/.agents/skills`. Each hit maps to that client's memory file:
+   `~/.config/opencode/AGENTS.md`, `~/.claude/CLAUDE.md`,
+   `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md`.
+3. **Dedupe before appending.** For each convention section, search the target
+   memory file for a rule already covering the same behavior — match on intent,
+   not wording ("Ask before risky actions" covers "Clarify before acting").
+   Append only what has no equivalent, as one-liners pointing at their skill;
+   the skill carries the how-to.
+4. **Show, then write.** Report per file: appended, skipped-as-covered, and
+   near-misses worth discussing. Write only after an explicit yes to the diff.
 
-*Done when* every convention lives in the global memory file (or the user declined some).
+*Done when* every convention lives in each detected memory file — appended or
+already covered — with the user's approval.
 
-## Note
-Skill descriptions already trigger the detailed workflows (`ask-clarify`,
-`web-first`, `no-slop`, `security-review`, …). Memory adds always-on defaults;
-don't copy full procedures into it.
+## Nothing found?
+No kit folders in any scanned directory means the kit isn't installed here.
+Tell the user to run `npx skills add kevin940726/agent-skills` first, then retry.

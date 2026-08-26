@@ -19,10 +19,10 @@ writes each into the correct location. Re-run to update.
 Then tell your agent: **"Set up kevin940726/agent-skills."** That prompt loads
 the `kit-setup` skill, which merges the kit's always-on conventions (fff search,
 clarify-before-acting, no-slop prose, security gate) into your global memory
-file — `AGENTS.md` / `CLAUDE.md`. Run it once after installing, again whenever
-you update the kit, and on any new machine or client. Agents installing
-headless should pass explicit flags (`-y -g --agent <client> --skill <name>…`),
-since the CLI's pickers need a terminal and bare `-y` installs every skill.
+file — `AGENTS.md` / `CLAUDE.md`. It detects which clients the kit is installed
+in, skips rules you already have, and shows you the diff before writing. Run it
+once after installing, again whenever you update the kit, and on any new
+machine or client.
 
 ## Layout
 ```
