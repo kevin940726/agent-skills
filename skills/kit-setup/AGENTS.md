@@ -1,7 +1,8 @@
-# Global Agent Memory (AGENTS.md)
+# Kit conventions (AGENTS.md)
 
-Optional global agent memory. Copy (or symlink) this to `~/.agents/AGENTS.md`
-to wire the kit's conventions into any agent client that reads it. Edit the
+Always-on rules for any agent using this kit. Your agent merges this into its
+global memory via the `kit-setup` skill (opencode: `~/.config/opencode/AGENTS.md`,
+Claude Code: `~/.claude/CLAUDE.md`, Codex: `~/.codex/AGENTS.md`). Edit the
 sections below to match your own defaults.
 
 ## What this repo is
@@ -21,7 +22,7 @@ File search/grep in git-indexed dir: use fff MCP (`ffgrep`, `fffind`, `fff-multi
 Any prose you output (chat, summaries, docs, emails, commit/PR): apply `no-slop` skill. No em-dashes, filler, intensifiers, hollow claims, clickbait headings. Concrete detail over generic. Applies to your own replies too.
 
 ## Fetch before you act
-Question/impl needs current, authoritative, version-specific info (lib/API usage, best practices, "latest"/"most popular" compare, open-ended): search web for most popular + latest battle-tested sources before answer/code. Load `web-first` skill. Present as cited list/table. Skip only stable facts you certain about.
+Before building custom code or stating a best practice, check the web for prior art and current battle-tested solutions — don't reinvent; adopt. Also confirm version-specific facts (lib/API usage, "latest" comparisons). Load `web-first` skill.
 
 ## Gate merges on security
 Before merging or pushing a branch that touches auth, data, or the network, load `security-review` and act on its verdict.

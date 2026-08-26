@@ -16,13 +16,19 @@ npx skills add kevin940726/agent-skills
 The CLI detects your installed agents, lets you pick which skills to take, and
 writes each into the correct location. Re-run to update.
 
+Then ask your agent to **set up the kit**: it loads the `kit-setup` skill and
+merges the kit's always-on conventions (fff search, clarify-before-acting,
+no-slop prose, security gate) into your global memory file — `AGENTS.md` /
+`CLAUDE.md`. The conventions ship inside that skill, so this works for any
+client the CLI installed to.
+
 ## Layout
 ```
 agents-skills/
 ├── README.md
 ├── LICENSE
-├── skills/                    # vendored, self-contained skills
-└── memory/AGENTS.md           # optional global agent memory / guidance
+└── skills/                    # vendored, self-contained skills
+    └── kit-setup/AGENTS.md    # always-on conventions, merged into client memory by kit-setup
 ```
 
 ## Skill kit
@@ -70,6 +76,7 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `docs` | Quality / shipping | Write/update README, API reference, JSDoc; example-driven, no-slop. | custom |
 | `fff` | File search (MCP) | fff-mcp file-search server; prefer over grep/ripgrep for agents. | [dmtrKovalenko/fff](https://github.com/dmtrKovalenko/fff) |
 | `ask-clarify` | Agent behavior | Clarify before acting; also loads on pushback ("wait", "but the user…") and question-mark prompts. | custom |
+| `kit-setup` | Setup | Merge the kit's always-on conventions into the client's global AGENTS.md / CLAUDE.md. | custom |
 | `no-slop` | Writing quality | Anti-slop prose rules: no em-dashes, filler, intensifiers, hollow claims. | [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules/blob/main/skills/no-ai-slop/SKILL.md) |
 | `web-first` | Agent behavior | Before building custom code or stating a best practice, check the web for prior art — don't reinvent; adopt a battle-tested solution. | custom |
 | `rabbit-hole` | Agent behavior | Watch for scope creep; check prior art (web-first) and load ask-clarify before going deeper. | custom |
@@ -89,7 +96,7 @@ is included with attribution (its upstream specifies no license).
 - [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) — `karpathy-guidelines`
 - [dmtrKovalenko/fff](https://github.com/dmtrKovalenko/fff) — `fff`
 - [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules) — `no-slop` (upstream specifies no license; included with attribution)
-- Custom (this kit, MIT) — `ask-clarify`, `web-first`, `rabbit-hole`, `security-review`, `changelog`, `docs`
+- Custom (this kit, MIT) — `ask-clarify`, `web-first`, `rabbit-hole`, `security-review`, `changelog`, `docs`, `kit-setup`
 
 ## Naming notes
 A few kit names had no separate upstream skill; closest equivalents were vendored:

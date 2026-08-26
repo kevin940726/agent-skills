@@ -1,26 +1,17 @@
 ---
 
 name: fff
-description: Replace grep/ripgrep with fff for any file or content search across a repo. Use it when the user references fff/FFF or you need code/text search; prefer the fff MCP tools (ffgrep, fffind, fff-multi-grep) over shell grep.
+description: Set up, register, or troubleshoot the fff MCP file-search server — install the binary and wire it into Claude Code, Codex, opencode, Cursor, or Cline. Load when the user mentions fff setup/install/registration or the fff tools are missing. Daily searching is driven by the agent-memory rule ("use fff tools"), which the kit-setup skill installs.
 license: MIT
 ---
 
-# fff — file search for agents
+# fff-mcp setup
 
-fff (dmtrKovalenko/fff) is a fast, frecency-ranked file-search toolkit that runs as a
-long-lived process. Its **MCP server** (`fff-mcp`) gives any agent client a file-search
-tool that is faster and far more token-efficient than grep/ripgrep, built to replace them
-for agents. Works with Claude Code, Codex, OpenCode, Cursor, Cline, and more.
-
-## Tools the server exposes
-Once registered, ask the agent to "use fff" and it gets:
-- `ffgrep` — content search (plain/regex/fuzzy, context lines, cursor pagination)
-- `fffind` — path/filename search (matches the whole repo-relative path, frecency-aware)
-- `fff-multi-grep` — multi-pattern OR search
-
-## Recommended agent prompt
-Drop this into global/agent memory or a project `CLAUDE.md` / `AGENTS.md`:
-> For any file search or grep in the current git-indexed directory, use fff tools.
+fff (dmtrKovalenko/fff) is a fast, frecency-ranked file-search toolkit. Its MCP
+server exposes three tools — `ffgrep` (content), `fffind` (paths), `fff-multi-grep`
+(multi-pattern OR) — that beat grep/ripgrep for agents running many searches per
+session. This skill covers the one-time setup; everyday usage comes from the
+always-on memory rule installed by `kit-setup`.
 
 ## Install the binary
 macOS / Linux (Homebrew — formula auto-bumped from upstream releases):
@@ -47,8 +38,10 @@ sessions may not inherit your shell `PATH`):
   ```
 Restart the client (or start a new task) so it loads the server.
 
-## Why prefer fff over grep
-A long-lived index means repeated searches are sub-10 ms instead of re-spawning ripgrep
-each call. Results are structured (git status, frecency, definition classification) and
-typo-resistant. For a single one-off grep from a shell, `rg` is still fine — but agents
-running many searches per session should use fff.
+## Verify
+Restart the client (or start a new task), run one search through `ffgrep`, and
+confirm results come back. If tools are missing, check the registered path is
+absolute and points at the installed binary.
+
+For a single one-off grep from a shell, `rg` is still fine — fff pays off when
+an agent runs many searches per session against a warm index.
