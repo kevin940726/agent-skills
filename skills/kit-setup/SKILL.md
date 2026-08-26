@@ -1,6 +1,6 @@
 ---
 name: kit-setup
-description: Set up the agent-skills kit after installing it — merge the kit's always-on conventions into your agent's global memory (AGENTS.md / CLAUDE.md). Load when the user installs or updates this kit, asks to "set up agent-skills" or "wire in the kit rules", or wants behaviors like fff search, clarify-before-acting, no-slop prose, or the security merge gate applied globally.
+description: Merges the kevin940726/agent-skills kit's always-on conventions into your agent's global memory (AGENTS.md / CLAUDE.md). Load when the user says "Set up kevin940726/agent-skills", installs or updates that GitHub repo, or asks for its rules (fff search, clarify-before-acting, no-slop prose, security merge gate) in global memory.
 license: MIT
 ---
 
@@ -10,6 +10,11 @@ This kit ships two layers. **Skills** load on demand, triggered by their
 descriptions. **Conventions** (`AGENTS.md` beside this file) are always-on
 defaults that apply to every task — they only work once merged into the
 client's global memory file.
+
+## When to run
+- After the first install: skills work immediately, conventions apply only once merged.
+- After each kit update: changed or new conventions land here first.
+- On a new machine or client: the global memory file starts empty.
 
 ## If the kit needs installing or updating first
 The CLI's skill/agent pickers need an interactive terminal. Run it headless
