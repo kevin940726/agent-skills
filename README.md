@@ -21,8 +21,8 @@ the `kit-setup` skill, which merges the kit's always-on conventions (fff search,
 clarify-before-acting, no-slop prose, security gate) into your global memory
 file — `AGENTS.md` / `CLAUDE.md`. Run it once after installing, again whenever
 you update the kit, and on any new machine or client. Agents installing
-headless should pass flags (`-y -g --agent <client>`), since the CLI's pickers
-need an interactive terminal.
+headless should pass explicit flags (`-y -g --agent <client> --skill <name>…`),
+since the CLI's pickers need a terminal and bare `-y` installs every skill.
 
 ## Layout
 ```

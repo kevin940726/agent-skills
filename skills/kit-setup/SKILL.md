@@ -17,16 +17,18 @@ client's global memory file.
 - On a new machine or client: the global memory file starts empty.
 
 ## If the kit needs installing or updating first
-The CLI's skill/agent pickers need an interactive terminal. Run it headless
-with flags instead:
+The CLI's pickers need an interactive terminal, so run it headless with flags.
+Name skills and clients explicitly: `-y` alone means "install everything in
+the repo", and `--agent '*'` targets every client the CLI knows.
 
 ```sh
-npx skills add kevin940726/agent-skills -y -g --agent opencode
+npx skills add kevin940726/agent-skills -y -g \
+  --agent opencode \
+  --skill kit-setup
 ```
 
-Repeat `--agent <slug>` per client (`opencode`, `claude-code`, `codex`, …) and
-add `--skill <name>` to take a subset. Humans can drop the flags and use the
-interactive picker.
+Ask the user which skills they want before adding more `--skill` flags. Humans
+can drop the flags and use the interactive picker instead.
 
 ## Procedure
 1. **Read the source.** Open `AGENTS.md` next to this SKILL.md.
