@@ -1,6 +1,6 @@
 # agent-skills
 
-A maintained kit of **42 agent skills** — planning, debugging, architecture,
+A maintained kit of **45 agent skills** — planning, debugging, architecture,
 web/UI, research, and writing — plus a set of **always-on conventions** that
 wire straight into your agent's memory.
 
@@ -67,6 +67,9 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `frontend-design` | Web / UI | Production-grade UI generation guidance. | [anthropics/skills](https://github.com/anthropics/skills) |
 | `vercel-react-best-practices` | Web / UI | React/Next.js performance optimization guidelines from Vercel Engineering. | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/blob/main/skills/react-best-practices/SKILL.md) |
 | `vercel-react-native-skills` | Web / UI | React Native/Expo best practices for performant mobile apps. | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/blob/main/skills/react-native-skills/SKILL.md) |
+| `vercel-composition-patterns` | Web / UI | React composition patterns that scale (compound components, no boolean props). | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/blob/main/skills/composition-patterns/SKILL.md) |
+| `vercel-react-view-transitions` | Web / UI | Native-feeling animations via React's View Transition API (`<ViewTransition>`, shared elements). | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/blob/main/skills/react-view-transitions/SKILL.md) |
+| `web-design-guidelines` | Web / UI | Review UI code for Web Interface Guidelines compliance (a11y, perf, UX). | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/blob/main/skills/web-design-guidelines/SKILL.md) |
 | `shadcn` | Web / UI | shadcn/ui expert guidance (CLI, composition, theming, Tailwind). | [shadcn-ui/ui](https://github.com/shadcn-ui/ui/blob/main/skills/shadcn/SKILL.md) |
 | `research` | Research | Investigate a question against primary sources; capture findings as a cited Markdown file. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | `caveman` | Knowledge / compress | Ultra-compressed communication mode (~75% token saving, full accuracy). | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman/blob/main/skills/caveman/SKILL.md) |
@@ -110,7 +113,7 @@ attribution (its upstream specifies no license).
 
 - [mattpocock/skills](https://github.com/mattpocock/skills) — `to-spec`, `to-tickets`, `prototype`, `implement`, `wayfinder`, `wizard`, `diagnosing-bugs`, `triage`, `tdd`, `code-review`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `resolving-merge-conflicts`, `setup-pre-commit`, `research`, `handoff`, `grill-me`, `grill-with-docs`, `grilling`, `wait-what`, `writing-for-agents`, `to-questionnaire`, `ask-matt`
 - [anthropics/skills](https://github.com/anthropics/skills) — `frontend-design`, `skill-creator` (Apache-2.0)
-- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — `vercel-react-best-practices`, `vercel-react-native-skills`
+- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-composition-patterns` (upstream `composition-patterns`), `vercel-react-view-transitions` (upstream `react-view-transitions`), `web-design-guidelines`
 - [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) — `web-app-design`
 - [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — `shadcn`
 - [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) — `caveman`, `compress`
