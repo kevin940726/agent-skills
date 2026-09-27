@@ -1,0 +1,55 @@
+{
+  "name": "@kevin940726/opencode-go-usage",
+  "version": "0.1.0",
+  "description": "OpenCode TUI plugin showing OpenCode Go usage against the rolling 5-hour, weekly, and monthly windows",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./tui": "./tui/index.js"
+  },
+  "oc-plugin": ["server", "tui"],
+  "files": [
+    "index.ts",
+    "status.ts",
+    "tui/index.js",
+    "build.tui.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node build.tui.mjs"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "oc-plugin",
+    "tui",
+    "sidebar",
+    "usage",
+    "quota",
+    "limits",
+    "opencode-go"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevin940726/agent-skills.git",
+    "directory": "packages/go-usage"
+  },
+  "bugs": {
+    "url": "https://github.com/kevin940726/agent-skills/issues"
+  },
+  "homepage": "https://github.com/kevin940726/agent-skills/tree/main/packages/go-usage#readme",
+  "author": "kevin940726",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@opentui/solid": ">=0.4.5",
+    "solid-js": ">=1.9.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "esbuild-plugin-solid": "0.6.0"
+  }
+}

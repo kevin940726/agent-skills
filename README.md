@@ -101,9 +101,30 @@ One row per skill. Folder names follow each upstream project's own naming; the
 agent-skills/
 ├── README.md
 ├── LICENSE
-└── skills/                    # vendored, self-contained skills
-    └── kit-setup/AGENTS.md    # always-on conventions, merged into client memory by kit-setup
+├── skills/                    # vendored, self-contained skills
+│   └── kit-setup/AGENTS.md    # always-on conventions, merged into client memory by kit-setup
+└── packages/                  # agent-specific settings, developed here but consumed elsewhere
+    └── go-usage/              # OpenCode TUI plugin, installed from GitHub
 ```
+
+## Client plugins
+
+Skills are agent-agnostic. Plugins are not: there is no cross-client plugin
+discovery, so anything under `packages/` targets one client and says so in its
+path.
+
+**[`go-usage`](packages/go-usage/)** — OpenCode TUI plugin showing OpenCode Go
+usage against the rolling 5-hour, weekly, and monthly windows. It reuses the
+credential OpenCode already holds from `/connect`, so there is no extra API key
+to manage.
+
+```sh
+opencode plugin add 'github:kevin940726/agent-skills#main::path:packages/go-usage'
+```
+
+This repo is where it is developed and tracked, not where it is consumed.
+`opencode.jsonc` at the root registers the local path so you can test changes
+here; remove that entry if you would rather not load it in this repo at all.
 
 ## Sourcing & licenses
 

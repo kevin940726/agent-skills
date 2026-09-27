@@ -5,3 +5,8 @@ Thumbs.db
 
 # Dependency artifacts (vendored skills should stay self-contained)
 node_modules/
+
+# Secrets (never commit; keep .env.example as the documented shape)
+.env
+.env.*
+!.env.example
