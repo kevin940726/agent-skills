@@ -113,18 +113,22 @@ Skills are agent-agnostic. Plugins are not: there is no cross-client plugin
 discovery, so anything under `packages/` targets one client and says so in its
 path.
 
-**[`go-usage`](packages/go-usage/)** — OpenCode TUI plugin showing OpenCode Go
+**[`go-usage`](packages/go-usage/)**, an OpenCode TUI plugin showing OpenCode Go
 usage against the rolling 5-hour, weekly, and monthly windows. It reuses the
 credential OpenCode already holds from `/connect`, so there is no extra API key
 to manage.
 
-```sh
-opencode plugin add 'github:kevin940726/agent-skills#main::path:packages/go-usage'
-```
+`opencode plugin add` cannot install a subdirectory of a larger repository, so
+this one is registered by path instead. See
+[its install notes](packages/go-usage/README.md#install) for the working steps
+and the reason the obvious command fails.
 
-This repo is where it is developed and tracked, not where it is consumed.
-`opencode.jsonc` at the root registers the local path so you can test changes
-here; remove that entry if you would rather not load it in this repo at all.
+This repo is where it is developed and tracked, not where it is consumed. There
+is deliberately no plugin registration in the repo root config: a registration
+here and one in your global config would both declare the id `go-usage`, and the
+second to load fails while the first keeps serving silently. Register the local
+path in your global config instead, so the checkout you are editing is the one
+that runs.
 
 ## Sourcing & licenses
 

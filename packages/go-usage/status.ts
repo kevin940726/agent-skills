@@ -35,7 +35,7 @@ const AUTH_KEYS = ["opencode-go", "opencode"] as const
 export type WindowKey = "rolling" | "weekly" | "monthly"
 
 export const WINDOWS: ReadonlyArray<{ key: WindowKey; label: string }> = [
-  { key: "rolling", label: "5h rolling" },
+  { key: "rolling", label: "Rolling" },
   { key: "weekly", label: "Weekly" },
   { key: "monthly", label: "Monthly" },
 ]
@@ -43,10 +43,9 @@ export const WINDOWS: ReadonlyArray<{ key: WindowKey; label: string }> = [
 export type Window = {
   key: WindowKey
   label: string
-  /** 0-100. Exhausted windows report 100. */
+  /** 0-100. A rate-limited window reports 100, since it is fully consumed. */
   percentUsed: number
   resetsAt: string
-  exhausted: boolean
 }
 
 export type UsageState =
@@ -174,14 +173,14 @@ function normalizeWindow(key: WindowKey, label: string, value: unknown): Window 
   if (typeof resetsAt !== "string" || Number.isNaN(Date.parse(resetsAt))) {
     return `${key} resetsAt must be an ISO timestamp`
   }
-  const exhausted = status === "rate-limited"
   return {
     key,
     label,
-    // A rate-limited window is by definition fully consumed.
-    percentUsed: exhausted ? 100 : percent,
+    // A rate-limited window is by definition fully consumed. Carried on the
+    // percentage rather than as a separate flag, because that is the only
+    // thing the bar renders. The API's own status is not surfaced separately.
+    percentUsed: status === "rate-limited" ? 100 : percent,
     resetsAt: new Date(resetsAt).toISOString(),
-    exhausted,
   }
 }
 
@@ -253,20 +252,66 @@ export async function fetchUsage(token: string, signal: AbortSignal): Promise<Us
   return normalizeUsage(body)
 }
 
+/**
+ * Every numeric field in a countdown is padded to two columns, so the string
+ * width does not change as the value ticks down. Without it "2h 18m" shrinks
+ * to "1h 18m" and then "0h 18m" over two hours, shifting everything after it
+ * in the sidebar by one column each time.
+ *
+ * Padded with a space rather than a zero. " 2h 18m" reads as time remaining,
+ * where "02h 18m" reads as a time of day, and this figure counts down rather
+ * than telling you when something happens. "now" and "unknown" are words
+ * rather than numbers, so they are left alone here and right-aligned by
+ * COUNTDOWN_WIDTH below.
+ */
+const pad2 = (value: number) => String(value).padStart(2, " ")
+
+/**
+ * Columns every countdown occupies, whatever the unit count.
+ *
+ * The two-unit forms are 7 columns by construction, but a sub-hour reset
+ * renders as a single unit and is only 3. That difference is not cosmetic: the
+ * sidebar lays each row out with space-between, and space-between only truly
+ * centres the middle child when the two outer children are the same width. A
+ * 3-column countdown beside a 7-column label slides the bar and percentage a
+ * couple of columns, so the column shifts whenever one window drops under an
+ * hour. Pinning the whole string to 7 keeps the label and countdown equal, so
+ * the centred group stays centred.
+ */
+const COUNTDOWN_WIDTH = 7
+
+/**
+ * Right-aligns a countdown to COUNTDOWN_WIDTH. padStart rather than padEnd, so
+ * the text hugs the right edge where the sidebar's space-between puts it, and
+ * the trailing unit lines up across forms: "    45m", " 5h 45m" and "16d 16h"
+ * all end on the same column.
+ */
+const fit = (text: string) => text.padStart(COUNTDOWN_WIDTH)
+
+/**
+ * Largest day count that still fits COUNTDOWN_WIDTH. pad2 only guarantees two
+ * columns, so a three-digit day would push the countdown to 8 and break the
+ * invariant the sidebar row alignment depends on: a 100+ day reset rendered one
+ * column wider, which is exactly the per-row rounding that misaligns the bar
+ * and percentage. No Go window is anywhere near 99 days, so clamping here costs
+ * nothing real and keeps the layout sound against an unvalidated response.
+ */
+const DAYS_MAX = 99
+
 /** Coarse "resets in 4h 12m". Recomputed on render, not on a timer. */
 export function until(iso: string): string {
   const target = Date.parse(iso)
-  if (Number.isNaN(target)) return "unknown"
+  if (Number.isNaN(target)) return fit("unknown")
   const ms = target - Date.now()
-  if (ms <= 0) return "now"
+  if (ms <= 0) return fit("now")
   const minutes = Math.round(ms / 60_000)
-  if (minutes < 60) return `${minutes}m`
+  if (minutes < 60) return fit(`${pad2(minutes)}m`)
   const hours = Math.floor(minutes / 60)
-  if (hours < 48) return `${hours}h ${minutes % 60}m`
-  return `${Math.floor(hours / 24)}d ${hours % 24}h`
+  if (hours < 48) return fit(`${pad2(hours)}h ${pad2(minutes % 60)}m`)
+  return fit(`${pad2(Math.min(DAYS_MAX, Math.floor(hours / 24)))}d ${pad2(hours % 24)}h`)
 }
 
-export function bar(percentUsed: number, width = 10): string {
+export function bar(percentUsed: number, width: number): string {
   const filled = Math.max(0, Math.min(width, Math.round((percentUsed / 100) * width)))
   return "█".repeat(filled) + "░".repeat(width - filled)
 }

@@ -6,13 +6,17 @@ footer.
 
 ```
 OpenCode Go
-5h rolling ░░░░░░░░░░   0%
-Weekly     █░░░░░░░░░░   1%
-Monthly    █░░░░░░░░░░   1%
+Rolling    ░░░░░░░░░░   0%     2h 18m
+Weekly     ███████░░░   87%    30h  0m
+Monthly    ██████████ 100%   16d 16h
 ```
 
-The footer carries a one-line monthly summary. Run `/go` (or `Ctrl+G`) to
-refresh on demand and open a dialog with reset countdowns.
+Each row is one window: the label hard left, the bar and percentage centred, the
+reset countdown hard right.
+
+The footer carries a one-line monthly summary. Run `/usage` (alias `/go-usage`, or
+`Ctrl+G`) to show or hide the block. Showing it also re-checks, which is what
+resumes polling after a rejected credential or a missing subscription stopped it.
 
 ## Why these three windows
 
@@ -40,28 +44,101 @@ secret to manage.
 
 ## Install
 
+There is no one-line installer yet. `opencode plugin add` cannot reach a package
+that lives in a subdirectory of a larger repository, so clone and place the
+folder yourself.
+
 ```sh
-opencode plugin add 'github:kevin940726/agent-skills#main::path:packages/go-usage'
+git clone --depth 1 https://github.com/kevin940726/agent-skills.git
 ```
 
-The `::path:` selector points at this package inside the monorepo, so no
-publishing step is involved. Pin a commit hash instead of `main` if you want
-reproducible installs.
+Then copy `packages/go-usage` into a plugins directory. Global is the usual
+choice, since Go usage is identical in every project:
 
-To wire it up by hand, add the same spec to `plugins` in `opencode.jsonc`:
+```sh
+# global, applies everywhere
+cp -r agent-skills/packages/go-usage ~/.config/opencode/plugins/go-usage
 
-```jsonc
+# or per project
+cp -r agent-skills/packages/go-usage /path/to/project/.opencode/plugins/go-usage
+```
+
+On Windows the global path is `%USERPROFILE%\.config\opencode\plugins\go-usage`.
+
+Restart OpenCode, or run `opencode service restart` if the service is already
+running.
+
+Install it in exactly one place. Two registrations, whether a global copy and a
+registered checkout or two checkouts, both declare the id `go-usage`, and the
+second fails with `Duplicate plugin ID: go-usage` while the first silently keeps
+serving, so edits to the one you are working in stop taking effect with nothing
+to indicate why.
+
+No build step and no `npm install` are needed. The compiled TUI entrypoint is
+committed, and `@opentui/solid` and `solid-js` resolve from the host at runtime.
+
+### Why not `opencode plugin add`
+
+The obvious command does not work yet:
+
+```sh
+# documented, but fails
+opencode plugin add 'github:kevin940726/agent-skills#main::path:packages/go-usage'
+# -> Could not read package.json: ENOENT .../git-cloneXXXX/package.json
+```
+
+The `::path:` subdirectory selector is ignored. npm 11 reads `package.json` from
+the repository root, where this package does not exist, and `plugin add` uses
+Bun, which fails later at git-dep preparation. A git dependency whose
+repository root *is* the package installs fine, so the selector is the only
+broken part. The OpenCode docs describe `::path:` as supported; it is not, with
+npm 11 or with the Bun build inside `plugin add`.
+
+Until that changes, this package needs a repository of its own for
+`opencode plugin add github:you/opencode-go-usage` to work.
+
+### Registering a local path instead
+
+If you keep a checkout, skip the copy and point config at it:
+
+```jsonc title="opencode.jsonc"
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugins": ["github:kevin940726/agent-skills#main::path:packages/go-usage"]
+  "plugins": ["./packages/go-usage"]
 }
 ```
+
+Relative paths resolve from the config file holding the entry, which makes this
+the better option while developing.
+
+Neither process needs restarting, but the two sides need different things before
+an edit is live.
+
+The **server** reads `index.ts` directly and re-reads it on change. The
+**terminal client** loads `./tui`, which `package.json` maps to the compiled
+`tui/index.js`, so a `tui.tsx` edit needs `npm run build` first. The build is
+committed to the repository precisely because installing from GitHub does not
+run one.
+
+The logging only covers the server half. Every `loading plugin` line in
+`~/.local/share/opencode/log/opencode.log` is `role=server` with `entrypoint`
+pointing at `index.ts`; the client's load of the `./tui` entry is not logged, in
+any run, at any role. So a `role=server` line tells you the server reloaded and
+its absence tells you nothing about the client. `opencode plugin` offers list,
+add, check, update and remove, and none of them report a reload.
+
+A build that exits zero and an import that does not throw are both weaker than
+they look. Four defects in this plugin passed both and were only caught by
+calling `setup()` and rendering the slots: a helper defined and never called, a
+`layer()` result used as if it were a config object, a `this` that was not what
+a `ref` callback received, and a name that was not in scope. Look at the running
+UI.
 
 ## Behavior
 
 - Polls every 5 minutes, and only while it has a usable credential.
 - A rejected credential or a missing subscription stops the poll rather than
-  retrying a dead endpoint. `/go` re-checks and resumes if that changed.
+  retrying a dead endpoint. `/usage` re-checks and resumes if that changed.
 - The request sets `redirect: "error"`, so the bearer header can never be
   forwarded to another origin.
 - The token is stripped from any error text before it is displayed.
