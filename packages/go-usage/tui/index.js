@@ -62,38 +62,12 @@ async function readAuthToken() {
   }
   return null;
 }
-function parseDotEnv(raw) {
-  const out = {};
-  for (const line of raw.split(/\r?\n/)) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-    const body = trimmed.startsWith("export ") ? trimmed.slice(7).trim() : trimmed;
-    const eq = body.indexOf("=");
-    if (eq <= 0) continue;
-    const key = body.slice(0, eq).trim();
-    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) continue;
-    let value = body.slice(eq + 1).trim();
-    if (value.length >= 2 && (value.startsWith('"') && value.endsWith('"') || value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1);
-    }
-    out[key] = value;
-  }
-  return out;
-}
 function resolveTokenFromEnv() {
   const value = process.env[TOKEN_ENV]?.trim();
   return value ? value : null;
 }
-async function resolveToken(directory) {
-  return resolveTokenFromEnv() ?? await readAuthToken() ?? await readDotEnvToken(directory);
-}
-async function readDotEnvToken(directory) {
-  if (!directory) return null;
-  try {
-    return parseDotEnv(await readFile(join(directory, ".env"), "utf8"))[TOKEN_ENV]?.trim() || null;
-  } catch {
-    return null;
-  }
+async function resolveToken() {
+  return resolveTokenFromEnv() ?? await readAuthToken();
 }
 function redact(text, token) {
   if (!token) return text;
@@ -268,7 +242,7 @@ var tui_default = {
       inFlight = controller;
       const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       try {
-        const token = await resolveToken(context.location?.directory);
+        const token = await resolveToken();
         if (!token) {
           apply(emptySnapshot({
             detail: `no credential found. Run /connect and pick OpenCode Go, or set ${TOKEN_ENV}`

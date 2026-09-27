@@ -115,42 +115,13 @@ export async function readAuthToken(): Promise<string | null> {
   return null
 }
 
-/** Minimal .env reader, for the case where someone keeps the key in a file. */
-export function parseDotEnv(raw: string): Record<string, string> {
-  const out: Record<string, string> = {}
-  for (const line of raw.split(/\r?\n/)) {
-    const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith("#")) continue
-    const body = trimmed.startsWith("export ") ? trimmed.slice(7).trim() : trimmed
-    const eq = body.indexOf("=")
-    if (eq <= 0) continue
-    const key = body.slice(0, eq).trim()
-    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) continue
-    let value = body.slice(eq + 1).trim()
-    if (value.length >= 2 && ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))) {
-      value = value.slice(1, -1)
-    }
-    out[key] = value
-  }
-  return out
-}
-
 export function resolveTokenFromEnv(): string | null {
   const value = process.env[TOKEN_ENV]?.trim()
   return value ? value : null
 }
 
-export async function resolveToken(directory: string | undefined): Promise<string | null> {
-  return resolveTokenFromEnv() ?? (await readAuthToken()) ?? (await readDotEnvToken(directory))
-}
-
-async function readDotEnvToken(directory: string | undefined): Promise<string | null> {
-  if (!directory) return null
-  try {
-    return parseDotEnv(await readFile(join(directory, ".env"), "utf8"))[TOKEN_ENV]?.trim() || null
-  } catch {
-    return null
-  }
+export async function resolveToken(): Promise<string | null> {
+  return resolveTokenFromEnv() ?? (await readAuthToken())
 }
 
 /** Never let a token reach an error string or a log line. */

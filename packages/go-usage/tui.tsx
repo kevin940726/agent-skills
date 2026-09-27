@@ -160,7 +160,7 @@ export default {
       inFlight = controller
       const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
       try {
-        const token = await resolveToken(context.location?.directory)
+        const token = await resolveToken()
         if (!token) {
           apply(
             emptySnapshot({

@@ -36,8 +36,6 @@ Credential resolution order:
 1. `OPENCODE_API_KEY` in the environment, if you prefer to set it explicitly
 2. OpenCode's `auth.json`, under the `opencode-go` provider key, falling back to
    the legacy `opencode` key
-3. `OPENCODE_API_KEY` in a project `.env` file, since OpenCode does not load
-   `.env` itself
 
 So there is no separate Console service-account key to create, and no second
 secret to manage.
