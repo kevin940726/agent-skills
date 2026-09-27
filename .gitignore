@@ -6,6 +6,13 @@ Thumbs.db
 # Dependency artifacts (vendored skills should stay self-contained)
 node_modules/
 
+# Local skill installs from the skills CLI. Per-machine state, not repo content:
+# .agents/ is where the CLI unpacks skills for an agent, and skills-lock.json
+# pins the upstream hash it resolved. Vendored skills live under skills/ and are
+# committed deliberately; this cache is not.
+.agents/
+skills-lock.json
+
 # Secrets (never commit; keep .env.example as the documented shape)
 .env
 .env.*
