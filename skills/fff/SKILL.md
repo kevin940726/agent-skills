@@ -8,7 +8,7 @@ license: MIT
 # fff-mcp setup
 
 fff (dmtrKovalenko/fff) is a fast, frecency-ranked file-search toolkit. Its MCP
-server exposes three tools — `ffgrep` (content), `fffind` (paths), `fff-multi-grep`
+server exposes three tools — `grep` (content), `find_files` (paths), `multi_grep`
 (multi-pattern OR) — that beat grep/ripgrep for agents running many searches per
 session. This skill covers the one-time setup; everyday usage comes from the
 always-on memory rule installed by `kit-setup`.
@@ -32,16 +32,27 @@ sessions may not inherit your shell `PATH`):
 
 - **Codex:** `codex mcp add fff -- "/abs/path/to/fff-mcp"` (writes `~/.codex/config.toml`).
 - **Claude Code:** `claude mcp add fff -- /abs/path/to/fff-mcp` (or add to `.mcp.json`).
-- **OpenCode:** add to `~/.config/opencode/opencode.json` under `mcpServers`:
+- **OpenCode:** add to `~/.config/opencode/opencode.json` under `mcp`:
   ```json
-  { "mcpServers": { "fff": { "type": "stdio", "command": "/abs/path/to/fff-mcp", "args": [] } } }
+  { "mcp": { "fff": { "type": "local", "command": ["/abs/path/to/fff-mcp"], "enabled": true } } }
   ```
 Restart the client (or start a new task) so it loads the server.
 
+## Home and filesystem-root directories
+fff refuses to index `~` or `/` by default (the server exits on startup there).
+To allow it, set `FFF_ENABLE_HOME_SCAN=1` (or pass `--enable-home-scan`;
+`FFF_ENABLE_ROOT_SCAN=1` / `--enable-root-scan` for the root). In OpenCode add
+it to the entry's `environment`. Only do this if you really open sessions at
+that scope — indexing a whole home directory is slow and memory-hungry.
+Note `opencode mcp list` probes servers from the home directory, so fff shows
+`failed: Connection closed` there unless the home-scan flag is set, even when
+it works fine in every project session.
+
 ## Verify
-Restart the client (or start a new task), run one search through `ffgrep`, and
-confirm results come back. If tools are missing, check the registered path is
-absolute and points at the installed binary.
+Restart the client (or start a new task), run one search through `grep`, and
+confirm results come back. `opencode mcp list` should show `fff connected`.
+If tools are missing, check the registered path is absolute and points at the
+installed binary.
 
 For a single one-off grep from a shell, `rg` is still fine — fff pays off when
 an agent runs many searches per session against a warm index.
