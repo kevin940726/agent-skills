@@ -45,12 +45,16 @@ const PERCENT_WIDTH = 3
 /**
  * What the plugin holds, which is not the same as what the API reports.
  *
- * Visibility is a display choice, so it lives here rather than on
+ * Expansion is a display choice, so it lives here rather than on
  * UsageSnapshot. Putting it there made normalizeUsage and emptySnapshot invent a
  * value neither of them has an opinion about, at eight call sites that only
  * wanted a state and a detail string.
  *
- * `visible` is a store field rather than a Solid signal because nothing in this
+ * It is `expanded` and not `visible` because the header row is on screen either
+ * way. The arrow is the only way back, so a state that removed the arrow could
+ * not be inverted by clicking.
+ *
+ * `expanded` is a store field rather than a Solid signal because nothing in this
  * Solid build is reactive. Under Bun, solid-js resolves through the
  * "node"/"worker" export condition to dist/server.js, whose Show is a one-shot
  * ternary and whose signals do not drive re-renders. Measured: mount a tree, flip
@@ -59,11 +63,13 @@ const PERCENT_WIDTH = 3
  *
  * A store write does re-render, because that is what makes the host re-invoke
  * the slot's render function, which re-reads this field live. Same mechanism as
- * the usage numbers updating, and the only reactive path available here.
+ * the usage numbers updating, and the only reactive path available here. The
+ * arrow glyph is derived from this field inside the render function for the
+ * same reason: it has to be recomputed on the re-render, not tracked.
  */
 type PluginStore = {
   snapshot: UsageSnapshot
-  visible: boolean
+  expanded: boolean
 }
 
 /**
@@ -88,7 +94,7 @@ function CommandRoot(props: { context: any; run: () => Promise<void> | void }) {
     commands: [
       {
         id: "go-usage.toggle",
-        title: "Toggle OpenCode Go usage in the sidebar",
+        title: "Collapse or expand OpenCode Go Usage in the sidebar",
         group: "Go usage",
         bind: "ctrl+g",
         palette: true,
@@ -120,7 +126,7 @@ export default {
     const [store, setStore] = context.storage.memory("goUsage", {
       initial: {
         snapshot: emptySnapshot({ detail: `connecting to OpenCode Go` }),
-        visible: true,
+        expanded: true,
       } as PluginStore,
     })
 
@@ -191,8 +197,9 @@ export default {
     }
 
     /**
-     * `/usage`, bound to ctrl+g. Toggles this plugin's own sidebar block; see
-     * PluginStore for why that is a store field rather than a signal.
+     * `/usage`, bound to ctrl+g, and the click handler on the header row.
+     * Expands or collapses this plugin's own sidebar block; see PluginStore for
+     * why that is a store field rather than a signal.
      *
      * It is a toggle and not a view. The sidebar already shows every window with
      * its percentage and reset countdown at all times, so the dialog this
@@ -204,16 +211,16 @@ export default {
      * with the running host in other ways, so guessing a command name is not
      * worth it.
      *
-     * Showing also re-checks, which is what resumes polling after it stopped on
-     * a rejected credential or a missing subscription. Hiding does not, since
+     * Expanding also re-checks, which is what resumes polling after it stopped on
+     * a rejected credential or a missing subscription. Collapsing does not, since
      * there is nothing on screen to be fresh. `next` is computed before the write
      * rather than re-read afterwards, because the store write is not guaranteed
      * to have landed by the time this returns.
      */
-    const toggleVisible = () => {
-      const next = !store.visible
+    const toggleExpanded = () => {
+      const next = !store.expanded
       setStore((draft) => {
-        draft.visible = next
+        draft.expanded = next
       })
       if (next) void refresh()
     }
@@ -224,6 +231,34 @@ export default {
       const monthly = current.windows.find((w) => w.key === "monthly")
       if (!monthly) return null
       return `Go ${monthly.percentUsed}% used`
+    }
+
+    /**
+     * One-line summary shown beside the header while collapsed, in the same
+     * role as the MCP block's "(2 active, 1 error)". The hottest window is the
+     * one that decides when you get blocked, so it is the only number that
+     * matters at a glance: ` (Weekly 87%)`. Full label rather than a
+     * single-letter key, because `R/W/M` saves four columns and costs a legend
+     * nobody will remember.
+     *
+     * Non-ok states get a short token instead of the diagnostic line, which is
+     * a sentence and never fits in a header. The full text stays one click
+     * away behind the expand.
+     */
+    const collapsedSummary = () => {
+      const current = store.snapshot
+      if (current.state !== "ok") {
+        if (current.state === "unconfigured") return " (setup needed)"
+        if (current.state === "unauthenticated") return " (auth failed)"
+        if (current.state === "notSubscribed") return " (no subscription)"
+        return " (error)"
+      }
+      let peak = current.windows[0]
+      for (const window of current.windows) {
+        if (!peak || window.percentUsed > peak.percentUsed) peak = window
+      }
+      if (!peak) return null
+      return ` (${peak.label} ${peak.percentUsed}%)`
     }
 
     /**
@@ -267,33 +302,78 @@ export default {
       return current.detail ?? current.state
     }
 
+    /**
+     * The section header: a disclosure arrow, the bold label, an optional
+     * collapsed summary, and the click target for all of it.
+     *
+     * `onMouseDown` rather than `onClick`, and the whole row rather than just
+     * the glyph, because that is exactly what the host's own collapsible
+     * sidebar sections do. OpenCode's MCP block in
+     * packages/tui/src/feature-plugins/sidebar/mcp.tsx puts `onMouseDown` on a
+     * `<box flexDirection="row" gap={1}>` wrapping a `▼`/`▶` text and a bold
+     * label (`<text><b>MCP</b>…</text>`). One column of arrow is not a hit
+     * target; the row is. Following the host here also means the plugin picks
+     * up the same mouse plumbing the host already enables, rather than a second
+     * mechanism that could disagree.
+     *
+     * A press toggles. There is no "only if the press and release land here"
+     * check, because the host does not do that either, and a drag that starts on
+     * this row and ends elsewhere is not something a user means as "collapse my
+     * quota panel".
+     *
+     * The glyph and the suffix are plain strings read at render time rather
+     * than tracked nodes, for the reason in PluginStore: only a re-render
+     * updates them. The store write inside toggleExpanded is what causes that
+     * re-render. Keeping the suffix an always-mounted `<span>` with an empty
+     * string (instead of a conditional branch) also steers clear of the
+     * reconciler's orphan-text throw documented on the slot below.
+     */
+    const headerRow = () => {
+      const suffix = store.expanded ? "" : (collapsedSummary() ?? "")
+      return (
+        <box flexDirection="row" gap={1} onMouseDown={toggleExpanded}>
+          <text fg={context.theme.text.base}>{store.expanded ? "▼" : "▶"}</text>
+          <text fg={context.theme.text.base}>
+            <b>OpenCode Go Usage</b>
+            <span style={{ fg: context.theme.text.muted }}>{suffix}</span>
+          </text>
+        </box>
+      )
+    }
+
     const disposables = [
       context.ui.slot({
         append: "sidebar.content",
-        // The <box> is unconditional and the visibility test below it is a plain
-        // `{cond && ...}`, not a <Show>. A <Show> whose `when` is false resolves
-        // to nothing, and the reconciler then throws `Orphan text error: "" must
-        // have a <text> as a parent: __root__`. Wrapping it in a <box> does not
-        // help; the throw just moves to the box. The inner <Show> is safe because
-        // it always resolves to one branch or the other.
+        // The <box> and the header are unconditional; only the body below is
+        // guarded, and by a plain `{cond && ...}` rather than a <Show>. A <Show>
+        // whose `when` is false resolves to nothing, and the reconciler then
+        // throws `Orphan text error: "" must have a <text> as a parent:
+        // __root__`. Wrapping it in a <box> does not help; the throw just moves
+        // to the box. The inner <Show> is safe because it always resolves to one
+        // branch or the other.
         //
-        // While visible, always render the header and, on failure, a diagnostic
-        // line. A block that renders nothing at all is indistinguishable from a
-        // broken one.
+        // The header survives the collapse deliberately. It carries the arrow,
+        // and the arrow is the only way back, so a header that collapsed along
+        // with its body would leave no click target and force the user onto the
+        // keyboard. The same reason the host's MCP block keeps its label on
+        // screen while the server list below it is collapsed.
+        //
+        // A collapsed block is not an empty one: the header line is always
+        // there, and on failure the diagnostic line is still reachable by
+        // expanding. A block that rendered nothing at all would be
+        // indistinguishable from a broken one.
         render: () => (
           <box flexDirection="column">
-            {store.visible && (
-              <>
-                <text fg={context.theme.text.muted}>OpenCode Go</text>
-                <Show
-                  when={store.snapshot.state === "ok"}
-                  fallback={<text fg={context.theme.text.muted}>{diagnostic()}</text>}
-                >
-                  <For each={store.snapshot.windows}>
-                    {(window) => windowRow(window)}
-                  </For>
-                </Show>
-              </>
+            {headerRow()}
+            {store.expanded && (
+              <Show
+                when={store.snapshot.state === "ok"}
+                fallback={<text fg={context.theme.text.muted}>{diagnostic()}</text>}
+              >
+                <For each={store.snapshot.windows}>
+                  {(window) => windowRow(window)}
+                </For>
+              </Show>
             )}
           </box>
         ),
@@ -304,14 +384,18 @@ export default {
         // the conditional, so there is no enclosing <box> to absorb the throw.
         // `summary` is read once, since the guard and the child would otherwise
         // each call monthlySummary().
+        //
+        // The footer follows the sidebar's expansion. It is a second place the
+        // same three numbers appear, so leaving it up while the sidebar is
+        // collapsed would mean "collapse" does not actually collapse.
         render: () => {
-          const summary = store.visible ? monthlySummary() : null
+          const summary = store.expanded ? monthlySummary() : null
           return <box>{summary && <text fg={context.theme.text.muted}>{summary}</text>}</box>
         },
       }),
       context.ui.slot({
         append: "app",
-        render: () => <CommandRoot context={context} run={toggleVisible} />,
+        render: () => <CommandRoot context={context} run={toggleExpanded} />,
       }),
     ]
 

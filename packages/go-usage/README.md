@@ -5,18 +5,31 @@ usage against the three windows that gate you, in the sidebar and the home
 footer.
 
 ```
-OpenCode Go
+▼ OpenCode Go Usage
 Rolling    ░░░░░░░░░░   0%     2h 18m
 Weekly     ███████░░░   87%    30h  0m
 Monthly    ██████████ 100%   16d 16h
 ```
 
-Each row is one window: the label hard left, the bar and percentage centred, the
-reset countdown hard right.
+The header is bold like the built-in MCP section. Each row is one window: the
+label hard left, the bar and percentage centred, the reset countdown hard right.
 
-The footer carries a one-line monthly summary. Run `/usage` (alias `/go-usage`, or
-`Ctrl+G`) to show or hide the block. Showing it also re-checks, which is what
-resumes polling after a rejected credential or a missing subscription stopped it.
+The footer carries a one-line monthly summary. Click the header row to collapse
+or expand the block, the same way the built-in MCP sidebar section works, or run
+`/usage` (alias `/go-usage`, or `Ctrl+G`). The block starts expanded. The header
+stays on screen when collapsed, with the hottest window beside it as a summary,
+so there is always something to click back:
+
+```
+▶ OpenCode Go Usage (Weekly 87%)
+```
+
+Expanding also re-checks, which is what resumes polling after a rejected
+credential or a missing subscription stopped it.
+
+That needs mouse support, which OpenCode enables by default. Set `"mouse": false`
+in `~/.config/opencode/tui.json` and the click target goes away, leaving `/usage`
+and `Ctrl+G` as the only way to toggle.
 
 ## Why these three windows
 

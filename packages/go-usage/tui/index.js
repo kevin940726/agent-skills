@@ -185,7 +185,7 @@ function CommandRoot(props) {
     priority: 10,
     commands: [{
       id: "go-usage.toggle",
-      title: "Toggle OpenCode Go usage in the sidebar",
+      title: "Collapse or expand OpenCode Go Usage in the sidebar",
       group: "Go usage",
       bind: "ctrl+g",
       palette: true,
@@ -214,7 +214,7 @@ var tui_default = {
         snapshot: emptySnapshot({
           detail: `connecting to OpenCode Go`
         }),
-        visible: true
+        expanded: true
       }
     });
     let timer;
@@ -270,10 +270,10 @@ var tui_default = {
         if (inFlight === controller) inFlight = void 0;
       }
     }
-    const toggleVisible = () => {
-      const next = !store.visible;
+    const toggleExpanded = () => {
+      const next = !store.expanded;
       setStore((draft) => {
-        draft.visible = next;
+        draft.expanded = next;
       });
       if (next) void refresh();
     };
@@ -283,6 +283,21 @@ var tui_default = {
       const monthly = current.windows.find((w) => w.key === "monthly");
       if (!monthly) return null;
       return `Go ${monthly.percentUsed}% used`;
+    };
+    const collapsedSummary = () => {
+      const current = store.snapshot;
+      if (current.state !== "ok") {
+        if (current.state === "unconfigured") return " (setup needed)";
+        if (current.state === "unauthenticated") return " (auth failed)";
+        if (current.state === "notSubscribed") return " (no subscription)";
+        return " (error)";
+      }
+      let peak = current.windows[0];
+      for (const window of current.windows) {
+        if (!peak || window.percentUsed > peak.percentUsed) peak = window;
+      }
+      if (!peak) return null;
+      return ` (${peak.label} ${peak.percentUsed}%)`;
     };
     const windowRow = (window) => (() => {
       var _el$ = _$createElement("box"), _el$2 = _$createElement("text"), _el$3 = _$createElement("text"), _el$4 = _$createElement("text");
@@ -313,38 +328,72 @@ var tui_default = {
       const current = store.snapshot;
       return current.detail ?? current.state;
     };
+    const headerRow = () => {
+      const suffix = store.expanded ? "" : collapsedSummary() ?? "";
+      return (() => {
+        var _el$5 = _$createElement("box"), _el$6 = _$createElement("text"), _el$7 = _$createElement("text"), _el$8 = _$createElement("b"), _el$0 = _$createElement("span");
+        _$insertNode(_el$5, _el$6);
+        _$insertNode(_el$5, _el$7);
+        _$setProp(_el$5, "flexDirection", "row");
+        _$setProp(_el$5, "gap", 1);
+        _$setProp(_el$5, "onMouseDown", toggleExpanded);
+        _$insert(_el$6, () => store.expanded ? "\u25BC" : "\u25B6");
+        _$insertNode(_el$7, _el$8);
+        _$insertNode(_el$7, _el$0);
+        _$insertNode(_el$8, _$createTextNode(`OpenCode Go Usage`));
+        _$insert(_el$0, suffix);
+        _$effect((_p$) => {
+          var _v$4 = context.theme.text.base, _v$5 = context.theme.text.base, _v$6 = {
+            fg: context.theme.text.muted
+          };
+          _v$4 !== _p$.e && (_p$.e = _$setProp(_el$6, "fg", _v$4, _p$.e));
+          _v$5 !== _p$.t && (_p$.t = _$setProp(_el$7, "fg", _v$5, _p$.t));
+          _v$6 !== _p$.a && (_p$.a = _$setProp(_el$0, "style", _v$6, _p$.a));
+          return _p$;
+        }, {
+          e: void 0,
+          t: void 0,
+          a: void 0
+        });
+        return _el$5;
+      })();
+    };
     const disposables = [context.ui.slot({
       append: "sidebar.content",
-      // The <box> is unconditional and the visibility test below it is a plain
-      // `{cond && ...}`, not a <Show>. A <Show> whose `when` is false resolves
-      // to nothing, and the reconciler then throws `Orphan text error: "" must
-      // have a <text> as a parent: __root__`. Wrapping it in a <box> does not
-      // help; the throw just moves to the box. The inner <Show> is safe because
-      // it always resolves to one branch or the other.
+      // The <box> and the header are unconditional; only the body below is
+      // guarded, and by a plain `{cond && ...}` rather than a <Show>. A <Show>
+      // whose `when` is false resolves to nothing, and the reconciler then
+      // throws `Orphan text error: "" must have a <text> as a parent:
+      // __root__`. Wrapping it in a <box> does not help; the throw just moves
+      // to the box. The inner <Show> is safe because it always resolves to one
+      // branch or the other.
       //
-      // While visible, always render the header and, on failure, a diagnostic
-      // line. A block that renders nothing at all is indistinguishable from a
-      // broken one.
+      // The header survives the collapse deliberately. It carries the arrow,
+      // and the arrow is the only way back, so a header that collapsed along
+      // with its body would leave no click target and force the user onto the
+      // keyboard. The same reason the host's MCP block keeps its label on
+      // screen while the server list below it is collapsed.
+      //
+      // A collapsed block is not an empty one: the header line is always
+      // there, and on failure the diagnostic line is still reachable by
+      // expanding. A block that rendered nothing at all would be
+      // indistinguishable from a broken one.
       render: () => (() => {
-        var _el$5 = _$createElement("box");
-        _$setProp(_el$5, "flexDirection", "column");
-        _$insert(_el$5, (() => {
-          var _c$ = _$memo(() => !!store.visible);
-          return () => _c$() && [(() => {
-            var _el$6 = _$createElement("text");
-            _$insertNode(_el$6, _$createTextNode(`OpenCode Go`));
-            _$effect((_$p) => _$setProp(_el$6, "fg", context.theme.text.muted, _$p));
-            return _el$6;
-          })(), _$createComponent(Show, {
+        var _el$1 = _$createElement("box");
+        _$setProp(_el$1, "flexDirection", "column");
+        _$insert(_el$1, headerRow, null);
+        _$insert(_el$1, (() => {
+          var _c$ = _$memo(() => !!store.expanded);
+          return () => _c$() && _$createComponent(Show, {
             get when() {
               return store.snapshot.state === "ok";
             },
             get fallback() {
               return (() => {
-                var _el$8 = _$createElement("text");
-                _$insert(_el$8, diagnostic);
-                _$effect((_$p) => _$setProp(_el$8, "fg", context.theme.text.muted, _$p));
-                return _el$8;
+                var _el$10 = _$createElement("text");
+                _$insert(_el$10, diagnostic);
+                _$effect((_$p) => _$setProp(_el$10, "fg", context.theme.text.muted, _$p));
+                return _el$10;
               })();
             },
             get children() {
@@ -355,9 +404,9 @@ var tui_default = {
                 children: (window) => windowRow(window)
               });
             }
-          })];
-        })());
-        return _el$5;
+          });
+        })(), null);
+        return _el$1;
       })()
     }), context.ui.slot({
       append: "home.footer.status",
@@ -365,24 +414,28 @@ var tui_default = {
       // the conditional, so there is no enclosing <box> to absorb the throw.
       // `summary` is read once, since the guard and the child would otherwise
       // each call monthlySummary().
+      //
+      // The footer follows the sidebar's expansion. It is a second place the
+      // same three numbers appear, so leaving it up while the sidebar is
+      // collapsed would mean "collapse" does not actually collapse.
       render: () => {
-        const summary = store.visible ? monthlySummary() : null;
+        const summary = store.expanded ? monthlySummary() : null;
         return (() => {
-          var _el$9 = _$createElement("box");
-          _$insert(_el$9, summary && (() => {
-            var _el$0 = _$createElement("text");
-            _$insert(_el$0, summary);
-            _$effect((_$p) => _$setProp(_el$0, "fg", context.theme.text.muted, _$p));
-            return _el$0;
+          var _el$11 = _$createElement("box");
+          _$insert(_el$11, summary && (() => {
+            var _el$12 = _$createElement("text");
+            _$insert(_el$12, summary);
+            _$effect((_$p) => _$setProp(_el$12, "fg", context.theme.text.muted, _$p));
+            return _el$12;
           })());
-          return _el$9;
+          return _el$11;
         })();
       }
     }), context.ui.slot({
       append: "app",
       render: () => _$createComponent(CommandRoot, {
         context,
-        run: toggleVisible
+        run: toggleExpanded
       })
     })];
     void refresh();
