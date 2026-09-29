@@ -38,7 +38,9 @@ local patch. Resolve upstream, then read upstream.
 3. **Treat the vendored copy as a hint:** use it to locate a symbol, then confirm signature, semantics, and examples upstream before citing or building on it.
 
 Offline, forked, or locally patched with no reachable upstream is the only
-exception: state you are reading a fork and name how it differs.
+exception: state you are reading a fork and name how it differs. If no manifest
+is reachable, use the in-file version header if present, else state version
+unknown and treat the local copy as authority.
 
 ## Present
 Compact cited table — one row per finding:

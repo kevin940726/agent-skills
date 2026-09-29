@@ -1,6 +1,6 @@
 ---
 name: bilingual
-description: Code-switched user prompt mixing English and Traditional Chinese where a span stands in for a forgotten word. Load when a user prompt contains a non-primary span. Do not load for monolingual prompts, translation requests, or output language choice.
+description: Code-switched user prompt mixing English and Traditional Chinese where a span stands in for a forgotten word. Load when a user prompt contains a non-primary span. Do not load for monolingual prompts or output language choice.
 license: MIT
 ---
 
@@ -13,7 +13,7 @@ User prompts only, never your own output.
 1. **Detect `primary` and `spans`.** `primary` is the dominant language of intent. Explicit "reply in X" wins. A `span` is:
    - 2+ consecutive CJK characters when `primary` is English
    - 1+ English words when `primary` is Chinese
-   Latin loanwords in English text (sushi, PR), code, identifiers, and URLs are never spans.
+   Latin loanwords (sushi, PR), code, identifiers, and URLs are never spans, either direction.
    *Done when* every non-primary span is listed or explicitly skipped.
 
 2. **Gloss inline.** Keep `span (gloss)` at first use, e.g. `部署流程 (deploy workflow)`. If one span has 2+ plausible meanings with different actions, load `ask-clarify`.

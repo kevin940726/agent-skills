@@ -1,11 +1,11 @@
 # agent-skills
 
-A maintained kit of **46 agent skills** — planning, debugging, architecture,
+A maintained kit of **47 agent skills** — planning, debugging, architecture,
 web/UI, research, and writing — plus a set of **always-on conventions** that
 wire straight into your agent's memory.
 
 Most skills are vendored from projects you may already trust (Anthropic,
-Vercel, shadcn-ui, mattpocock/skills); seven are written here. Every skill
+Vercel, shadcn-ui, mattpocock/skills); eight are written here. Every skill
 folder carries its own license and provenance, so installs stay auditable.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
@@ -94,6 +94,7 @@ One row per skill. Folder names follow each upstream project's own naming; the
 | `no-slop` | Writing quality | Anti-slop prose rules: no em-dashes, filler, intensifiers, hollow claims. | [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules/blob/main/skills/no-ai-slop/SKILL.md) |
 | `web-first` | Agent behavior | Before building custom code or stating a best practice, check the web for prior art — don't reinvent; adopt a battle-tested solution. | custom |
 | `rabbit-hole` | Agent behavior | Watch for scope creep; check prior art (web-first) and load ask-clarify before going deeper. | custom |
+| `bilingual` | Agent behavior | Handle EN/Traditional Chinese code-switched prompts with inline gloss; respond in primary language. | custom |
 
 ## Layout
 
@@ -146,7 +147,7 @@ attribution (its upstream specifies no license).
 - [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) — `karpathy-guidelines`
 - [dmtrKovalenko/fff](https://github.com/dmtrKovalenko/fff) — `fff`
 - [realrossmanngroup/no_ai_slop_writing_rules](https://github.com/realrossmanngroup/no_ai_slop_writing_rules) — `no-slop` (upstream specifies no license; included with attribution)
-- Custom (this kit, MIT) — `ask-clarify`, `web-first`, `rabbit-hole`, `security-review`, `changelog`, `docs`, `kit-setup`
+- Custom (this kit, MIT) — `ask-clarify`, `web-first`, `rabbit-hole`, `security-review`, `changelog`, `docs`, `kit-setup`, `bilingual`
 
 A few kit names had no direct upstream skill; closest equivalents were vendored
 (`to-issues` → `to-tickets`, `diagnose` → `diagnosing-bugs`, `write-a-skill` →
