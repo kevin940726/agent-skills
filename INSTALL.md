@@ -148,6 +148,49 @@ Upstream sometimes removes or renames a skill. Example: our
 | `npx skills rm <name> -g` | Remove one. |
 | `npx skills add <owner/repo>#<tag> --skill <name> -g` | Pin one to a tag. |
 
+## Optional: OpenCode slash command wrappers
+
+OpenCode can load a skill from a fully typed `/skill-name`, but in current
+OpenCode 2 builds the skill metadata forms are not enough to reliably register
+the command in the slash autocomplete menu.
+
+Use the bundled optional bridge:
+
+```sh
+node scripts/sync-opencode-commands.mjs --dry-run
+node scripts/sync-opencode-commands.mjs
+```
+
+It scans the global skill roots (`~/.agents/skills`, `~/.claude/skills`),
+finds skills marked `disable-model-invocation: true`, and generates a small
+OpenCode command wrapper for each one under:
+
+```sh
+~/.config/opencode/commands/<skill-name>.md
+```
+
+The generated wrapper is shallow and preserves the original construction of the
+skill:
+
+```text
+Use the `skill` tool with name="<skill-name>", then follow its instructions
+for the task: $ARGUMENTS
+```
+
+Filter or remove generated wrappers:
+
+```sh
+node scripts/sync-opencode-commands.mjs --skill arena,bro
+node scripts/sync-opencode-commands.mjs --skip wayfinder
+node scripts/sync-opencode-commands.mjs --clean
+```
+
+`--clean` only deletes command files whose names match a discovered
+explicit-only skill that was filtered out. It leaves unrelated commands alone.
+
+This step is optional. The canonical skill files remain under `.agents/`;
+the wrappers only improve OpenCode command-catalog discoverability.
+
 ## Notes
 
 - `local` entries need a full clone, not a raw URL fetch of the manifest.

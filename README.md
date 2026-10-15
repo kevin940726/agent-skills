@@ -22,6 +22,11 @@ every curated skill without prompts.
 For consumers: nothing auto-installs. Follow the same script and pick what
 you want; for updates run `npx skills update -g` and review results.
 
+OpenCode 2 users can optionally run
+`node scripts/sync-opencode-commands.mjs` after installing. It writes shallow
+slash-command wrappers so explicit-only skills such as `arena` are visible in
+OpenCode's command interface without changing the skill files.
+
 See [INSTALL.md](INSTALL.md) for the full process, conventions merge, and
 maintainer-vs-consumer notes.
 
@@ -33,6 +38,7 @@ agent-skills/
 ├── skills/                   # 9 local skills (no installable upstream)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
+├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers
 ├── INSTALL.md                # install instructions
 └── packages/                 # agent-specific settings, consumed elsewhere
     └── go-usage/             # OpenCode TUI plugin, installed from GitHub
