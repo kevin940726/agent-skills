@@ -108,13 +108,11 @@ function getLocalSource(entry) {
   return entry.source;
 }
 function buildSource(entry) {
+  // Group by source root (repo) so one 'npx skills add ROOT' covers all curated
+  // skills from that repo; curated names become the --skill list on each run.
   const source = getLocalSource(entry);
   if (!source) return null;
-  const withRef = (s) => (entry.ref ? `${s}#${entry.ref}` : s);
-  if (!entry.skillPath) return withRef(source);
-  if (!supportsSubpath(source)) return withRef(source);
-  const folder = deriveFolder(entry.skillPath);
-  return withRef(folder ? `${source}/${folder}` : source);
+  return entry.ref ? `${source}#${entry.ref}` : source;
 }
 function groupEntries(lock, curatedDir, fromUrl) {
   const groups = new Map();
@@ -175,8 +173,8 @@ async function main() {
       // User explicitly chose via --skill/--skip; assume consent, run without TUI.
       cargs = ['skills', 'add', src, '-g', ...kept.flatMap((n) => ['--skill', n]), '-y', ...agentFlags];
     } else if (process.stdin.isTTY) {
-      // Interactive: let the CLI open its picker. No -y, no --skill.
-      cargs = ['skills', 'add', src, '-g', ...agentFlags];
+      // Interactive: show curated subset, ask one confirm (no -y).
+      cargs = ['skills', 'add', src, '-g', ...kept.flatMap((n) => ['--skill', n]), ...agentFlags];
     } else {
       // Non-interactive host (e.g. agent). Print the exact copy-paste command.
       cargs = ['npx', 'skills', 'add', src, '-g', ...kept.flatMap((n) => ['--skill', n]), '-y', ...agentFlags];

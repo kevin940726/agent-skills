@@ -1,0 +1,10 @@
+{
+  "name": "agent-skills",
+  "private": true,
+  "description": "Personal curated agent skills, tracked as a lockfile; installs are global-only.",
+  "scripts": {
+    "skills:check": "node scripts/sync-skills.mjs --dry-run",
+    "skills:sync": "node scripts/sync-skills.mjs --all",
+    "skills:list": "npx skills ls -g"
+  }
+}
