@@ -1,8 +1,8 @@
 # agent-skills
 
 This repo holds a personal set of agent skills. It stores third-party skills
-as pointers in `skills-lock.json` (42 entries). Nine skills live here as files.
-Seven are custom and three have no installable upstream.
+as pointers in `skills-lock.json` (47 entries). Nine skills live here as files.
+Seven are custom and two have no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
 client supported by the [Agent Skills CLI](https://github.com/vercel-labs/skills).
@@ -63,9 +63,10 @@ agent-skills/
 ## 🔗 Locked skills
 
 Grouped by source repo. Two local names differ from upstream:
-`compress` → `caveman-compress`, `no-slop` → `no-ai-slop`.
+`compress` → `caveman-compress`, `no-slop` → `unslop` (poteto/noodle).
 
 - [mattpocock/skills](https://github.com/mattpocock/skills) — 27: planning, debugging, architecture, grill, writing, triage set
+- [backnotprop/pstack](https://github.com/backnotprop/pstack) — 5: `arena`, `bro`, `create-verification-skill`, `figure-it-out`, `no-comments`
 - [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — 5: `vercel-composition-patterns`, `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-react-view-transitions`, `web-design-guidelines`
 - [anthropics/skills](https://github.com/anthropics/skills) — 2: `frontend-design`, `skill-creator` (Apache-2.0)
 - [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — 2: `shadcn`, `migrate-radix-to-base`
