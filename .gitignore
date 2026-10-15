@@ -6,12 +6,15 @@ Thumbs.db
 # Dependency artifacts (vendored skills should stay self-contained)
 node_modules/
 
-# Local skill installs from the skills CLI. Per-machine state, not repo content:
-# .agents/ is where the CLI unpacks skills for an agent, and skills-lock.json
-# pins the upstream hash it resolved. Vendored skills live under skills/ and are
-# committed deliberately; this cache is not.
+# CLI install output (per-machine state, not repo content):
+# .agents/ is where the CLI unpacks skills, .claude/ holds symlinks into it.
+# skills-lock.json is the curated pointer list and IS committed; those are not.
 .agents/
-skills-lock.json
+.claude/
+
+# Python bytecode (some skills ship scripts)
+__pycache__/
+*.pyc
 
 # Secrets (never commit; keep .env.example as the documented shape)
 .env

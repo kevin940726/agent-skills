@@ -1,7 +1,7 @@
 ---
 
 name: fff
-description: Set up, register, or troubleshoot the fff MCP file-search server — install the binary and wire it into Claude Code, Codex, opencode, Cursor, or Cline. Load when the user mentions fff setup/install/registration or the fff tools are missing. Daily searching is driven by the agent-memory rule ("use fff tools"), which the kit-setup skill installs.
+description: Set up, register, or troubleshoot the fff MCP file-search server — install the binary and wire it into Claude Code, Codex, opencode, Cursor, or Cline. Load when the user mentions fff setup/install/registration or the fff tools are missing. Daily searching is driven by the agent-memory rule ("use fff tools"), which the INSTALL.md conventions step installs.
 license: MIT
 ---
 
@@ -11,7 +11,7 @@ fff (dmtrKovalenko/fff) is a fast, frecency-ranked file-search toolkit. Its MCP
 server exposes three tools — `grep` (content), `find_files` (paths), `multi_grep`
 (multi-pattern OR) — that beat grep/ripgrep for agents running many searches per
 session. This skill covers the one-time setup; everyday usage comes from the
-always-on memory rule installed by `kit-setup`.
+always-on memory rule installed by the INSTALL.md conventions step.
 
 ## Install the binary
 macOS / Linux (Homebrew — formula auto-bumped from upstream releases):
