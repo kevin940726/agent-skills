@@ -138,7 +138,10 @@ function groupEntries(lock, curatedDir, fromUrl) {
 function run(cmd, cargs, dry) {
   console.log(`$ ${cmd} ${cargs.join(' ')}`);
   if (dry) return true;
-  const r = spawnSync(cmd, cargs, { stdio: 'inherit', shell: process.platform === 'win32' });
+  // Pipe stdio to avoid interactive CLI windows or hijacking the current terminal session.
+  const r = spawnSync(cmd, cargs, { stdio: 'pipe', shell: process.platform === 'win32' });
+  if (r.stdout) process.stdout.write(r.stdout);
+  if (r.stderr) process.stderr.write(r.stderr);
   return r.status === 0;
 }
 
