@@ -166,7 +166,24 @@ export default {
       inFlight = controller
       const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
       try {
-        const token = await resolveToken()
+        let token: string | null
+        try {
+          token = await resolveToken(() => context.client.credential.list())
+        } catch {
+          // The credential store could not be read at all. That is not the same
+          // as no credential existing, and answering it with /connect advice is
+          // what points users at re-authenticating a working login. Keep polling
+          // so the panel recovers on its own rather than freezing until /usage.
+          apply(
+            emptySnapshot({
+              state: "retryable",
+              fetchedAt: Date.now(),
+              detail: "could not read the credential from OpenCode",
+            }),
+          )
+          startPolling()
+          return
+        }
         if (!token) {
           apply(
             emptySnapshot({

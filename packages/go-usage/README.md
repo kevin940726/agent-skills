@@ -42,13 +42,23 @@ is no daily window, so this plugin does not invent one.
 
 The plugin reuses the credential OpenCode already holds. Run `/connect` in
 OpenCode and pick **OpenCode Go** (or `opencode auth login -p opencode-go`), and
-OpenCode writes the key into its own auth store. The plugin reads it from there.
+OpenCode writes the key into its own credential store. The plugin reads it from
+there.
 
 Credential resolution order:
 
 1. `OPENCODE_API_KEY` in the environment, if you prefer to set it explicitly
-2. OpenCode's `auth.json`, under the `opencode-go` provider key, falling back to
-   the legacy `opencode` key
+2. OpenCode's credential store, through the client the host hands the plugin
+   (`credential.list`, the `GET /api/credential` route)
+3. OpenCode 1's `auth.json`, under the `opencode-go` provider key, falling back
+   to the legacy `opencode` key
+
+Step 2 is the supported read, and the one that matters on OpenCode 2. OpenCode 2
+keeps credentials in its own store and stopped maintaining `auth.json`, so a key
+rotated in the Console leaves that file holding the stale one and the plugin
+reports a rejected credential instead of working. Reading the store also
+survives the rename of the credential type from OpenCode 1's `api` to OpenCode
+2's `key`. Step 3 is kept as a fallback for hosts that expose no client.
 
 So there is no separate Console service-account key to create, and no second
 secret to manage.
@@ -150,6 +160,10 @@ UI.
 - Polls every 5 minutes, and only while it has a usable credential.
 - A rejected credential or a missing subscription stops the poll rather than
   retrying a dead endpoint. `/usage` re-checks and resumes if that changed.
+- A credential store that cannot be read at all is reported as retryable and
+  keeps polling. Only a store that answers and holds no Go credential is treated
+  as "no credential found", so an unreadable credential is never mistaken for a
+  missing one.
 - The request sets `redirect: "error"`, so the bearer header can never be
   forwarded to another origin.
 - The token is stripped from any error text before it is displayed.
@@ -163,6 +177,17 @@ UI.
 inference routes. It is not in the published docs, so treat the response shape
 as a contract to validate rather than a guarantee: the plugin checks every field
 and degrades to a readable message instead of rendering garbage.
+
+Deliberately not used: `GET https://opencode.ai/console/api/go/status`, which
+the Console calls for its own billing page. It reports the same three windows
+but as `usedMicroCents` and `limitMicroCents`, so the percentage would have to be
+derived here, and the server's rule is `floor(used / limit × 100)` — verified
+against a 1.701% window reporting 1 and a 4.523% window reporting 4. That rule
+is documented nowhere and would drift silently if it changed, where the usage
+endpoint just hands over the number. The console response also carries
+`paymentMethodId`, renewal and cancellation state, and `upgradePrice`, none of
+which a three-bar quota panel displays, and it sits under the console app's
+internal API rather than beside the documented Go inference routes.
 
 ## Development
 

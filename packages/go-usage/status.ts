@@ -7,11 +7,13 @@
  * documented surface as the Go inference routes. It reports a percentage per
  * window, so there is no currency math here at all.
  *
- * Credentials come from OpenCode's own auth store first. Running `/connect`
- * (or `opencode auth login -p opencode-go`) makes OpenCode write the Go key
- * into its data directory, so the plugin never asks the user to create and
- * manage a separate Console service-account key. An explicit environment
- * variable still wins, for people who prefer that.
+ * Credentials come from OpenCode's own store first, through the client the host
+ * hands the plugin (`credential.list`, the `GET /api/credential` route), so the
+ * plugin never asks the user to create and manage a separate Console
+ * service-account key. That route is the one surface that survives OpenCode 2's
+ * storage change: OpenCode 2 keeps credentials in its own store and no longer
+ * maintains OpenCode 1's `auth.json`, which is what the file fallback below is
+ * left reading. An explicit environment variable still wins over both.
  *
  * Nothing here imports OpenCode, so this file stays testable on its own and
  * survives a change of client.
@@ -27,8 +29,9 @@ export const DEFAULT_POLL_MS = 5 * 60_000
 export const REQUEST_TIMEOUT_MS = 10_000
 
 /**
- * Provider keys OpenCode may have written the Go credential under.
+ * Integration ids OpenCode may have stored the Go credential under.
  * `opencode-go` is what `/connect` uses; `opencode` is the legacy alias.
+ * Ordered by priority: the first id that yields a usable key wins.
  */
 const AUTH_KEYS = ["opencode-go", "opencode"] as const
 
@@ -87,16 +90,57 @@ export function authPaths(): string[] {
   return [...new Set(dirs.filter((d): d is string => Boolean(d)))].map((dir) => join(dir, "auth.json"))
 }
 
-/** Pull the Go API key out of an already-parsed auth.json. */
+/**
+ * Pull the Go API key out of OpenCode 1's already-parsed `auth.json`.
+ *
+ * Superseded by {@link tokenFromCredentials} for anything on OpenCode 2, which
+ * stopped maintaining this file. Kept because the read is free and it is the only
+ * fallback when the host hands the plugin no client.
+ *
+ * Accepts both credential type spellings: OpenCode 1 wrote `"api"`, OpenCode 2
+ * writes `"key"`.
+ */
 export function tokenFromAuth(auth: unknown): string | null {
-  if (!auth || typeof auth !== "object") return null
-  const record = auth as Record<string, unknown>
-  for (const key of AUTH_KEYS) {
-    const entry = record[key]
-    if (!entry || typeof entry !== "object") continue
-    const { type, key: value } = entry as Record<string, unknown>
-    if (typeof value === "string" && value.trim() && (type === undefined || type === "api")) {
-      return value.trim()
+  if (!isRecord(auth)) return null
+  for (const id of AUTH_KEYS) {
+    const entry = auth[id]
+    if (!isRecord(entry)) continue
+    const { type, key: value } = entry
+    const usable = type === undefined || type === "api" || type === "key"
+    if (usable && typeof value === "string" && value.trim()) return value.trim()
+  }
+  return null
+}
+
+/**
+ * Pull the Go API key out of the credential list behind `GET /api/credential`.
+ *
+ * This is the supported read, and the one that fixes the failure the file read
+ * caused: OpenCode 2 keeps credentials in its own store, so `auth.json` holds a
+ * key that was rotated and expired out from under it. A credential is a
+ * discriminated union, so only `type: "key"` carries a bearer token; an `oauth`
+ * or `external` entry is skipped.
+ *
+ * A credential the server marks inactive is skipped, and `opencode-go` is tried
+ * before the legacy `opencode` id, so a workspace holding both resolves the way
+ * the host would. A missing `active` field counts as active: the server always
+ * sends it, so a false negative would cost more than a stale read.
+ *
+ * Accepts either the wrapped `{ data: [...] }` the HTTP route returns or a bare
+ * array, because the generated client and the raw route do not agree on that.
+ */
+export function tokenFromCredentials(payload: unknown): string | null {
+  const entries = isRecord(payload) && Array.isArray(payload.data) ? payload.data : payload
+  if (!Array.isArray(entries)) return null
+
+  for (const id of AUTH_KEYS) {
+    for (const entry of entries) {
+      if (!isRecord(entry) || entry.integrationID !== id) continue
+      if (entry.active === false) continue
+      const value = entry.value
+      if (!isRecord(value) || value.type !== "key") continue
+      const secret = typeof value.key === "string" ? value.key.trim() : ""
+      if (secret) return secret
     }
   }
   return null
@@ -120,8 +164,44 @@ export function resolveTokenFromEnv(): string | null {
   return value ? value : null
 }
 
-export async function resolveToken(): Promise<string | null> {
-  return resolveTokenFromEnv() ?? (await readAuthToken())
+/** Loads the credential list the host's client exposes, e.g. `credential.list`. */
+export type CredentialLoader = () => Promise<unknown>
+
+/**
+ * Environment override, then the host's credential store, then `auth.json`.
+ *
+ * The loader is injected rather than imported so this file keeps no dependency
+ * on OpenCode and stays testable on its own. A loader that is absent, or that
+ * throws because this host exposes no client, degrades to the file read rather
+ * than failing the poll.
+ *
+ * Throws when the store read itself failed and nothing else resolved. That is
+ * not the same as "no credential": the credential may exist and merely be
+ * unreadable, and reporting that as a missing one sends the user to `/connect`
+ * over a working login. A store that answers and holds no Go credential is not
+ * an error, and returns null.
+ */
+export async function resolveToken(loadCredentials?: CredentialLoader): Promise<string | null> {
+  const fromEnv = resolveTokenFromEnv()
+  if (fromEnv) return fromEnv
+
+  let storeFailure: unknown
+  if (loadCredentials) {
+    try {
+      const fromStore = tokenFromCredentials(await loadCredentials())
+      if (fromStore) return fromStore
+    } catch (error) {
+      // Held, not discarded: the file read below still has to run, because a
+      // host with no client at all reaches this catch on every load.
+      storeFailure = error
+    }
+  }
+
+  const fromFile = await readAuthToken()
+  if (fromFile) return fromFile
+
+  if (storeFailure !== undefined) throw storeFailure
+  return null
 }
 
 /** Never let a token reach an error string or a log line. */
@@ -178,6 +258,21 @@ export function isNotSubscribed(status: number, body: unknown): boolean {
   return body.type === "error" && isRecord(error) && error.type === "EntitlementError"
 }
 
+/**
+ * The server's own explanation for a rejected credential, when it sends one.
+ *
+ * Worth surfacing rather than swallowing: `api_key_expired` is the common case,
+ * and the generic sentence points at `/connect`, which cannot renew a key the
+ * console issued. Redacted and truncated by the caller before it is displayed.
+ */
+export function authErrorDetail(body: unknown): string | null {
+  if (!isRecord(body)) return null
+  const error = body.error
+  if (!isRecord(error)) return null
+  const message = error.message
+  return typeof message === "string" && message.trim() ? message.trim() : null
+}
+
 function isRetryableStatus(status: number): boolean {
   return status === 408 || status === 425 || status === 429 || status >= 500
 }
@@ -206,10 +301,13 @@ export async function fetchUsage(token: string, signal: AbortSignal): Promise<Us
   }
 
   if (response.status === 401) {
+    const reason = authErrorDetail(body)
     return emptySnapshot({
       state: "unauthenticated",
       fetchedAt: Date.now(),
-      detail: "credential rejected. Run /connect in OpenCode and pick OpenCode Go",
+      detail: reason
+        ? redact(reason, token)
+        : "credential rejected. Run /connect in OpenCode and pick OpenCode Go",
     })
   }
   if (isNotSubscribed(response.status, body)) {

@@ -39,14 +39,27 @@ function authPaths() {
   return [...new Set(dirs.filter((d) => Boolean(d)))].map((dir) => join(dir, "auth.json"));
 }
 function tokenFromAuth(auth) {
-  if (!auth || typeof auth !== "object") return null;
-  const record = auth;
-  for (const key of AUTH_KEYS) {
-    const entry = record[key];
-    if (!entry || typeof entry !== "object") continue;
+  if (!isRecord(auth)) return null;
+  for (const id of AUTH_KEYS) {
+    const entry = auth[id];
+    if (!isRecord(entry)) continue;
     const { type, key: value } = entry;
-    if (typeof value === "string" && value.trim() && (type === void 0 || type === "api")) {
-      return value.trim();
+    const usable = type === void 0 || type === "api" || type === "key";
+    if (usable && typeof value === "string" && value.trim()) return value.trim();
+  }
+  return null;
+}
+function tokenFromCredentials(payload) {
+  const entries = isRecord(payload) && Array.isArray(payload.data) ? payload.data : payload;
+  if (!Array.isArray(entries)) return null;
+  for (const id of AUTH_KEYS) {
+    for (const entry of entries) {
+      if (!isRecord(entry) || entry.integrationID !== id) continue;
+      if (entry.active === false) continue;
+      const value = entry.value;
+      if (!isRecord(value) || value.type !== "key") continue;
+      const secret = typeof value.key === "string" ? value.key.trim() : "";
+      if (secret) return secret;
     }
   }
   return null;
@@ -66,8 +79,22 @@ function resolveTokenFromEnv() {
   const value = process.env[TOKEN_ENV]?.trim();
   return value ? value : null;
 }
-async function resolveToken() {
-  return resolveTokenFromEnv() ?? await readAuthToken();
+async function resolveToken(loadCredentials) {
+  const fromEnv = resolveTokenFromEnv();
+  if (fromEnv) return fromEnv;
+  let storeFailure;
+  if (loadCredentials) {
+    try {
+      const fromStore = tokenFromCredentials(await loadCredentials());
+      if (fromStore) return fromStore;
+    } catch (error) {
+      storeFailure = error;
+    }
+  }
+  const fromFile = await readAuthToken();
+  if (fromFile) return fromFile;
+  if (storeFailure !== void 0) throw storeFailure;
+  return null;
 }
 function redact(text, token) {
   if (!token) return text;
@@ -115,6 +142,13 @@ function isNotSubscribed(status, body) {
   const error = body.error;
   return body.type === "error" && isRecord(error) && error.type === "EntitlementError";
 }
+function authErrorDetail(body) {
+  if (!isRecord(body)) return null;
+  const error = body.error;
+  if (!isRecord(error)) return null;
+  const message = error.message;
+  return typeof message === "string" && message.trim() ? message.trim() : null;
+}
 function isRetryableStatus(status) {
   return status === 408 || status === 425 || status === 429 || status >= 500;
 }
@@ -140,10 +174,11 @@ async function fetchUsage(token, signal) {
     body = void 0;
   }
   if (response.status === 401) {
+    const reason = authErrorDetail(body);
     return emptySnapshot({
       state: "unauthenticated",
       fetchedAt: Date.now(),
-      detail: "credential rejected. Run /connect in OpenCode and pick OpenCode Go"
+      detail: reason ? redact(reason, token) : "credential rejected. Run /connect in OpenCode and pick OpenCode Go"
     });
   }
   if (isNotSubscribed(response.status, body)) {
@@ -242,7 +277,18 @@ var tui_default = {
       inFlight = controller;
       const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       try {
-        const token = await resolveToken();
+        let token;
+        try {
+          token = await resolveToken(() => context.client.credential.list());
+        } catch {
+          apply(emptySnapshot({
+            state: "retryable",
+            fetchedAt: Date.now(),
+            detail: "could not read the credential from OpenCode"
+          }));
+          startPolling();
+          return;
+        }
         if (!token) {
           apply(emptySnapshot({
             detail: `no credential found. Run /connect and pick OpenCode Go, or set ${TOKEN_ENV}`
