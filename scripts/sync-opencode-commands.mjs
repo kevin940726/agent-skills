@@ -66,6 +66,34 @@ function disableModelInvocation(front) {
   return scalar(front,'disable-model-invocation').toLowerCase() === 'true';
 }
 
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Read a boolean from the nested `metadata:` map, e.g.
+// metadata:
+//   opencode/slash: "true"
+function metadataFlag(front, key) {
+  const lines = front.split(/\r?\n/);
+  let inMetadata = false;
+  for (const ln of lines) {
+    if (/^metadata:\s*$/.test(ln)) { inMetadata = true; continue; }
+    if (!inMetadata) continue;
+    if (/^\S/.test(ln)) { inMetadata = false; continue; }
+    const m = ln.match(new RegExp('^\\s+' + escapeRegex(key) + ':\\s*(.*)$'));
+    if (!m) continue;
+    return m[1].trim().replace(/^["']|["']$/g,'').toLowerCase() === 'true';
+  }
+  return false;
+}
+
+// A skill gets a wrapper when it is explicit-only (no model invocation) or when
+// it opts in with metadata["opencode/slash"]. The latter lets a model-invoked
+// skill such as fix-review keep its description and still appear as /fix-review.
+function wantsCommand(front) {
+  return disableModelInvocation(front) || metadataFlag(front, 'opencode/slash');
+}
+
 const byName = new Map();
 for (const root of homes) {
   if (!fs.existsSync(root)) continue;
@@ -81,27 +109,40 @@ for (const root of homes) {
   }
 }
 
-const explicit = Array.from(byName.values())
-  .filter(({fm}) => disableModelInvocation(fm))
+const wrappable = Array.from(byName.values())
+  .filter(({fm}) => wantsCommand(fm))
   .sort((a,b) => a.name.localeCompare(b.name));
 
 const onlySet = new Set(opts.skillsOnly);
 const skipSet = new Set(opts.skillsSkip);
-const selected = explicit.filter(({name}) => !skipSet.has(name) && (onlySet.size === 0 || onlySet.has(name)));
+const selected = wrappable.filter(({name}) => !skipSet.has(name) && (onlySet.size === 0 || onlySet.has(name)));
 
 const cmdDir = path.join(os.homedir(), '.config', 'opencode', 'commands');
 let wrote = 0;
 if (!opts.dry) fs.mkdirSync(cmdDir,{recursive:true});
 
-console.log(`Discovered ${explicit.length} explicit-only global skills; selected ${selected.length}.`);
+console.log(`Discovered ${wrappable.length} skills that request an OpenCode command; selected ${selected.length}.`);
 const generatedNames = new Set(selected.map(({name})=>name));
 // Only touch wrappers this script is responsible for. Do not remove unrelated
 // user commands from ~/.config/opencode/commands when --clean is passed.
-const cleanupNames = new Set(explicit.map(({name})=>name).filter((name)=>!generatedNames.has(name)));
+const cleanupNames = new Set(wrappable.map(({name})=>name).filter((name)=>!generatedNames.has(name)));
+
+function clipDescription(desc, max = 220) {
+  if (desc.length <= max) return desc;
+  const cut = desc.slice(0, max);
+  const sentenceEnd = Math.max(
+    cut.lastIndexOf('. '),
+    cut.lastIndexOf('! '),
+    cut.lastIndexOf('? ')
+  );
+  if (sentenceEnd >= 100) return cut.slice(0, sentenceEnd + 1);
+  const wordEnd = cut.lastIndexOf(' ');
+  return `${cut.slice(0, wordEnd > 0 ? wordEnd : max).trimEnd()}…`;
+}
 
 for (const {name, fm} of selected) {
   let desc = scalar(fm,'description') || `Invoke the ${name} skill explicitly.`;
-  desc = desc.replace(/\s+/g,' ').trim().slice(0,220).replace(/'/g,"''");
+  desc = clipDescription(desc.replace(/\s+/g,' ').trim()).replace(/'/g,"''");
   const command = `---\ndescription: '${desc}'\n---\nUse the \`skill\` tool with name="${name}", then follow its instructions for the task: $ARGUMENTS\n`;
   const out = path.join(cmdDir, name + '.md');
   console.log(`${opts.dry ? '[dry] ' : ''}command: ${out}`);

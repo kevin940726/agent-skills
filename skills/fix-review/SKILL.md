@@ -1,7 +1,9 @@
 ---
 name: fix-review
-description: Apply findings from a code-review report. Fix findings that are cheap, safe, and either important or subtractive. Propose important but risky fixes instead of applying them. Use when the user asks to fix review findings, apply review feedback, or when the ready pipeline calls it.
+description: Apply findings from a code-review report. Fix findings that are cheap, safe, and either important or structural. Propose important but risky fixes instead of applying them. Use when the user asks to fix review findings, apply review feedback, or when the ready pipeline calls it.
 license: MIT
+metadata:
+  opencode/slash: "true"
 ---
 
 # Fix review

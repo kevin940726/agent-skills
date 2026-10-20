@@ -162,8 +162,9 @@ node scripts/sync-opencode-commands.mjs
 ```
 
 It scans the global skill roots (`~/.agents/skills`, `~/.claude/skills`),
-finds skills marked `disable-model-invocation: true`, and generates a small
-OpenCode command wrapper for each one under:
+finds skills marked `disable-model-invocation: true` or
+`metadata: opencode/slash: "true"`, and generates a small OpenCode command
+wrapper for each one under:
 
 ```sh
 ~/.config/opencode/commands/<skill-name>.md
