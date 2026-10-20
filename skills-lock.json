@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "architect": {
+      "source": "backnotprop/pstack",
+      "sourceType": "github",
+      "skillPath": "skills/architect/SKILL.md",
+      "computedHash": "c612169c7bd393cdc4241aab808b97abf7a1840b936fa3cdc153e8636d4c6adc"
+    },
     "arena": {
       "source": "backnotprop/pstack",
       "sourceType": "github",
@@ -97,6 +103,12 @@
       "skillPath": "skills/productivity/handoff/SKILL.md",
       "computedHash": "9ea2a5de5ca2d717f913356de982fdc4fe27d28a300c16598cd43a4865491008"
     },
+    "how": {
+      "source": "backnotprop/pstack",
+      "sourceType": "github",
+      "skillPath": "skills/how/SKILL.md",
+      "computedHash": "eac057f89d0e10493067e5d00e4302630a051699eec596ceeefbff6c567c1d2e"
+    },
     "implement": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -144,6 +156,18 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/pr/SKILL.md",
       "computedHash": "e6e63bada1f038e0b5488f8b62f77ebbd36c97669ddc5afaffcd17f974709f9a"
+    },
+    "principle-fix-root-causes": {
+      "source": "backnotprop/pstack",
+      "sourceType": "github",
+      "skillPath": "skills/principle-fix-root-causes/SKILL.md",
+      "computedHash": "cdc2baeffbc8e418686f721b4695cc1001adcd6844b670c3224f1e3776e8ce6a"
+    },
+    "principle-redesign-from-first-principles": {
+      "source": "backnotprop/pstack",
+      "sourceType": "github",
+      "skillPath": "skills/principle-redesign-from-first-principles/SKILL.md",
+      "computedHash": "f627292d04bdd447c5e1dcce7b8fbd28906d9cbab44498c81a9d8c017d055ae4"
     },
     "prototype": {
       "source": "mattpocock/skills",
@@ -270,6 +294,12 @@
       "sourceType": "github",
       "skillPath": "skills/web-design-guidelines/SKILL.md",
       "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
+    },
+    "why": {
+      "source": "backnotprop/pstack",
+      "sourceType": "github",
+      "skillPath": "skills/why/SKILL.md",
+      "computedHash": "7d6791c541adbff1fe59f66ec77b4e6f3c63f2f0186af7957b0968b8475e13ca"
     },
     "wizard": {
       "source": "mattpocock/skills",

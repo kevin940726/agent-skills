@@ -1,8 +1,8 @@
 # agent-skills
 
 This repo holds a personal set of agent skills. It stores third-party skills
-as pointers in `skills-lock.json` (47 entries). Nine skills live here as files.
-Seven are custom and two have no installable upstream.
+as pointers in `skills-lock.json` (52 entries). Eleven skills live here as files.
+Nine are custom and two have no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
 client supported by the [Agent Skills CLI](https://github.com/vercel-labs/skills).
@@ -34,8 +34,8 @@ maintainer-vs-consumer notes.
 
 ```
 agent-skills/
-├── skills-lock.json          # 42 third-party skills: source + hash each (curated manifest)
-├── skills/                   # 9 local skills (no installable upstream)
+├── skills-lock.json          # 52 third-party skills: source + hash each (curated manifest)
+├── skills/                   # 11 local skills (no installable upstream)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
 ├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers
@@ -61,7 +61,9 @@ agent-skills/
 | `changelog` | Generate release notes from git history, grouped by type and linked. | custom |
 | `docs` | Write/update README, API reference, JSDoc; example-driven, no-slop. | custom |
 | `fff` | fff-mcp file-search setup; prefer over grep/ripgrep for agents. | custom-written, upstream has no `SKILL.md` |
+| `fix-review` | Triage review findings: auto-fix cheap and safe, propose risky important fixes. | custom |
 | `rabbit-hole` | Watch for scope creep; check prior art before going deeper. | custom |
+| `ready` | Clean, review, fix safe findings, and verify a change before merge. | custom |
 | `security-review` | Pre-merge vuln gate (secrets, injection, authz, XSS, CVEs). | custom |
 | `web-app-design` | Modern web interface guidelines (Vercel). | distilled from upstream `command.md`; not installable |
 | `web-first` | Check the web for prior art before building custom code. | custom |
@@ -72,7 +74,7 @@ Grouped by source repo. Two local names differ from upstream:
 `compress` → `caveman-compress`, `no-slop` → `unslop` (poteto/noodle).
 
 - [mattpocock/skills](https://github.com/mattpocock/skills) — 27: planning, debugging, architecture, grill, writing, triage set
-- [backnotprop/pstack](https://github.com/backnotprop/pstack) — 5: `arena`, `bro`, `create-verification-skill`, `figure-it-out`, `no-comments`
+- [backnotprop/pstack](https://github.com/backnotprop/pstack) — 10: `architect`, `arena`, `bro`, `create-verification-skill`, `figure-it-out`, `how`, `no-comments`, `principle-fix-root-causes`, `principle-redesign-from-first-principles`, `why`
 - [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — 5: `vercel-composition-patterns`, `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-react-view-transitions`, `web-design-guidelines`
 - [anthropics/skills](https://github.com/anthropics/skills) — 2: `frontend-design`, `skill-creator` (Apache-2.0)
 - [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — 2: `shadcn`, `migrate-radix-to-base`

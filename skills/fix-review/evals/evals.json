@@ -1,0 +1,23 @@
+{
+  "skill_name": "fix-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here is the code-review report for my branch. Apply the fixes you think are safe.",
+      "expected_output": "A table that classifies each finding by cheap, safe, important, and structural. Auto-fix only cheap AND safe AND (important OR structural). Propose important findings that are not safe or not cheap. Defer nitpicks that are neither important nor structural. Each fixed finding has a test or a direct check.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "The review found a data-loss bug in the import path. The fix needs a schema change and touches five files. Fix it.",
+      "expected_output": "The skill puts the finding in the propose lane: a patch or precise proposal with a reproduction, no change to the working tree, and a request for approval. It does not silently apply a large, behavior-changing fix.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Fix the findings from the review.",
+      "expected_output": "If no code-review report is in context, the skill stops and asks for a code-review run first. It does not invent findings.",
+      "files": []
+    }
+  ]
+}

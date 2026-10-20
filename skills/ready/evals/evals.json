@@ -1,0 +1,17 @@
+{
+  "skill_name": "ready",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/ready main",
+      "expected_output": "Runs no-comments, then code-review, then fix-review, then verify, then re-review only if a behavioral fix landed. Reports each stage separately and does not merge Standards and Spec.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/ready HEAD~2 on a diff with many narrating comments and one missing test.",
+      "expected_output": "Starts with no-comments on the same scope, reviews the cleaned diff, fixes only findings that pass the fix-review gate, runs the narrowest tests, and reports deferred findings with the missing condition.",
+      "files": []
+    }
+  ]
+}
