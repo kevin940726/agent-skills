@@ -1,8 +1,8 @@
 # agent-skills
 
 This repo holds a personal set of agent skills. It stores third-party skills
-as pointers in `skills-lock.json` (52 entries). Eleven skills live here as files.
-Nine are custom and two have no installable upstream.
+as pointers in `skills-lock.json` (52 entries). Thirteen skills live here as files.
+Eleven are custom and two have no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
 client supported by the [Agent Skills CLI](https://github.com/vercel-labs/skills).
@@ -36,7 +36,7 @@ maintainer-vs-consumer notes.
 ```
 agent-skills/
 ├── skills-lock.json          # 52 third-party skills: source + hash each (curated manifest)
-├── skills/                   # 11 local skills (no installable upstream)
+├── skills/                   # 13 local skills (no installable upstream)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
 ├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers
@@ -66,8 +66,17 @@ agent-skills/
 | `rabbit-hole` | Watch for scope creep; check prior art before going deeper. | custom |
 | `ready` | Clean, review, fix safe findings, and verify a change before merge. | custom |
 | `security-review` | Pre-merge vuln gate (secrets, injection, authz, XSS, CVEs). | custom |
+| `tech-doc-zh-tw` | Traditional Chinese (Taiwan) technical-writing rules; delegates Simplified conversion to `zh-tw-convert`. | derived from `Fenng/tech-doc-style-chinese`, MIT |
 | `web-app-design` | Modern web interface guidelines (Vercel). | distilled from upstream `command.md`; not installable |
 | `web-first` | Check the web for prior art before building custom code. | custom |
+| `zh-tw-convert` | Convert Simplified Chinese docs and skills to Taiwan Traditional with OpenCC; preserves code, URLs, and identifiers. | custom; glossary adapted from the oil-ui zh-TW port |
+
+### Skill dependencies
+
+| Skill | Needs |
+|---|---|
+| `tech-doc-zh-tw` | `zh-tw-convert` for Simplified Chinese source |
+| `zh-tw-convert` | OpenCC 1.4.2+ with `s2twp.json` on PATH, or `OPENCC_BIN` |
 
 ## 🔗 Locked skills
 
