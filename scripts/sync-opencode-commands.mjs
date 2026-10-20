@@ -66,32 +66,22 @@ function disableModelInvocation(front) {
   return scalar(front,'disable-model-invocation').toLowerCase() === 'true';
 }
 
-function escapeRegex(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// Read a boolean from the nested `metadata:` map, e.g.
-// metadata:
-//   opencode/slash: "true"
-function metadataFlag(front, key) {
+function wantsOpencodeSlash(front) {
   const lines = front.split(/\r?\n/);
   let inMetadata = false;
   for (const ln of lines) {
     if (/^metadata:\s*$/.test(ln)) { inMetadata = true; continue; }
     if (!inMetadata) continue;
     if (/^\S/.test(ln)) { inMetadata = false; continue; }
-    const m = ln.match(new RegExp('^\\s+' + escapeRegex(key) + ':\\s*(.*)$'));
+    const m = ln.match(/^\s+opencode\/slash:\s*(.*)$/);
     if (!m) continue;
     return m[1].trim().replace(/^["']|["']$/g,'').toLowerCase() === 'true';
   }
   return false;
 }
 
-// A skill gets a wrapper when it is explicit-only (no model invocation) or when
-// it opts in with metadata["opencode/slash"]. The latter lets a model-invoked
-// skill such as fix-review keep its description and still appear as /fix-review.
 function wantsCommand(front) {
-  return disableModelInvocation(front) || metadataFlag(front, 'opencode/slash');
+  return disableModelInvocation(front) || wantsOpencodeSlash(front);
 }
 
 const byName = new Map();

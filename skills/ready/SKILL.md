@@ -33,17 +33,13 @@ Rules:
 
 - Run stage 1 before stage 2. The review must read the cleaned diff.
 - Delegate by skill name. Do not restate the rules of a skill that you call.
+- Pass the stage 2 report and the same scope to `fix-review`.
 - If `fix-review` is not installed, skip stage 3 and say so. Do not improvise
   fixes from the review report.
 - If `no-comments` or `code-review` is missing, stop and print the install
   command. Do not substitute a different workflow.
 - To add a stage, add one row and one skill. Keep the order. Do not fold a new
   skill into an existing stage.
-
-## Fix stage
-
-Stage 3 delegates to `fix-review`. Pass the stage 2 report and the same scope.
-Do not restate its lanes or its budget here.
 
 ## Invocation limits
 
@@ -52,8 +48,9 @@ skill from invoking another user-invoked skill. If stage 1 is blocked, stop and
 ask the user to run the `no-comments` skill for the same scope. Resume at stage
 2. Do not reimplement its rules.
 
-`code-review` and `fix-review` are model-invoked, so every harness can reach
-them.
+`code-review` and `fix-review` are model-invoked, so `ready` can reach them
+without the user-invoked restriction. A harness that disables the skill tool can
+still block both.
 
 ## Report
 
@@ -66,5 +63,3 @@ Report in this order:
 4. Verify: the commands that ran and the results.
 5. Re-review: the fresh report, or a statement that no behavioral fix landed.
 6. Open work: anything outside the scope.
-
-Do not claim a finding is fixed without a test or a direct check.

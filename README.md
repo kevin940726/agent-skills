@@ -24,9 +24,9 @@ you want; for updates run `npx skills update -g` and review results.
 
 OpenCode 2 users can optionally run
 `node scripts/sync-opencode-commands.mjs` after installing. It writes shallow
-slash-command wrappers so explicit-only skills such as `arena`, and skills that
-opt in with `metadata: opencode/slash: "true"` such as `fix-review`, are visible
-in OpenCode's command interface without changing the skill files.
+slash-command wrappers so explicit-only skills such as `arena` and skills that
+opt in with `metadata["opencode/slash"]` such as `fix-review` are visible in
+OpenCode's command interface without changing the skill files.
 
 See [INSTALL.md](INSTALL.md) for the full process, conventions merge, and
 maintainer-vs-consumer notes.

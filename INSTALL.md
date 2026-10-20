@@ -161,10 +161,16 @@ node scripts/sync-opencode-commands.mjs --dry-run
 node scripts/sync-opencode-commands.mjs
 ```
 
-It scans the global skill roots (`~/.agents/skills`, `~/.claude/skills`),
-finds skills marked `disable-model-invocation: true` or
-`metadata: opencode/slash: "true"`, and generates a small OpenCode command
-wrapper for each one under:
+It scans the global skill roots (`~/.agents/skills`, `~/.claude/skills`) for
+skills marked `disable-model-invocation: true`, and for skills that opt in with
+this frontmatter:
+
+```yaml
+metadata:
+  opencode/slash: "true"
+```
+
+It generates a small OpenCode command wrapper for each one under:
 
 ```sh
 ~/.config/opencode/commands/<skill-name>.md
@@ -186,8 +192,10 @@ node scripts/sync-opencode-commands.mjs --skip wayfinder
 node scripts/sync-opencode-commands.mjs --clean
 ```
 
-`--clean` only deletes command files whose names match a discovered
-explicit-only skill that was filtered out. It leaves unrelated commands alone.
+`--clean` only deletes command files whose names match a discovered skill that
+requests a wrapper and was filtered out. It leaves unrelated commands alone.
+A skill requests a wrapper when it is explicit-only or sets
+`metadata["opencode/slash"]` to `"true"`.
 
 This step is optional. The canonical skill files remain under `.agents/`;
 the wrappers only improve OpenCode command-catalog discoverability.

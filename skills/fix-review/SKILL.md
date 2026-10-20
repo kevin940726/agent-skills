@@ -64,8 +64,9 @@ enforcing a rule. Defer it.
 
 ## Verify
 
-Run the narrowest test that covers each batch. If a fix changes behavior, it is
-not safe. Move it to propose, or add the test that proves the behavior.
+Run the narrowest test that covers each batch. A behavioral fix is safe only
+when a test fails before the fix and passes after it. Without that red-green
+proof, move the fix to the propose lane. A green suite alone is not proof.
 
 After any behavioral fix, the original review is stale. Ask for a re-review of
 the final tree before you call the change ready.
