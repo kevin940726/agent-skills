@@ -36,7 +36,7 @@ maintainer-vs-consumer notes.
 ```
 agent-skills/
 ├── skills-lock.json          # 52 third-party skills: source + hash each (curated manifest)
-├── skills/                   # 13 local skills (no installable upstream)
+├── skills/                   # 13 local skills (committed files)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
 ├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers

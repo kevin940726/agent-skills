@@ -215,19 +215,33 @@ function maskHtml(text, masker) {
 
 const IDENTIFIER_EXTENSIONS = 'md|mdx|markdown|js|mjs|cjs|jsx|ts|tsx|json|ya?ml|py|sh|ps1|txt|toml|ini';
 
+const IDENTIFIER_PATTERNS = [
+  /(^|[\s(（])(--[^\s，。；：！？、（）()]+)/g,
+  /(^|[\s(（])((?:[^\s/，。；：！？、（）()]+\/)+[^\s/，。；：！？、（）()]+\.\w+)(?=$|[\s)）.,;:!?，。；：！？、])/g,
+  new RegExp(
+    `(^|[\\s(（])([^\\s/，。；：！？、（）()]+\\.(?:${IDENTIFIER_EXTENSIONS}))(?=$|[\\s)）.,;:!?，。；：！？、])`,
+    'g',
+  ),
+];
+
+const IDENTIFIER_SNIFFS = [
+  /(?:^|[\s(（])--[^\s，。；：！？、（）()]+/,
+  /(?:^|[\s(（])(?:[^\s/，。；：！？、（）()]+\/)+[^\s/，。；：！？、（）()]+\.\w+/,
+  new RegExp(
+    `(?:^|[\\s(（])[^\\s/，。；：！？、（）()]+\\.(?:${IDENTIFIER_EXTENSIONS})(?=$|[\\s)）.,;:!?，。；：！？、])`,
+  ),
+];
+
 function maskIdentifiers(text, masker) {
-  let out = text.replace(
-    /(^|[\s(])(--?[^\s,.;:!?，。；：！？]+)/g,
-    (_, lead, token) => `${lead}${masker.add(token)}`,
-  );
-  out = out.replace(
-    /(^|[\s(])((?:[^\s/]+\/)+[^\s/]+\.\w+)/g,
-    (_, lead, token) => `${lead}${masker.add(token)}`,
-  );
-  return out.replace(
-    new RegExp(`(^|[\\s(])([^\\s/]+\\.(?:${IDENTIFIER_EXTENSIONS}))\\b`, 'g'),
-    (_, lead, token) => `${lead}${masker.add(token)}`,
-  );
+  let out = text;
+  for (const pattern of IDENTIFIER_PATTERNS) {
+    out = out.replace(pattern, (_, lead, token) => `${lead}${masker.add(token)}`);
+  }
+  return out;
+}
+
+export function looksLikeIdentifier(text) {
+  return IDENTIFIER_SNIFFS.some((pattern) => pattern.test(` ${text}`));
 }
 
 function maskProse(text, masker) {

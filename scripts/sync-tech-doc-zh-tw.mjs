@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { transformProse } from '../skills/zh-tw-convert/scripts/convert-zh-tw.mjs';
+import { transformProse, looksLikeIdentifier } from '../skills/zh-tw-convert/scripts/convert-zh-tw.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
@@ -176,6 +176,10 @@ function isCjk(char) {
   return /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/.test(char);
 }
 
+function isProseSpan(body) {
+  return [...body].some(isCjk) && !looksLikeIdentifier(body);
+}
+
 function mapInlineCode(text, visit) {
   const lines = text.split('\n');
   let fence = null;
@@ -233,7 +237,7 @@ function mapInlineCode(text, visit) {
 function convertInlineCodeProse(text, opencc, fix) {
   const spans = [];
   mapInlineCode(text, (body) => {
-    if ([...body].some(isCjk)) spans.push(body);
+    if (isProseSpan(body)) spans.push(body);
     return body;
   });
   if (spans.length === 0) return text;
@@ -243,7 +247,7 @@ function convertInlineCodeProse(text, opencc, fix) {
     fail(`inline code conversion changed the span count: ${spans.length} -> ${converted.length}`);
   }
   let index = 0;
-  return mapInlineCode(text, (body) => ([...body].some(isCjk) ? converted[index++] : body));
+  return mapInlineCode(text, (body) => (isProseSpan(body) ? converted[index++] : body));
 }
 
 function applyFixes(text, fixes) {
