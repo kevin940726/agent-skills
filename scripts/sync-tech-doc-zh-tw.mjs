@@ -1,26 +1,11 @@
 #!/usr/bin/env node
-// Regenerate skills/tech-doc-zh-tw from the pinned upstream Simplified skill.
-//
-// The upstream repository is a Simplified Chinese writing-style skill. This
-// script ports its prose to Taiwan Traditional Chinese: it downloads the five
-// pinned source files, runs the shared zh-tw-convert converter, then applies the
-// Taiwan wording fixes that a character/phrase table alone does not settle.
-//
-// Hand-authored files (LICENSE, SOURCE, agents/openai.yaml, and
-// references/taiwan-terminology.md) are never written by this script.
-//
-// Usage:
-//   node scripts/sync-tech-doc-zh-tw.mjs            # write the skill
-//   node scripts/sync-tech-doc-zh-tw.mjs --check     # exit 1 on drift
-//   node scripts/sync-tech-doc-zh-tw.mjs --opencc <path>
-//
-// OpenCC resolution: --opencc, then OPENCC_BIN, then `opencc` on PATH.
 
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { transformProse } from '../skills/zh-tw-convert/scripts/convert-zh-tw.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
@@ -38,13 +23,6 @@ const SOURCE_FILES = [
   'references/terminology-and-typography.md',
 ];
 
-const HAND_AUTHORED = new Set([
-  'LICENSE',
-  'SOURCE',
-  'agents/openai.yaml',
-  'references/taiwan-terminology.md',
-]);
-
 const DESCRIPTION =
   '在撰寫、改寫、校對或審閱繁體中文（台灣）技術文件、產品文案、介面文案、Markdown 文件、API 說明、操作手冊、疑難排解或維運文件時使用。採用克制、準確、可掃讀的繁體中文（台灣）技術寫作風格；保留原文事實、限制和機器可讀內容；按任務讀取術語排版、API 狀態文案、專案覆蓋或受控繁體中文技術寫作參考。';
 
@@ -56,13 +34,7 @@ const PREREQUISITE =
 const TERMINOLOGY_ROUTE =
   '- 台灣術語與常見搭配：讀取 [台灣技術術語](references/taiwan-terminology.md)';
 
-// OpenCC s2twp keeps a number of mainland words once the glyphs are Traditional.
-// These fixes are Traditional-to-Taiwan wording, applied after conversion.
-// Order matters: longer forms first, and the second group runs on the output of
-// the first.
 const PROSE_FIXES = [
-  // Vocabulary s2twp keeps mainland once the glyphs are Traditional, plus a few
-  // glyph choices Taiwan settles differently.
   ['識別符號', '識別碼'],
   ['識別符', '識別碼'],
   ['控制元件', '控制項'],
@@ -107,7 +79,6 @@ const PROSE_FIXES = [
   ['幫助文本', '說明文字'],
   ['幫助團隊', '協助團隊'],
   ['實施人員', '實作人員'],
-  // Phrases that only exist after the fixes above.
   ['缺少會改變結論的事即時', '缺少會改變結論的事實時'],
   ['直接映象介面定義的表頭', '直接沿用介面定義的表頭'],
   ['通過一站式能力', '透過一站式能力'],
@@ -117,7 +88,6 @@ const PROSE_FIXES = [
   ['配置存取權杖', '設定存取權杖'],
 ];
 
-// SKILL.md-only wording: the port is about Taiwan Traditional, not Chinese in general.
 const SKILL_FIXES = [
   ['本 Skill 用於中文技術內容', '本 Skill 用於繁體中文（台灣）技術內容'],
   ['使用克制、直接、可執行的中文。', '使用克制、直接、可執行的繁體中文。'],
@@ -206,8 +176,6 @@ function isCjk(char) {
   return /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/.test(char);
 }
 
-// Visit inline code spans line by line, skipping fenced blocks. The visitor
-// receives the span body and returns its replacement.
 function mapInlineCode(text, visit) {
   const lines = text.split('\n');
   let fence = null;
@@ -262,10 +230,7 @@ function mapInlineCode(text, visit) {
   return lines.join('\n');
 }
 
-// The shared converter protects inline code, which is right for identifiers and
-// commands but leaves Chinese prose examples in Simplified. Convert only the
-// Chinese-bearing spans, in one OpenCC call.
-function convertInlineCodeProse(text, opencc) {
+function convertInlineCodeProse(text, opencc, fix) {
   const spans = [];
   mapInlineCode(text, (body) => {
     if ([...body].some(isCjk)) spans.push(body);
@@ -273,7 +238,7 @@ function convertInlineCodeProse(text, opencc) {
   });
   if (spans.length === 0) return text;
 
-  const converted = runOpencc(opencc, spans.join('\n')).split('\n');
+  const converted = runOpencc(opencc, spans.join('\n')).split('\n').map((span) => fix(span));
   if (converted.length !== spans.length) {
     fail(`inline code conversion changed the span count: ${spans.length} -> ${converted.length}`);
   }
@@ -282,12 +247,14 @@ function convertInlineCodeProse(text, opencc) {
 }
 
 function applyFixes(text, fixes) {
-  let out = text;
-  for (const [from, to] of fixes) {
-    if (from === to) continue;
-    out = out.split(from).join(to);
-  }
-  return out;
+  return transformProse(text, (prose) => {
+    let out = prose;
+    for (const [from, to] of fixes) {
+      if (from === to) continue;
+      out = out.split(from).join(to);
+    }
+    return out;
+  });
 }
 
 function splitFrontmatter(text) {
@@ -327,7 +294,8 @@ function finish(text) {
 }
 
 function buildFile(relative, converted, opencc) {
-  let text = applyFixes(convertInlineCodeProse(converted, opencc), PROSE_FIXES);
+  const fixedSpan = (span) => applyFixes(span, PROSE_FIXES);
+  let text = applyFixes(convertInlineCodeProse(converted, opencc, fixedSpan), PROSE_FIXES);
   if (relative === 'SKILL.md') return finish(buildSkill(applyFixes(text, SKILL_FIXES)));
   if (relative === 'references/terminology-and-typography.md') {
     return finish(dropUnwrapParagraph(text, relative));
@@ -335,12 +303,8 @@ function buildFile(relative, converted, opencc) {
   return finish(text);
 }
 
-// 台 is the usual Taiwan spelling (s2t prefers 臺); 游 and 群 are standard in
-// Taiwan text such as 下游 and 社群 (s2t prefers 遊 and 羣). None of the three
-// is evidence of Simplified text.
 const VARIANT_ALLOWED = new Set(['台', '游', '群']);
 
-// A character is Simplified-only when OpenCC s2t rewrites it on its own.
 function assertNoSimplified(relative, text, opencc) {
   const chars = [...new Set([...text].filter(isCjk))];
   if (chars.length === 0) return;
@@ -387,12 +351,10 @@ async function main() {
 
   const convert = spawnSync(
     process.execPath,
-    [CONVERTER, sourceDir, '--write', '--opencc', opencc],
+    [CONVERTER, sourceDir, '--write', '--config', OPENCC_CONFIG, '--opencc', opencc],
     {
       encoding: 'utf8',
       maxBuffer: 1024 * 1024 * 64,
-      // Keep the ported output independent of a locally configured config name.
-      env: { ...process.env, OPENCC_CONFIG: '' },
     },
   );
   if (convert.status !== 0) {
@@ -401,7 +363,6 @@ async function main() {
 
   const results = new Map();
   for (const relative of SOURCE_FILES) {
-    if (HAND_AUTHORED.has(relative)) fail(`${relative}: hand-authored files are never generated`);
     const converted = fs.readFileSync(path.join(sourceDir, relative), 'utf8');
     const built = buildFile(relative, converted, opencc);
     assertNoSimplified(relative, built, opencc);

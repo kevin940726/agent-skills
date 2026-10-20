@@ -6,7 +6,7 @@ global memory during setup (see INSTALL.md: opencode
 `~/.codex/AGENTS.md`). Edit the sections below to match your own defaults.
 
 ## What this repo is
-`agents-skills`: version-controlled portable kit of curated agent skills. Third-party skills resolve from `skills-lock.json` (see `INSTALL.md`); eleven local skills live in `skills/<name>/`.
+`agents-skills`: version-controlled portable kit of curated agent skills. Third-party skills resolve from `skills-lock.json` (see `INSTALL.md`); thirteen local skills live in `skills/<name>/`.
 
 ## Non-blocking by default
 - Run never-finish tasks (servers, REPLs, `while True` loops, open-ended waits) in the background; ask the user to say when done. Don't hold their turn.

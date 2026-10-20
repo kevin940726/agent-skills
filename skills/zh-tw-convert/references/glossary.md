@@ -190,28 +190,28 @@ These have real Taiwan-versus-mainland divergence or more than one defensible
 Taiwan form. Stop and read the sentence. Do not blanket-replace them, and do not
 add them to `overrides.json`.
 
-1. **配置** — a settings object is 設定; a system or build configuration is 組態.
+1. **配置**: a settings object is 設定; a system or build configuration is 組態.
    A config file is 設定檔 or 組態檔 depending on the register.
-2. **脚本** — Microsoft style is 指令碼; Taiwan web development commonly writes
+2. **脚本**: Microsoft style is 指令碼; Taiwan web development commonly writes
    腳本. Match the file's existing register.
-3. **仓库** — a `git` repository is 版本庫; a package store may be 儲存庫; a
+3. **仓库**: a `git` repository is 版本庫; a package store may be 儲存庫; a
    physical warehouse is 倉庫. Never blanket-replace 倉庫.
-4. **依赖** — the Taiwan term for a software dependency is 相依, but 依賴 is
+4. **依赖**: the Taiwan term for a software dependency is 相依, but 依賴 is
    common in older docs and sometimes means emotional or logical reliance.
-5. **校验** — general validation is 驗證; a checksum or parity check can stay
+5. **校验**: general validation is 驗證; a checksum or parity check can stay
    校驗. A function named `validate` keeps its name in code.
-6. **接口** — a UI interface is 介面; a web API stays `API` in English. The same
+6. **接口**: a UI interface is 介面; a web API stays `API` in English. The same
    source word covers both.
-7. **生成** — Taiwan AI and tooling prose uses 生成; classic writing prefers
+7. **生成**: Taiwan AI and tooling prose uses 生成; classic writing prefers
    產生. Pick per paragraph, not per file.
-8. **文件** — a document is 文件; a file on disk is 檔案. OpenCC maps 文件 to
+8. **文件**: a document is 文件; a file on disk is 檔案. OpenCC maps 文件 to
    檔案, so verify every hit.
-9. **质量** — 品質 for quality; 質量 for physical mass. Only the first is the
+9. **质量**: 品質 for quality; 質量 for physical mass. Only the first is the
    software sense.
-10. **提交** — a commit is 提交; submitting a form is 送出.
-11. **归档** — 封存 and 歸檔 are both current in Taiwan. Match the surrounding
+10. **提交**: a commit is 提交; submitting a form is 送出.
+11. **归档**: 封存 and 歸檔 are both current in Taiwan. Match the surrounding
     vocabulary.
-12. **像素 / 畫素** — CSS uses 像素; print and prepress use 畫素. Keep 像素 for
+12. **像素 / 畫素**: CSS uses 像素; print and prepress use 畫素. Keep 像素 for
     screen coordinates.
 
 ## Notes

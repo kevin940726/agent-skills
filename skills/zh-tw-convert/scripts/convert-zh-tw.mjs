@@ -2,17 +2,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const DEFAULT_GLOSSARY = path.resolve(SCRIPT_DIR, '..', 'references', 'glossary.md');
 const OVERRIDES_PATH = path.resolve(SCRIPT_DIR, '..', 'references', 'overrides.json');
 
 const EXTENSIONS = new Set(['.md', '.mdx', '.markdown', '.txt']);
 const SKIP_DIRS = new Set(['.git', 'node_modules', '.venv', 'vendor', '__pycache__']);
 const REVIEW_TERMS = ['配置', '腳本', '倉庫', '依賴', '校驗', '介面', '生成', '文件'];
 
-// Protected spans become private-use placeholders so OpenCC cannot touch them.
 const OPEN = '\uE000';
 const CLOSE = '\uE001';
 
@@ -30,7 +28,6 @@ function usage() {
     '  --check             Exit 1 if any file would change, 0 if clean',
     '  --opencc <path>     OpenCC CLI path (default: $OPENCC_BIN, then opencc)',
     '  --config <name>     OpenCC config (default: s2twp.json, or $OPENCC_CONFIG)',
-    '  --glossary <path>   Glossary reported with the result',
     '  --json              Print a machine-readable result',
     '  -h, --help          Show this help',
   ].join('\n');
@@ -44,7 +41,6 @@ function parseArgs(argv) {
     json: false,
     opencc: null,
     config: null,
-    glossary: null,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
@@ -54,7 +50,7 @@ function parseArgs(argv) {
     else if (arg === '-h' || arg === '--help') {
       process.stdout.write(`${usage()}\n`);
       process.exit(0);
-    } else if (arg === '--opencc' || arg === '--config' || arg === '--glossary') {
+    } else if (arg === '--opencc' || arg === '--config') {
       const value = argv[i + 1];
       if (!value || value.startsWith('--')) fail(`${arg} needs a value\n\n${usage()}`);
       opts[arg.slice(2)] = value;
@@ -217,11 +213,29 @@ function maskHtml(text, masker) {
   return withoutComments.replace(/<\/?[A-Za-z][^>\n]*>/g, (match) => masker.add(match));
 }
 
+const IDENTIFIER_EXTENSIONS = 'md|mdx|markdown|js|mjs|cjs|jsx|ts|tsx|json|ya?ml|py|sh|ps1|txt|toml|ini';
+
+function maskIdentifiers(text, masker) {
+  let out = text.replace(
+    /(^|[\s(])(--?[^\s,.;:!?，。；：！？]+)/g,
+    (_, lead, token) => `${lead}${masker.add(token)}`,
+  );
+  out = out.replace(
+    /(^|[\s(])((?:[^\s/]+\/)+[^\s/]+\.\w+)/g,
+    (_, lead, token) => `${lead}${masker.add(token)}`,
+  );
+  return out.replace(
+    new RegExp(`(^|[\\s(])([^\\s/]+\\.(?:${IDENTIFIER_EXTENSIONS}))\\b`, 'g'),
+    (_, lead, token) => `${lead}${masker.add(token)}`,
+  );
+}
+
 function maskProse(text, masker) {
   let out = maskInlineCode(text, masker);
   out = maskUrls(out, masker);
   out = maskLinkDestinations(out, masker);
-  return maskHtml(out, masker);
+  out = maskHtml(out, masker);
+  return maskIdentifiers(out, masker);
 }
 
 function maskFences(text, masker) {
@@ -317,15 +331,25 @@ function countTerm(text, term) {
   return text.split(term).length - 1;
 }
 
-function convertText(text, opencc, config, replacements, detectorConfig) {
-  if (text.includes(OPEN) || text.includes(CLOSE)) {
-    fail(`refusing to convert: input already contains U+E000/U+E001 placeholder characters`);
-  }
+function maskDocument(text) {
   const masker = createMasker();
   const parts = splitFrontmatter(text);
   const masked = parts
     ? `---\n${parts.hasFrontmatterLine ? `${maskFrontmatter(parts.frontmatter, masker)}\n` : ''}---${parts.separator}${maskBody(parts.body, masker)}`
     : maskBody(text, masker);
+  return { masked, masker };
+}
+
+export function transformProse(text, transform) {
+  const { masked, masker } = maskDocument(text);
+  return masker.restore(transform(masked));
+}
+
+function convertText(text, opencc, config, replacements, detectorConfig) {
+  if (text.includes(OPEN) || text.includes(CLOSE)) {
+    fail(`refusing to convert: input already contains U+E000/U+E001 placeholder characters`);
+  }
+  const { masked, masker } = maskDocument(text);
 
   if (detectorConfig) {
     const probe = spawnOpencc(opencc, detectorConfig, masked);
@@ -418,9 +442,6 @@ function main() {
   const config = resolveConfig(opts, opencc);
   const replacements = loadOverrides();
 
-  const glossary = path.resolve(opts.glossary || DEFAULT_GLOSSARY);
-  if (!fs.existsSync(glossary)) fail(`glossary not found: ${opts.glossary || glossary}`);
-
   const configName = path.basename(config);
   const detectorConfig = configName.startsWith('s2') && configName !== 's2t.json' ? 's2t.json' : null;
 
@@ -469,7 +490,6 @@ function main() {
           opencc,
           config,
           mode,
-          glossary,
           files: results,
           skipped,
           summary: { files: results.length, changed: changedCount, clean: changedCount === 0 },
@@ -505,4 +525,4 @@ function main() {
   if (opts.check && changedCount > 0) process.exit(1);
 }
 
-main();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

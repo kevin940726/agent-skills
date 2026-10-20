@@ -2,7 +2,7 @@
 
 This repo holds a personal set of agent skills. It stores third-party skills
 as pointers in `skills-lock.json` (52 entries). Thirteen skills live here as files.
-Eleven are custom and two have no installable upstream.
+Ten are custom, one is derived from upstream, and two have no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
 client supported by the [Agent Skills CLI](https://github.com/vercel-labs/skills).
@@ -40,6 +40,7 @@ agent-skills/
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
 ├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers
+├── scripts/sync-tech-doc-zh-tw.mjs # regenerate tech-doc-zh-tw from its pin
 ├── INSTALL.md                # install instructions
 └── packages/                 # agent-specific settings, consumed elsewhere
     └── go-usage/             # OpenCode TUI plugin, installed from GitHub
@@ -76,7 +77,7 @@ agent-skills/
 | Skill | Needs |
 |---|---|
 | `tech-doc-zh-tw` | `zh-tw-convert` for Simplified Chinese source |
-| `zh-tw-convert` | OpenCC 1.4.2+ with `s2twp.json` on PATH, or `OPENCC_BIN` |
+| `zh-tw-convert` | OpenCC 1.x (tested with 1.4.2) with `s2twp.json` on PATH, or `OPENCC_BIN` |
 
 ## 🔗 Locked skills
 
