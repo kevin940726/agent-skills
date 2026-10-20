@@ -1,0 +1,29 @@
+{
+  "replacements": [
+    {
+      "from": "程式程式碼",
+      "to": "程式碼",
+      "note": "s2twp turns 程序代码 into 程式程式碼; the doubled 程式 is not Taiwan usage."
+    },
+    {
+      "from": "軟體質量",
+      "to": "軟體品質",
+      "note": "s2twp converts the glyphs but keeps mainland 質量; Taiwan software prose uses 品質."
+    },
+    {
+      "from": "產品質量",
+      "to": "產品品質",
+      "note": "Taiwan product prose uses 品質 for quality; 質量 reads as physical mass."
+    },
+    {
+      "from": "程式碼質量",
+      "to": "程式碼品質",
+      "note": "Same 質量/品質 split as 軟體質量, scoped to code."
+    },
+    {
+      "from": "服務質量",
+      "to": "服務品質",
+      "note": "Taiwan service prose uses 服務品質; 質量 reads as physical mass."
+    }
+  ]
+}

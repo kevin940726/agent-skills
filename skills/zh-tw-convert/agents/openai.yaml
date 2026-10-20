@@ -1,0 +1,4 @@
+interface:
+  display_name: "Simplified to Taiwan Traditional Chinese"
+  short_description: "Convert Chinese docs and skills to zh-TW with OpenCC"
+  default_prompt: "Use $zh-tw-convert to convert this Simplified Chinese content to Taiwan Traditional Chinese, preserving code and machine-readable text."

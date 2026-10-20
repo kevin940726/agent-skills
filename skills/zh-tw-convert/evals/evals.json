@@ -1,0 +1,23 @@
+{
+  "skill_name": "zh-tw-convert",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Convert docs/guide.md to Taiwan Traditional Chinese. It has fenced code blocks, inline code, and several URLs.",
+      "expected_output": "Runs the converter in dry-run mode first, reviews the diff, then writes with --write. Prose and frontmatter description values become zh-TW with Taiwan vocabulary; frontmatter keys, the name value, fenced blocks, inline code, URLs, and link destinations are unchanged. Uses s2twp rather than s2tw. Reports files changed, overrides applied, review terms, and skipped items, then verifies that --check exits 0. Does not claim round-trip safety.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Port the whole `widget` skill folder to Taiwan Traditional Chinese.",
+      "expected_output": "Uses skill mode on the folder. Preserves the SKILL.md frontmatter name, converts prose in SKILL.md and references, and does not rename files or directories. Leaves tests and scripts unchanged, but reports test files containing Chinese assertions or fixtures that need a manual update. Lists ambiguous terms for review instead of replacing them globally, and verifies --check exits 0 after writing.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Convert this Simplified Chinese document to zh-TW. I don't have OpenCC installed.",
+      "expected_output": "Stops before changing any file and reports that the OpenCC CLI is missing. Gives the install/configuration options: put opencc on PATH, pass --opencc <path>, or set OPENCC_BIN. Does not hand-convert the document, does not invent a partial conversion, and does not claim the task is complete.",
+      "files": []
+    }
+  ]
+}
