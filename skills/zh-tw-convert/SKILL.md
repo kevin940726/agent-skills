@@ -78,6 +78,17 @@ alone is not localization.
 The script masks these spans before conversion and restores them afterwards.
 Do not edit or unmask them by hand to "finish" a sentence.
 
+## Known limits
+
+Masking covers common paths, filenames, CLI flags, URLs, code spans, and
+frontmatter keys. Review these edge cases by hand and report them instead of
+guessing:
+
+- A path whose first segment is non-ASCII.
+- A filename that touches Chinese text with no space or punctuation.
+- Inline code that mixes prose and an identifier.
+- An extension outside the common list.
+
 ## Skill mode
 
 - Preserve `SKILL.md` frontmatter `name`. The script masks it; change it only

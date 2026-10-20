@@ -214,22 +214,21 @@ function maskHtml(text, masker) {
 }
 
 const IDENTIFIER_EXTENSIONS = 'md|mdx|markdown|js|mjs|cjs|jsx|ts|tsx|json|ya?ml|py|sh|ps1|txt|toml|ini';
+const IDENTIFIER_TOKEN = '[^\\s/，。；：！？、（）()]';
 
 const IDENTIFIER_PATTERNS = [
-  /(^|[\s(（])(--[^\s，。；：！？、（）()]+)/g,
-  /(^|[\s(（])((?:[^\s/，。；：！？、（）()]+\/)+[^\s/，。；：！？、（）()]+\.\w+)(?=$|[\s)）.,;:!?，。；：！？、])/g,
+  /(^|[\s(（.,;:!?，。；：！？、])(--?[^\s，。；：！？、（）()]+)/g,
+  /(^|[^\w.-])((?:[A-Za-z0-9_.-]+\/)+[^\s/，。；：！？、（）()]+\.\w+)/g,
   new RegExp(
-    `(^|[\\s(（])([^\\s/，。；：！？、（）()]+\\.(?:${IDENTIFIER_EXTENSIONS}))(?=$|[\\s)）.,;:!?，。；：！？、])`,
-    'g',
+    `(^|[\\s(（.,;:!?，。；：！？、])(${IDENTIFIER_TOKEN}+\\.(?:${IDENTIFIER_EXTENSIONS}))(?=$|[\\s)）.,;:!?，。；：！？、])`,
+    'gi',
   ),
 ];
 
-const IDENTIFIER_SNIFFS = [
-  /(?:^|[\s(（])--[^\s，。；：！？、（）()]+/,
-  /(?:^|[\s(（])(?:[^\s/，。；：！？、（）()]+\/)+[^\s/，。；：！？、（）()]+\.\w+/,
-  new RegExp(
-    `(?:^|[\\s(（])[^\\s/，。；：！？、（）()]+\\.(?:${IDENTIFIER_EXTENSIONS})(?=$|[\\s)）.,;:!?，。；：！？、])`,
-  ),
+const IDENTIFIER_ONLY = [
+  /^--?[^\s，。；：！？、（）()]+$/,
+  /^(?:[A-Za-z0-9_.-]+\/)+[^\s/，。；：！？、（）()]+\.\w+$/,
+  new RegExp(`^${IDENTIFIER_TOKEN}+\\.(?:${IDENTIFIER_EXTENSIONS})$`, 'i'),
 ];
 
 function maskIdentifiers(text, masker) {
@@ -241,7 +240,8 @@ function maskIdentifiers(text, masker) {
 }
 
 export function looksLikeIdentifier(text) {
-  return IDENTIFIER_SNIFFS.some((pattern) => pattern.test(` ${text}`));
+  const value = text.trim();
+  return IDENTIFIER_ONLY.some((pattern) => pattern.test(value));
 }
 
 function maskProse(text, masker) {
