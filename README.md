@@ -2,7 +2,8 @@
 
 This repo holds a personal set of agent skills. It stores third-party skills
 as pointers in `skills-lock.json` (53 entries). Thirteen skills live here as files.
-Ten are custom, one is derived from upstream, and two have no installable upstream.
+Ten are custom (plus one maintainer-only under `.skills/`), one is derived from
+upstream, and two have no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
 client supported by the [Agent Skills CLI](https://github.com/vercel-labs/skills).
@@ -37,7 +38,7 @@ maintainer-vs-consumer notes.
 agent-skills/
 ├── skills-lock.json          # 53 third-party skills: source + hash each (curated manifest)
 ├── skills/                   # 13 local skills (committed files)
-├── .skills/                  # maintainer-only skills (committed, not published)
+├── .skills/                  # maintainer-only skills (committed, not published; 1)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
 ├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers
@@ -79,6 +80,12 @@ agent-skills/
 |---|---|
 | `tech-doc-zh-tw` | `zh-tw-convert` for Simplified Chinese source |
 | `zh-tw-convert` | OpenCC 1.x (tested with 1.4.2) with `s2twp.json` on PATH, or `OPENCC_BIN` |
+
+### Maintainer skills
+
+| Skill | What it does (one line) |
+|-------|-------------------------|
+| `adding-a-skill` | Standard procedure for adding a new skill to this kit (third-party or local). Lives under `.skills/` (maintainer-only, not published). |
 
 ## 🔗 Locked skills
 

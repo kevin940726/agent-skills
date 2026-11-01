@@ -3,23 +3,30 @@ name: adding-a-skill
 description: Standard procedure for adding a new skill to this agent-skills kit (third-party via skills-lock.json or a local custom skill). Use when curating a new skill, onboarding a new source repo, or whenever a skill is added/renamed/removed. Keeps the manifest, README counts, and install paths consistent.
 license: MIT
 disable-model-invocation: true
+metadata:
+  internal: true
 ---
 
 # Adding a skill to this kit
 
-This kit has two layers: third-party skills pinned in `skills-lock.json`, and
-local skills committed under `skills/`. Pick the right path, then update the
-counts and tables in `README.md` so the docs never drift from the manifest.
+This kit has three layers: third-party skills pinned in `skills-lock.json`,
+local skills committed under `skills/` (published to consumers), and
+maintainer-only skills committed under `.skills/` (not published). Pick the
+right path, then update the counts and tables in `README.md` so the docs never
+drift from the manifest.
 
 ## Before you start
 
 1. Decide the layer:
    - **Third-party / upstream**: the skill lives in someone else's repo and is
      installed via the Agent Skills CLI. Add it to `skills-lock.json`.
-   - **Local / custom**: the skill is authored here. Add a directory under
-     `skills/`.
-2. Check for duplicates: search `skills-lock.json` and `skills/` for the skill
-   name and any upstream alias.
+   - **Local / custom (published)**: the skill is authored here and shipped to
+     consumers. Add a directory under `skills/`.
+   - **Maintainer-only**: the skill is authored here but must not be published.
+     Add a directory under `.skills/` and set `metadata.internal: true` in its
+     frontmatter (see "Adding a maintainer-only skill").
+2. Check for duplicates: search `skills-lock.json`, `skills/`, and `.skills/`
+   for the skill name and any upstream alias.
 3. Prefer the upstream name. If this repo renames it (e.g. `compress` →
    `caveman-compress`), record the mapping in the README locked-skills note.
 
@@ -78,6 +85,25 @@ counts and tables in `README.md` so the docs never drift from the manifest.
    into OpenCode slash via `metadata["opencode/slash"]: "true"`, run
    `node scripts/sync-opencode-commands.mjs` to regenerate wrappers.
 
+## Adding a maintainer-only skill
+
+1. Create `.skills/<skill-name>/SKILL.md` with valid frontmatter (`name`,
+   `description`, `license`) **and** `metadata.internal: true`. Match the tone
+   and structure of existing skills.
+2. If the skill needs supporting files, keep them inside
+   `.skills/<skill-name>/`.
+3. **Do not** add it to `skills-lock.json` and do not add a row to the
+   "Local skills" table.
+4. Update `README.md`:
+   - Add a row to a "Maintainer skills" subsection (or update the `.skills/`
+     layout count) so the file stays discoverable to maintainers.
+5. **Publication hardening**: `.skills/` is not in the CLI's priority search
+   dirs, so default discovery skips it. However, `npx skills add … --full-depth`
+   (and any full-tree scan) **will** discover it. `metadata.internal: true` is
+   the second barrier: the CLI skips internal skills unless
+   `INSTALL_INTERNAL_SKILLS=1` or `--include-internal` is passed. Both
+   barriers must be in place; never rely on placement alone.
+
 ## Renaming or removing a skill
 
 - **Rename**: add under the new name, leave a note in README, update any
@@ -91,7 +117,7 @@ counts and tables in `README.md` so the docs never drift from the manifest.
 ## Final checks
 
 - `git diff --stat` shows only intended files.
-- Counts in README match `Object.keys(lock.skills).length` and the number of
-  directories under `skills/`.
+- Counts in README match `Object.keys(lock.skills).length`, the number of
+  directories under `skills/`, and the number under `.skills/`.
 - `node scripts/sync-skills.mjs --dry-run` succeeds.
 - Commit with a clear message; do not open a PR without human review.
