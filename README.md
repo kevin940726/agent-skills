@@ -1,7 +1,7 @@
 # agent-skills
 
 This repo holds a personal set of agent skills. It stores third-party skills
-as pointers in `skills-lock.json` (53 entries). Fourteen skills live here as files.
+as pointers in `skills-lock.json` (53 entries). Thirteen skills live here as files.
 Ten are custom, one is derived from upstream, and two have no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
@@ -36,7 +36,8 @@ maintainer-vs-consumer notes.
 ```
 agent-skills/
 ├── skills-lock.json          # 53 third-party skills: source + hash each (curated manifest)
-├── skills/                   # 14 local skills (committed files)
+├── skills/                   # 13 local skills (committed files)
+├── .skills/                  # maintainer-only skills (committed, not published)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
 ├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers
@@ -58,7 +59,6 @@ agent-skills/
 
 | Skill | What it does (one line) | Provenance |
 |-------|-------------------------|------------|
-| `adding-a-skill` | Standard procedure for adding a new skill to this kit (third-party or local). | custom |
 | `ask-clarify` | Clarify before acting; also loads on pushback and question-mark prompts. | custom |
 | `bilingual` | Handle EN/Traditional Chinese code-switched prompts with inline gloss. | custom |
 | `changelog` | Generate release notes from git history, grouped by type and linked. | custom |
