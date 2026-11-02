@@ -21,6 +21,9 @@ File search/grep in git-indexed dir: use fff MCP (`ffgrep`, `fffind`, `fff-multi
 ## Write without AI slop
 Any prose you output (chat, summaries, docs, emails, commit/PR): apply `no-ai-slop` skill. No em-dashes, filler, intensifiers, hollow claims, clickbait headings. Concrete detail over generic. Applies to your own replies too.
 
+## Comments
+Write code without comments. Keep a comment only for a non-obvious why the code cannot show: a legal/license header, a public API contract, a constraint forced by an external dependency, platform, vendor, or protocol, or an issue/RFC link. No narration, banners, commented-out code, speculative TODO/FIXME, or workaround sermons. If a comment is justifying a workaround, fix the root cause or encode the constraint in a type, test, runtime check, or lint. Full procedure: load `no-comments` skill.
+
 ## Fetch before you act
 Before building custom code or stating a best practice, check the web for prior art and current battle-tested solutions — don't reinvent; adopt. Also confirm version-specific facts (lib/API usage, "latest" comparisons). Load `web-first` skill.
 

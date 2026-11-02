@@ -102,6 +102,7 @@ at its skill. Show the diff and write only after approval:
 - Clarify before acting (`ask-clarify`)
 - File search via fff MCP (`fff`)
 - Prose without AI slop (`no-ai-slop`)
+- Comments only for non-obvious why (`no-comments`)
 - Web-first prior art (`web-first`)
 - Security gate on merges (`security-review`)
 
