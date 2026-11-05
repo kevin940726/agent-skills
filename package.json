@@ -6,6 +6,7 @@
     "skills:check": "node scripts/sync-skills.mjs --dry-run",
     "skills:sync": "node scripts/sync-skills.mjs --all",
     "skills:list": "npx skills ls -g",
+    "skills:retro": "node scripts/skill-retro.mjs",
     "opencode:commands:check": "node scripts/sync-opencode-commands.mjs --dry-run",
     "opencode:commands:sync": "node scripts/sync-opencode-commands.mjs"
   }

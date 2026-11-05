@@ -1,7 +1,7 @@
 ---
 
 name: security-review
-description: Before merging or shipping a branch, scan the current diff for security vulnerabilities (leaked secrets, injection, broken access control, XSS, insecure dependencies). Load this skill for any PR, commit, or code you are about to merge or review; return a cited findings table with severity and a concrete fix. For CVEs and current guidance, fetch the latest sources first (web-first).
+description: Security gate before merging or shipping. Scan the current diff for leaked secrets, injection, broken access control, XSS, and insecure dependencies. Load for any PR, commit, or code you are about to merge or review. Return cited findings with severity and a concrete fix; fetch current CVE guidance first.
 license: MIT
 ---
 

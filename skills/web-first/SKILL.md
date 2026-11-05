@@ -1,6 +1,6 @@
 ---
 name: web-first
-description: Check the web before building custom code, stating a best practice, or trusting vendored code — does prior art already solve it, is it still current, and does upstream confirm what the vendored copy claims? Prefer adopting a battle-tested solution over writing your own. Load for anything non-trivial from scratch, anything whose currency is unsure, or any read of vendored code/docs for API, types, or usage.
+description: Check the web before building custom code, stating a best practice, or trusting vendored code. Confirm prior art, currency, and upstream behavior. Load for non-trivial work from scratch, uncertain facts, and any read of vendored code or docs.
 license: MIT
 ---
 

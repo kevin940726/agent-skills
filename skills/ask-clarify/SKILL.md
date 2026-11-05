@@ -1,7 +1,7 @@
 ---
 
 name: ask-clarify
-description: Clarify with the user instead of guessing. Load when a request is ambiguous, under-specified, risky, or could go more than one way; when the user pushes back or corrects (says "wait", "but the user…", "actually", "no I meant"); or when the user's message is a question (has a "?") — restate it and confirm the underlying intent before answering. Trigger even when the user doesn't explicitly ask to clarify.
+description: Clarify before acting. Load when a request is ambiguous, risky, or could go more than one way; when the user pushes back, corrects, or asks a question; when you would have to guess a file, API, or scope. Restate intent and confirm before multi-step work. Trigger even without an explicit request.
 license: MIT
 ---
 

@@ -1,9 +1,9 @@
 # agent-skills
 
 This repo holds a personal set of agent skills. It stores third-party skills
-as pointers in `skills-lock.json` (53 entries). Thirteen skills live here as files.
+as pointers in `skills-lock.json` (50 entries). Twelve skills live here as files.
 Ten are custom (plus one maintainer-only under `.skills/`), one is derived from
-upstream, and two have no installable upstream.
+upstream, and one has no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
 client supported by the [Agent Skills CLI](https://github.com/vercel-labs/skills).
@@ -36,13 +36,14 @@ maintainer-vs-consumer notes.
 
 ```
 agent-skills/
-├── skills-lock.json          # 53 third-party skills: source + hash each (curated manifest)
-├── skills/                   # 13 local skills (committed files)
+├── skills-lock.json          # 50 third-party skills: source + hash each (curated manifest)
+├── skills/                   # 12 local skills (committed files)
 ├── .skills/                  # maintainer-only skills (committed, not published; 1)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
 ├── scripts/sync-opencode-commands.mjs # optional OpenCode command wrappers
 ├── scripts/sync-tech-doc-zh-tw.mjs # regenerate tech-doc-zh-tw from its pin
+├── scripts/skill-retro.mjs   # skill usage retro from OpenCode sessions
 ├── INSTALL.md                # install instructions
 └── packages/                 # agent-specific settings, consumed elsewhere
     └── go-usage/             # OpenCode TUI plugin, installed from GitHub
@@ -55,6 +56,22 @@ agent-skills/
 - **Conventions** (`conventions/AGENTS.md`) are always-on defaults that
   apply to every task. They only take effect once merged into client memory
   (INSTALL.md step), which skills alone never do.
+
+## 📊 Skill retro
+
+OpenCode records every `skill` tool call in its local session database. To see
+which skills were actually used, run:
+
+```sh
+node scripts/skill-retro.mjs --days 30
+node scripts/skill-retro.mjs --days 90 --json
+```
+
+The report shows calls, sessions, main vs subagent use, errors, approximate
+context tokens per skill, and skills never used in the window. Use it to find
+removal candidates and to spot skills whose descriptions are costing context
+without being loaded. The database path can be overridden with `--db` or
+`OPENCODE_DB`.
 
 ## 🧩 Local skills
 
@@ -70,9 +87,8 @@ agent-skills/
 | `ready` | Clean, review, fix safe findings, and verify a change before merge. | custom |
 | `security-review` | Pre-merge vuln gate (secrets, injection, authz, XSS, CVEs). | custom |
 | `tech-doc-zh-tw` | Traditional Chinese (Taiwan) technical-writing rules; delegates Simplified conversion to `zh-tw-convert`. | derived from `Fenng/tech-doc-style-chinese`, MIT |
-| `web-app-design` | Modern web interface guidelines (Vercel). | distilled from upstream `command.md`; not installable |
 | `web-first` | Check the web for prior art before building custom code. | custom |
-| `zh-tw-convert` | Convert Simplified Chinese docs and skills to Taiwan Traditional with OpenCC; preserves code, URLs, and identifiers. | custom; glossary adapted from the oil-ui zh-TW port |
+| `zh-tw-convert` | Convert Simplified Chinese docs and skills to Taiwan Traditional with OpenCC; preserves code, URLs, and identifiers. | custom; glossary adapted from the removed oil-ui zh-TW port |
 
 ### Skill dependencies
 
@@ -92,9 +108,9 @@ agent-skills/
 Grouped by source repo. Two local names differ from upstream:
 `compress` → `caveman-compress`, `no-slop` → `unslop` (poteto/noodle).
 
-- [mattpocock/skills](https://github.com/mattpocock/skills) — 27: planning, debugging, architecture, grill, writing, triage set
+- [mattpocock/skills](https://github.com/mattpocock/skills) — 25: planning, debugging, architecture, grill, writing, triage set
 - [backnotprop/pstack](https://github.com/backnotprop/pstack) — 10: `architect`, `arena`, `bro`, `create-verification-skill`, `figure-it-out`, `how`, `no-comments`, `principle-fix-root-causes`, `principle-redesign-from-first-principles`, `why`
-- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — 5: `vercel-composition-patterns`, `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-react-view-transitions`, `web-design-guidelines`
+- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — 4: `vercel-composition-patterns`, `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-react-view-transitions`
 - [anthropics/skills](https://github.com/anthropics/skills) — 2: `frontend-design`, `skill-creator` (Apache-2.0)
 - [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — 2: `shadcn`, `migrate-radix-to-base`
 - [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) — 2: `caveman`, `caveman-compress`
