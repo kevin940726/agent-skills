@@ -1,8 +1,8 @@
 # agent-skills
 
 This repo holds a personal set of agent skills. It stores third-party skills
-as pointers in `skills-lock.json` (50 entries). Twelve skills live here as files.
-Ten are custom (plus one maintainer-only under `.skills/`), one is derived from
+as pointers in `skills-lock.json` (31 entries). Ten skills live here as files.
+Eight are custom (plus one maintainer-only under `.skills/`), one is derived from
 upstream, and one has no installable upstream.
 
 Works with Claude Code, opencode, Codex, Cursor, Copilot, Gemini, and any
@@ -36,8 +36,8 @@ maintainer-vs-consumer notes.
 
 ```
 agent-skills/
-├── skills-lock.json          # 50 third-party skills: source + hash each (curated manifest)
-├── skills/                   # 12 local skills (committed files)
+├── skills-lock.json          # 31 third-party skills: source + hash each (curated manifest)
+├── skills/                   # 10 local skills (committed files)
 ├── .skills/                  # maintainer-only skills (committed, not published; 1)
 ├── conventions/AGENTS.md     # always-on rules, merged per INSTALL.md
 ├── scripts/sync-skills.mjs   # global installer (interactive | --all)
@@ -78,12 +78,10 @@ without being loaded. The database path can be overridden with `--db` or
 | Skill | What it does (one line) | Provenance |
 |-------|-------------------------|------------|
 | `ask-clarify` | Clarify before acting; also loads on pushback and question-mark prompts. | custom |
-| `bilingual` | Handle EN/Traditional Chinese code-switched prompts with inline gloss. | custom |
 | `changelog` | Generate release notes from git history, grouped by type and linked. | custom |
 | `docs` | Write/update README, API reference, JSDoc; example-driven, no-slop. | custom |
 | `fff` | fff-mcp file-search setup; prefer over grep/ripgrep for agents. | custom-written, upstream has no `SKILL.md` |
 | `fix-review` | Triage review findings: auto-fix cheap and safe, propose risky important fixes. | custom |
-| `rabbit-hole` | Watch for scope creep; check prior art before going deeper. | custom |
 | `ready` | Clean, review, fix safe findings, and verify a change before merge. | custom |
 | `security-review` | Pre-merge vuln gate (secrets, injection, authz, XSS, CVEs). | custom |
 | `tech-doc-zh-tw` | Traditional Chinese (Taiwan) technical-writing rules; delegates Simplified conversion to `zh-tw-convert`. | derived from `Fenng/tech-doc-style-chinese`, MIT |
@@ -105,16 +103,14 @@ without being loaded. The database path can be overridden with `--db` or
 
 ## 🔗 Locked skills
 
-Grouped by source repo. Two local names differ from upstream:
-`compress` → `caveman-compress`, `no-slop` → `unslop` (poteto/noodle).
+Grouped by source repo. One local name differs from upstream:
+`no-slop` → `unslop` (poteto/noodle).
 
-- [mattpocock/skills](https://github.com/mattpocock/skills) — 25: planning, debugging, architecture, grill, writing, triage set
-- [backnotprop/pstack](https://github.com/backnotprop/pstack) — 10: `architect`, `arena`, `bro`, `create-verification-skill`, `figure-it-out`, `how`, `no-comments`, `principle-fix-root-causes`, `principle-redesign-from-first-principles`, `why`
-- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — 4: `vercel-composition-patterns`, `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-react-view-transitions`
+- [mattpocock/skills](https://github.com/mattpocock/skills) — 16: planning, debugging, architecture, grill, writing set
+- [backnotprop/pstack](https://github.com/backnotprop/pstack) — 5: `how`, `no-comments`, `principle-fix-root-causes`, `principle-redesign-from-first-principles`, `why`
+- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — 3: `vercel-composition-patterns`, `vercel-react-best-practices`, `vercel-react-view-transitions`
 - [anthropics/skills](https://github.com/anthropics/skills) — 2: `frontend-design`, `skill-creator` (Apache-2.0)
-- [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — 2: `shadcn`, `migrate-radix-to-base`
-- [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) — 2: `caveman`, `caveman-compress`
-- [anomalyco/opentui](https://github.com/anomalyco/opentui) — 1: `opentui`
+- [shadcn-ui/ui](https://github.com/shadcn-ui/ui) — 1: `shadcn`
 - [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) — 1: `karpathy-guidelines`
 - [0xpili/simplified-technical-english](https://github.com/0xpili/simplified-technical-english) — 1: `simplified-technical-english`
 - [benjitaylor/skills](https://github.com/benjitaylor/skills) — 1: `stageshow`
@@ -148,9 +144,8 @@ that runs.
 The Agent Skills CLI runs third-party scans (Gen Agent Trust Hub, Socket, Snyk)
 during install. Known flags and why they're accepted:
 
-- `caveman-compress`, `skill-creator` — LOW-severity Socket anomalies (no malware found):
-  `caveman-compress` pipes file text to a local `claude` call, so run it only on non-secret
-  files; `skill-creator`'s eval viewer renders local eval artifacts as HTML.
+- `skill-creator` — LOW-severity Socket anomaly (no malware found): its eval viewer
+  renders local eval artifacts as HTML.
 - `fff` — flags the upstream `curl | bash` installer, now documented in its
   `INSTALLATION.md`; the skill leads with Homebrew / GitHub Releases instead.
 - `web-first`, `research`, `triage`, and similar — Snyk "medium" for reading
